@@ -417,6 +417,8 @@
   <span class="nav-logo">HCP Product</span>
   <a href="#journey">Journey Map</a>
   <a href="#pms">PM Portfolio</a>
+  <a href="#starting">Go Do This First</a>
+  <a href="#packaging">AI Products</a>
   <a href="#flywheel">Flywheel</a>
   <a href="#whitespace">White Space</a>
   <a href="#csr">CSR AI Layer</a>
@@ -930,6 +932,268 @@
     </div><!-- .pm-grid -->
   </div>
 
+  <!-- GO DO THIS FIRST -->
+  <div class="section" id="starting">
+    <style>
+      .starts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .start-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+      .start-head { padding: 12px 16px 10px; border-bottom: 1px solid var(--border); }
+      .start-head-pm { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+      .start-head-squad { font-size: 11px; color: var(--muted); }
+      .start-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+      .start-row-label { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 4px; }
+      .start-action { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.5; }
+      .start-why { font-size: 11px; color: var(--muted); line-height: 1.5; }
+      .start-suggest { font-size: 11px; color: var(--gold); line-height: 1.5; background: rgba(245,200,76,0.06); border: 1px solid rgba(245,200,76,0.18); border-radius: 6px; padding: 8px 10px; margin-top: auto; }
+      .start-suggest-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 3px; }
+      .sa  .start-head { border-top: 3px solid var(--blue);   } .sa  .start-head-pm { color: var(--blue);   }
+      .sk  .start-head { border-top: 3px solid var(--purple); } .sk  .start-head-pm { color: var(--purple); }
+      .saj .start-head { border-top: 3px solid var(--orange); } .saj .start-head-pm { color: var(--orange); }
+      .san .start-head { border-top: 3px solid var(--green);  } .san .start-head-pm { color: var(--green);  }
+      .ss  .start-head { border-top: 3px solid var(--gold);   } .ss  .start-head-pm { color: var(--gold);   }
+      .sn  .start-head { border-top: 3px solid var(--pink);   } .sn  .start-head-pm { color: var(--pink);   }
+    </style>
+    <div class="section-head">
+      <h2>Go Do This First</h2>
+      <span class="section-sub">One priority per PM — and where it might be worth starting instead</span>
+    </div>
+    <div class="starts-grid">
+
+      <div class="start-card sa">
+        <div class="start-head">
+          <div class="start-head-pm">Andre Ottoni</div>
+          <div class="start-head-squad">HCPA / CSR AI</div>
+        </div>
+        <div class="start-body">
+          <div>
+            <div class="start-row-label">Go Do This First</div>
+            <div class="start-action">Improve CSR AI booking rate — call quality, trust, and prompt improvements to convert more intent-to-book calls into appointments.</div>
+          </div>
+          <div class="start-why">60% of ITB calls (~3,375/day) walk away without booking. Every percentage point gained = ~56 more appointments per day.</div>
+          <div class="start-suggest">
+            <div class="start-suggest-label">Consider starting here instead</div>
+            Before changing any prompts, do a 2-week transcript analysis to categorize WHY ITB calls don't book — scheduling? price? trust? The AB framework only works once you have a specific hypothesis. Build the experiment around the most common failure mode, not a guess.
+          </div>
+        </div>
+      </div>
+
+      <div class="start-card ss">
+        <div class="start-head">
+          <div class="start-head-pm">Sani Djaya</div>
+          <div class="start-head-squad">Campaigns / Marketing Hub → GBP</div>
+        </div>
+        <div class="start-body">
+          <div>
+            <div class="start-row-label">Go Do This First</div>
+            <div class="start-action">When a job is marked complete with photos, automatically push those photos to the Pro's GBP listing as a post.</div>
+          </div>
+          <div class="start-why">Real job photos are GBP's highest local ranking signal. Pros almost never update GBP manually. Automates the highest-impact SEO action with zero Pro effort. 25% of pros (~X) already have GBP connected.</div>
+          <div class="start-suggest">
+            <div class="start-suggest-label">Also do this now</div>
+            With only 25% GBP connection rate today, launch a "connect your GBP" prompt inside HCP before the auto-push feature ships. Double the addressable market first — the feature is only as valuable as the connection rate.
+          </div>
+        </div>
+      </div>
+
+      <div class="start-card sk">
+        <div class="start-head">
+          <div class="start-head-pm">Kasia Szenajch</div>
+          <div class="start-head-squad">OLB + Pipeline</div>
+        </div>
+        <div class="start-body">
+          <div>
+            <div class="start-row-label">Go Do This First</div>
+            <div class="start-action">Improve OLB conversion through obvious tweaks — reduce form fields, simplify the flow, lower friction at every step.</div>
+          </div>
+          <div class="start-why">Every lead from website, GBP, and campaigns passes through OLB. A 10pp conversion lift = hundreds of additional bookings per month across the Pro base.</div>
+          <div class="start-suggest">
+            <div class="start-suggest-label">Consider starting here instead</div>
+            Pull OLB funnel drop-off data before picking the tweak. "Obvious" without data often misses the actual problem. Identify the single field with the highest abandon rate, remove it, ship as an A/B test. Don't redesign the whole form — change one thing and measure.
+          </div>
+        </div>
+      </div>
+
+      <div class="start-card san">
+        <div class="start-head">
+          <div class="start-head-pm">Anyssa Barbour</div>
+          <div class="start-head-squad">Websites + Reviews</div>
+        </div>
+        <div class="start-body">
+          <div>
+            <div class="start-row-label">Go Do This First</div>
+            <div class="start-action">Get AI sending personalized SMS review requests automatically — customized by job type, triggered immediately at job completion.</div>
+          </div>
+          <div class="start-why">Review count and recency are the top GBP ranking signals. Automated personalized requests require zero Pro action and turn every completed job into compounding reputation capital.</div>
+          <div class="start-suggest">
+            <div class="start-suggest-label">Consider starting here instead</div>
+            Timing beats copy. When does the review request go out today? Move the trigger to immediately at job completion first — before adding AI personalization. A generic SMS at the right moment outperforms perfect copy sent 24 hours late.
+          </div>
+        </div>
+      </div>
+
+      <div class="start-card saj">
+        <div class="start-head">
+          <div class="start-head-pm">AJ McCraw</div>
+          <div class="start-head-squad">Job Inbox</div>
+        </div>
+        <div class="start-body">
+          <div>
+            <div class="start-row-label">Go Do This First</div>
+            <div class="start-action">Connect Job Inbox to CSR AI — every new inbound lead gets an immediate outbound SMS within 30 seconds, no manual action required from the Pro.</div>
+          </div>
+          <div class="start-why">Sub-1-min response = +391% conversion. Every lead sitting unresponded for 10+ minutes loses 400% conversion potential. The inbox needs to become an active response machine, not a passive bucket.</div>
+          <div class="start-suggest">
+            <div class="start-suggest-label">Align with Andre first</div>
+            CSR AI text reply to leads from lead forms is already in design (Jan 29 — Andre's work). These are the same surface. Agree on ownership before building: AJ owns inbox routing trigger, Andre's team owns CSR AI conversation logic. Don't ship two separate SMS systems.
+          </div>
+        </div>
+      </div>
+
+      <div class="start-card sn">
+        <div class="start-head">
+          <div class="start-head-pm">Natalie</div>
+          <div class="start-head-squad">Campaigns</div>
+        </div>
+        <div class="start-body">
+          <div>
+            <div class="start-row-label">Go Do This First</div>
+            <div class="start-action">Set up an agentic campaign approach — AI identifies the right cohort, sends the right offer, and CSR AI responds to all replies to close appointments.</div>
+          </div>
+          <div class="start-why">Campaigns with AI cohort targeting + CSR AI close turn a static broadcast into a two-way revenue conversation. Every campaign reply is a potential appointment.</div>
+          <div class="start-suggest">
+            <div class="start-suggest-label">Consider starting here instead</div>
+            Run one well-segmented manual campaign first. Build the attribution model (campaign → reply → appt → job) before making it agentic. Also: the CSR AI reply dependency (Andre) needs to be live before sending campaigns — otherwise you're generating leads with no close mechanism.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AI PRODUCT LINE -->
+  <div class="section" id="packaging">
+    <style>
+      .pkg-table-wrap { overflow-x: auto; }
+      .pkg-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      .pkg-table th { background: var(--surface-2); color: var(--muted); font-weight: 600; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+      .pkg-table td { padding: 14px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--muted); line-height: 1.5; }
+      .pkg-table tr:last-child td { border-bottom: none; }
+      .pkg-table tr:hover td { background: rgba(255,255,255,0.015); }
+      .pkg-product { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+      .pkg-pm { font-size: 10px; color: var(--muted-2); margin-bottom: 4px; }
+      .pkg-price { font-size: 22px; font-weight: 800; color: var(--blue); line-height: 1; }
+      .pkg-price-label { font-size: 10px; color: var(--muted-2); }
+      .pkg-arr { font-size: 15px; font-weight: 700; }
+      .pkg-arr.ex { color: var(--purple); }
+      .pkg-arr.nw { color: var(--green); }
+      .pkg-attach { font-size: 10px; color: var(--muted-2); margin-top: 2px; }
+      .pkg-breakeven { font-size: 11px; font-weight: 600; color: var(--green); }
+      .pkg-next { font-size: 11px; color: var(--blue); line-height: 1.5; }
+    </style>
+    <div class="section-head">
+      <h2>AI Product Line</h2>
+      <span class="section-sub">Each PM bet as a productized monthly add-on — Pro business case, attach rates, ARR model, and next step</span>
+    </div>
+    <div class="pkg-table-wrap">
+      <table class="pkg-table">
+        <thead>
+          <tr>
+            <th style="min-width:140px">Product / PM</th>
+            <th style="min-width:60px">$/mo</th>
+            <th style="min-width:190px">What it does for the Pro</th>
+            <th style="min-width:130px">Addressable<br><span style="font-weight:400;font-style:italic;text-transform:none">(fill in with actual data)</span></th>
+            <th style="min-width:115px;color:var(--purple)">Existing Attach + ARR</th>
+            <th style="min-width:115px;color:var(--green)">New Cust. Attach + ARR</th>
+            <th style="min-width:120px">Pro Break-Even</th>
+            <th style="min-width:150px;color:var(--blue)">Go Do This Next</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td><div class="pkg-product">AI Inbox</div><div class="pkg-pm">AJ McCraw · Stage 02</div></td>
+            <td><div class="pkg-price">$49</div><div class="pkg-price-label">/mo</div></td>
+            <td>Every new inbox lead gets an SMS response within 30 seconds. Sub-1-min response = +391% conversion. Pro never loses a lead to slow response time again.</td>
+            <td>All active pros receiving leads<br><span style="font-size:10px;color:var(--muted-2)">~15K est. — fill in with Job Inbox active Pro count</span></td>
+            <td><div class="pkg-arr ex">$1.8M ARR</div><div class="pkg-attach">20% attach · 3,000 pros</div></td>
+            <td><div class="pkg-arr nw">$1.1M ARR</div><div class="pkg-attach">15% of new customers</div></td>
+            <td><div class="pkg-breakeven">~0.03 jobs</div><div style="font-size:10px;color:var(--muted-2)">$49/mo ÷ avg ticket. One job from one saved lead = months covered.</div></td>
+            <td class="pkg-next">Align with Andre on CSR AI SMS overlap. AJ owns inbox trigger, Andre owns conversation logic. Ship as one integrated system.</td>
+          </tr>
+
+          <tr>
+            <td><div class="pkg-product">Smart Booking</div><div class="pkg-pm">Kasia Szenajch · Stage 02</div></td>
+            <td><div class="pkg-price">$49</div><div class="pkg-price-label">/mo</div></td>
+            <td>AI-simplified OLB form that converts more visitors into leads — fewer fields, smarter flow. Estimated lift: 25% → 35%+ completion (+40% relative). More bookings from the same website traffic.</td>
+            <td>Pros using OLB today<br><span style="font-size:10px;color:var(--muted-2)">~15K est. — fill in with OLB active Pro count</span></td>
+            <td><div class="pkg-arr ex">$1.8M ARR</div><div class="pkg-attach">20% attach · 3,000 pros</div></td>
+            <td><div class="pkg-arr nw">$1.3M ARR</div><div class="pkg-attach">15% of new customers</div></td>
+            <td><div class="pkg-breakeven">~1 additional booking</div><div style="font-size:10px;color:var(--muted-2)">Any single extra booking from improved conversion covers $49/mo.</div></td>
+            <td class="pkg-next">Pull OLB drop-off data. Identify #1 abandon field. Ship one targeted A/B removal. Measure downstream booking rate, not just form completion.</td>
+          </tr>
+
+          <tr>
+            <td><div class="pkg-product">AI Reviews</div><div class="pkg-pm">Anyssa Barbour · Stage 08</div></td>
+            <td><div class="pkg-price">$39</div><div class="pkg-price-label">/mo</div></td>
+            <td>AI sends a personalized SMS review request at job completion. Review completion improves from ~30% to ~50% of jobs. More reviews → higher GBP rating → better local search ranking → more inbound calls.</td>
+            <td>Pros completing jobs on HCP<br><span style="font-size:10px;color:var(--muted-2)">~20K est. — nearly all active pros qualify</span></td>
+            <td><div class="pkg-arr ex">$1.9M ARR</div><div class="pkg-attach">20% attach · 4,000 pros</div></td>
+            <td><div class="pkg-arr nw">$0.9M ARR</div><div class="pkg-attach">10% of new customers</div></td>
+            <td><div class="pkg-breakeven">Reputation compounding</div><div style="font-size:10px;color:var(--muted-2)">Each new review improves GBP rank → more inbound calls → more jobs. ROI is indirect and upstream.</div></td>
+            <td class="pkg-next">Fix trigger timing first (immediately at job complete). Build AI personalization on top once timing baseline is confirmed to improve completion rate.</td>
+          </tr>
+
+          <tr>
+            <td><div class="pkg-product">AI Local</div><div class="pkg-pm">Sani Djaya · Stage 09</div></td>
+            <td><div class="pkg-price">$29</div><div class="pkg-price-label">/mo</div></td>
+            <td>Completed job photos auto-post to the Pro's GBP listing. Pro's online presence stays current with zero manual effort. Active, photo-rich GBP listings get 7× more clicks (Google data).</td>
+            <td><strong style="color:var(--gold)">25% of active pros</strong> have GBP connected today<br><span style="font-size:10px;color:var(--muted-2)">Fill in: 25% × total active pros = addressable. Growing this % is itself a priority.</span></td>
+            <td><div class="pkg-arr ex">~$0.9M ARR</div><div class="pkg-attach">25% attach of connected base<br>(25% of total pros × 25% attach × $29 × 12)</div></td>
+            <td><div class="pkg-arr nw">~$0.5M ARR</div><div class="pkg-attach">8% of new customers</div></td>
+            <td><div class="pkg-breakeven">1 additional call/mo</div><div style="font-size:10px;color:var(--muted-2)">$29/mo. Any single additional inbound call from improved GBP ranking covers the cost.</div></td>
+            <td class="pkg-next">Launch "connect your GBP" in-app prompt now to grow 25% connection rate before auto-push ships. Target 40%+ at launch to maximize feature TAM.</td>
+          </tr>
+
+          <tr>
+            <td><div class="pkg-product">AI Campaigns</div><div class="pkg-pm">Natalie · Stage 01</div></td>
+            <td><div class="pkg-price">$59</div><div class="pkg-price-label">/mo</div></td>
+            <td>AI identifies the right past-customer cohort, sends a targeted offer, and CSR AI handles all replies end-to-end. A Pro with 200 past customers running one campaign/month → ~5 booked jobs from reactivation alone.</td>
+            <td>Pros with customer history in HCP<br><span style="font-size:10px;color:var(--muted-2)">~20K est. — any pro with completed jobs qualifies</span></td>
+            <td><div class="pkg-arr ex">$1.4M ARR</div><div class="pkg-attach">15% attach · 3,000 pros</div></td>
+            <td><div class="pkg-arr nw">$1.1M ARR</div><div class="pkg-attach">8% of new customers</div></td>
+            <td><div class="pkg-breakeven">~1 reactivated job</div><div style="font-size:10px;color:var(--muted-2)">$59/mo. One campaign-sourced job at avg ticket covers 3+ months.</div></td>
+            <td class="pkg-next">Get CSR AI campaign-reply mode live (Andre dependency) before first campaign. Run one manual well-segmented campaign first; build attribution model; then automate what works.</td>
+          </tr>
+
+          <tr style="background:var(--surface-2)">
+            <td>
+              <div style="font-size:12px;font-weight:700;color:var(--text)">Total AI Product Line</div>
+              <div style="font-size:10px;color:var(--muted-2);margin-top:3px">AI Inbox + Smart Booking + AI Reviews + AI Local + AI Campaigns<br>Conservative addressable estimates — replace with actual HCP Pro counts</div>
+            </td>
+            <td></td><td></td><td></td>
+            <td>
+              <div style="font-size:20px;font-weight:800;color:var(--purple)">$7.8M ARR</div>
+              <div style="font-size:10px;color:var(--muted-2)">Existing customer attach</div>
+            </td>
+            <td>
+              <div style="font-size:20px;font-weight:800;color:var(--green)">$4.9M ARR</div>
+              <div style="font-size:10px;color:var(--muted-2)">New customer acquisition</div>
+            </td>
+            <td>
+              <div style="font-size:18px;font-weight:800;color:var(--text)">$12.7M ARR</div>
+              <div style="font-size:10px;color:var(--muted-2)">Combined at conservative estimates</div>
+            </td>
+            <td></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:12px;color:var(--muted);line-height:1.65;">
+      <strong style="color:var(--text)">Addressable base needs validation.</strong> All ARR figures use conservative estimates. Fill in with: (1) active OLB pros, (2) pros with Job Inbox activity, (3) total pros with completed jobs, (4) total pros × 25% GBP connection rate. Each additional 5K in addressable base adds roughly $350–500K to the totals above.
+    </div>
+  </div>
+
   <!-- FLYWHEEL -->
   <div class="section" id="flywheel">
     <div class="section-head">
@@ -1105,6 +1369,7 @@
             <th class="col-cons" style="min-width:120px">Conservative</th>
             <th class="col-base" style="min-width:120px">Base</th>
             <th class="col-agg" style="min-width:120px">Aggressive</th>
+            <th style="min-width:180px;color:var(--blue)">Go Do This Next</th>
           </tr>
         </thead>
         <tbody>
@@ -1140,6 +1405,7 @@
               <div class="sc-val agg">$5.1M ARR</div>
               <div class="sc-attach">35% attach · 2,450 pros</div>
             </td>
+            <td class="pkg-next">Launch "CSR AI + Call Credits" bundle offer at checkout. Market to ~28K active lead-spend pros who don't yet have CSR AI — natural upsell at the moment of call-purchase intent.</td>
           </tr>
 
           <!-- CSR AI New Attach from Bundle -->
@@ -1169,59 +1435,10 @@
               <div class="sc-val agg">+$0.4M ARR</div>
               <div class="sc-attach">245 new CSR AI subs<br>(10% of 2,450)</div>
             </td>
+            <td class="pkg-next">Once bundle attach is proven in the warm cohort, expand to the full active lead-spend base. Test waiving CSR AI setup fee when paired with first call credit purchase.</td>
           </tr>
 
-          <!-- Estimate Follow-Up -->
-          <tr>
-            <td>
-              <div class="bt-init">Estimate Follow-Up Automation</div>
-              <div class="bt-stage">Stage 06 · Estimate Signed</div>
-              <span class="assumption-chip">Estimate — baseline needed</span>
-            </td>
-            <td>~20,000 pros actively sending estimates</td>
-            <td>~$0 incremental (automation/AI absorbed in plan). No new pricing needed — drives retention + tier expansion.</td>
-            <td>
-              <div style="font-size:11px">% of pros who enable AI follow-up × % of cold estimates recovered</div>
-            </td>
-            <td>
-              <div class="sc-val cons">$0.8M ARR</div>
-              <div class="sc-attach">10% cohort · 15% cold recovery</div>
-            </td>
-            <td>
-              <div class="sc-val base">$2.0M ARR</div>
-              <div class="sc-attach">20% cohort · 20% cold recovery</div>
-            </td>
-            <td>
-              <div class="sc-val agg">$3.8M ARR</div>
-              <div class="sc-attach">30% cohort · 30% cold recovery</div>
-            </td>
-          </tr>
-
-          <!-- Estimate AI Quality -->
-          <tr>
-            <td>
-              <div class="bt-init">AI Estimate Quality</div>
-              <div class="bt-stage">Stage 05 · Appt + Estimate</div>
-              <span class="assumption-chip">Estimate — baseline needed</span>
-            </td>
-            <td>~20,000 pros sending estimates</td>
-            <td>LLM cost &lt;$0.10/estimate draft. Priced as premium add-on ~$30/mo or bundled in higher tier.</td>
-            <td>
-              <div style="font-size:11px">% of pros who use AI-drafted estimates × acceptance rate lift</div>
-            </td>
-            <td>
-              <div class="sc-val cons">$0.7M ARR</div>
-              <div class="sc-attach">10% cohort · $30/mo feature</div>
-            </td>
-            <td>
-              <div class="sc-val base">$1.4M ARR</div>
-              <div class="sc-attach">20% cohort · $30/mo feature</div>
-            </td>
-            <td>
-              <div class="sc-val agg">$2.9M ARR</div>
-              <div class="sc-attach">40% cohort · $30/mo feature</div>
-            </td>
-          </tr>
+          <!-- Estimate rows removed — moved to TBD section below -->
 
           <!-- CSR AI Booking Rate -->
           <tr>
@@ -1255,6 +1472,7 @@
               <div class="sc-attach">40% → 55% ITB rate (+15pp)<br>+844 appts/day</div>
               <div style="font-size:10px;color:var(--muted-2);margin-top:4px">~$43M Pro revenue unlocked<br>($400 ticket × 35% close)</div>
             </td>
+            <td class="pkg-next">Confirm ITB rate by category. A/B test prompt variations on HVAC + Plumbing first (highest volume). Publish a per-pro "Calls Converted" dashboard so pros can see the lift and attribute it to HCP — drives retention.</td>
           </tr>
 
           <!-- GBP / Reputation -->
@@ -1272,33 +1490,36 @@
             <td colspan="3" style="text-align:center;vertical-align:middle">
               <div style="font-size:12px;color:var(--muted-2);font-style:italic">Measured as: inbound call volume growth + review volume growth.<br>Feeds back into Stage 01 (Discovery) — downstream multiplier on every other bet.</div>
             </td>
+            <td class="pkg-next">Wire completed jobs to GBP update API for the 25% of pros already connected. Pair with Anyssa's AI Review SMS — one post-job automation triggers both. Goal: grow GBP connection rate from 25% → 40% before launch to maximize feature TAM.</td>
           </tr>
 
           <!-- Totals row -->
           <tr style="background:var(--surface-2)">
             <td>
-              <div style="font-size:12px;font-weight:700;color:var(--text)">Total (modeled initiatives)</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text)">Total (confirmed-ownership initiatives)</div>
               <div style="font-size:10px;color:var(--muted-2);margin-top:3px">
-                Call Marketplace + CSR AI Bundle Attach<br>
-                + Estimate Follow-Up + AI Estimate Quality<br>
-                Excludes CSR AI booking rate lift + GBP multiplier (no hard baseline yet)
+                Call Marketplace + CSR AI Bundle Attach only.<br>
+                CSR AI booking rate = retention/NRR play (not direct ARR).<br>
+                GBP = upstream multiplier (not direct ARR).<br>
+                Estimate initiatives moved to TBD section ↓
               </div>
             </td>
             <td></td>
             <td></td>
             <td></td>
             <td>
-              <div class="sc-val cons" style="font-size:20px">$3.0M ARR</div>
-              <div class="sc-attach" style="line-height:1.8">$1.2M calls<br>+ $0.25M CSR bundle<br>+ $0.8M est. follow-up<br>+ $0.7M est. quality</div>
+              <div class="sc-val cons" style="font-size:20px">$1.45M ARR</div>
+              <div class="sc-attach" style="line-height:1.8">$1.2M calls<br>+ $0.25M CSR bundle</div>
             </td>
             <td>
-              <div class="sc-val base" style="font-size:20px">$6.5M ARR</div>
-              <div class="sc-attach" style="line-height:1.8">$2.8M calls<br>+ $0.3M CSR bundle<br>+ $2.0M est. follow-up<br>+ $1.4M est. quality</div>
+              <div class="sc-val base" style="font-size:20px">$3.1M ARR</div>
+              <div class="sc-attach" style="line-height:1.8">$2.8M calls<br>+ $0.3M CSR bundle</div>
             </td>
             <td>
-              <div class="sc-val agg" style="font-size:20px">$12.2M ARR</div>
-              <div class="sc-attach" style="line-height:1.8">$5.1M calls<br>+ $0.4M CSR bundle<br>+ $3.8M est. follow-up<br>+ $2.9M est. quality</div>
+              <div class="sc-val agg" style="font-size:20px">$5.5M ARR</div>
+              <div class="sc-attach" style="line-height:1.8">$5.1M calls<br>+ $0.4M CSR bundle</div>
             </td>
+            <td></td>
           </tr>
 
         </tbody>
@@ -1306,8 +1527,79 @@
     </div>
 
     <div class="biz-note">
-      <strong>CSR AI baseline confirmed:</strong> 15% of all calls → appt; 40% of intent-to-book calls → appt; ~15K calls/day (exact numbers TBD). The 60% of ITB calls that don't convert is the gap Andre's team is directly attacking. <strong>One diagnostic still needed:</strong> current estimate acceptance rate — this is the baseline that anchors the estimate follow-up and AI estimate quality models. Pull from data team before taking those two bets to leadership.
+      <strong>CSR AI baseline confirmed:</strong> 15% of all calls → appt; 40% of intent-to-book calls → appt; ~15K calls/day (exact numbers TBD). The 60% of ITB calls that don't convert is the gap Andre's team is directly attacking. <strong>Estimate initiatives</strong> (follow-up automation + AI estimate quality) have been moved to the TBD section below — ownership is not yet assigned. Pull current estimate acceptance rate from the data team before taking either bet to leadership.
     </div>
+
+    <!-- ESTIMATE TBD SECTION -->
+    <div style="margin-top:36px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Estimate Initiatives — Ownership TBD</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6">These are well-scoped bets with meaningful ARR upside, but no PM has been assigned yet. Both require the current estimate acceptance rate as a baseline before projections are finalized. Combined base-case upside: <strong style="color:var(--text)">+$3.4M ARR</strong>.</div>
+      <div class="biz-table-wrap">
+        <table class="biz-table">
+          <thead>
+            <tr>
+              <th style="min-width:180px">Initiative</th>
+              <th style="min-width:130px">Addressable Cohort</th>
+              <th style="min-width:160px">Cost Assumption</th>
+              <th style="min-width:110px">Attach Assumption</th>
+              <th class="col-cons" style="min-width:120px">Conservative</th>
+              <th class="col-base" style="min-width:120px">Base</th>
+              <th class="col-agg" style="min-width:120px">Aggressive</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="bt-init">Estimate Follow-Up Automation</div>
+                <div class="bt-stage">Stage 06 · Estimate Signed</div>
+                <span class="assumption-chip" style="background:rgba(245,200,76,0.1);color:var(--gold);border-color:rgba(245,200,76,0.3)">Baseline needed</span>
+              </td>
+              <td>~20,000 pros actively sending estimates</td>
+              <td>~$0 incremental (automation/AI absorbed in plan). Drives retention + tier expansion — no new pricing needed.</td>
+              <td><div style="font-size:11px">% of pros who enable AI follow-up × % of cold estimates recovered</div></td>
+              <td>
+                <div class="sc-val cons">$0.8M ARR</div>
+                <div class="sc-attach">10% cohort · 15% cold recovery</div>
+              </td>
+              <td>
+                <div class="sc-val base">$2.0M ARR</div>
+                <div class="sc-attach">20% cohort · 20% cold recovery</div>
+              </td>
+              <td>
+                <div class="sc-val agg">$3.8M ARR</div>
+                <div class="sc-attach">30% cohort · 30% cold recovery</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="bt-init">AI Estimate Quality</div>
+                <div class="bt-stage">Stage 05 · Appt + Estimate</div>
+                <span class="assumption-chip" style="background:rgba(245,200,76,0.1);color:var(--gold);border-color:rgba(245,200,76,0.3)">Baseline needed</span>
+              </td>
+              <td>~20,000 pros sending estimates</td>
+              <td>LLM cost &lt;$0.10/estimate draft. Priced as premium add-on ~$30/mo or bundled in higher tier.</td>
+              <td><div style="font-size:11px">% of pros who use AI-drafted estimates × acceptance rate lift</div></td>
+              <td>
+                <div class="sc-val cons">$0.7M ARR</div>
+                <div class="sc-attach">10% cohort · $30/mo feature</div>
+              </td>
+              <td>
+                <div class="sc-val base">$1.4M ARR</div>
+                <div class="sc-attach">20% cohort · $30/mo feature</div>
+              </td>
+              <td>
+                <div class="sc-val agg">$2.9M ARR</div>
+                <div class="sc-attach">40% cohort · $30/mo feature</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="biz-note" style="margin-top:16px">
+        <strong>Blocker for both:</strong> Pull current estimate acceptance rate from the data team. That single number anchors both models. Once ownership is assigned, these are fast to move — the automation infrastructure largely exists. Likely candidates: Kasia (estimate workflow) or a cross-functional bet with Andre (CSR AI has context on the job).
+      </div>
+    </div>
+
   </div>
 
 </div><!-- .page -->
