@@ -1117,7 +1117,14 @@
               <span class="assumption-chip">Well-modeled</span>
             </td>
             <td>7,000 warm pros<br><span style="font-size:10px;color:var(--muted-2)">(CSR AI active + active lead spend)</span></td>
-            <td>~$80/call avg provider cost; HCP margin 15–20% per credit sold. ~$60/mo avg spend per attached pro.</td>
+            <td>
+              ~$80/call avg provider cost; HCP margin 15–20% per credit sold. ~$60/mo avg spend per attached pro.
+              <div style="margin-top:8px;padding:7px 10px;background:rgba(62,207,142,0.08);border:1px solid rgba(62,207,142,0.2);border-radius:6px;font-size:10px;color:var(--green);line-height:1.5">
+                <strong>Break-even: 1 completed job</strong><br>
+                CSR AI (~$149/mo) + 5 call credits ($400) = ~$550/mo combined.<br>
+                Avg completed job: ~$500–600. First booked job covers the month.
+              </div>
+            </td>
             <td>
               <div style="font-size:11px">% of warm cohort who purchase call credits in HCP</div>
             </td>
@@ -1132,6 +1139,35 @@
             <td>
               <div class="sc-val agg">$5.1M ARR</div>
               <div class="sc-attach">35% attach · 2,450 pros</div>
+            </td>
+          </tr>
+
+          <!-- CSR AI New Attach from Bundle -->
+          <tr style="background:rgba(79,142,247,0.03)">
+            <td>
+              <div class="bt-init" style="color:var(--blue)">↳ CSR AI New Attach — Bundle</div>
+              <div class="bt-stage">Incremental to call marketplace</div>
+              <span class="assumption-chip" style="background:rgba(79,142,247,0.12);color:var(--blue);border-color:rgba(79,142,247,0.25)">Additive ARR</span>
+              <div style="margin-top:8px;font-size:10px;color:var(--muted-2);line-height:1.6">
+                Pros who sign up for call buying and <em>don't yet have CSR AI</em> — the bundle offer converts them. At scale (beyond warm cohort), this number grows significantly.
+              </div>
+            </td>
+            <td>10% of call buying customers who are net new CSR AI subscribers<br><span style="font-size:10px;color:var(--muted-2)">Upside: much larger if marketed to broader lead-buying base beyond warm cohort</span></td>
+            <td>~$149/mo CSR AI plan (assumption — verify against actual pricing). $0 incremental cost to acquire — bundle drives organic attach.</td>
+            <td>
+              <div style="font-size:11px">10% of call buying customer base × CSR AI monthly plan</div>
+            </td>
+            <td>
+              <div class="sc-val cons">+$0.25M ARR</div>
+              <div class="sc-attach">140 new CSR AI subs<br>(10% of 1,400)</div>
+            </td>
+            <td>
+              <div class="sc-val base">+$0.3M ARR</div>
+              <div class="sc-attach">175 new CSR AI subs<br>(10% of 1,750)</div>
+            </td>
+            <td>
+              <div class="sc-val agg">+$0.4M ARR</div>
+              <div class="sc-attach">245 new CSR AI subs<br>(10% of 2,450)</div>
             </td>
           </tr>
 
@@ -1242,22 +1278,26 @@
           <tr style="background:var(--surface-2)">
             <td>
               <div style="font-size:12px;font-weight:700;color:var(--text)">Total (modeled initiatives)</div>
-              <div style="font-size:10px;color:var(--muted-2);margin-top:3px">Call Marketplace + Estimate Follow-Up + AI Estimate Quality<br>Excludes CSR AI lift + GBP multiplier (no hard baseline yet)</div>
+              <div style="font-size:10px;color:var(--muted-2);margin-top:3px">
+                Call Marketplace + CSR AI Bundle Attach<br>
+                + Estimate Follow-Up + AI Estimate Quality<br>
+                Excludes CSR AI booking rate lift + GBP multiplier (no hard baseline yet)
+              </div>
             </td>
             <td></td>
             <td></td>
             <td></td>
             <td>
-              <div class="sc-val cons" style="font-size:20px">$2.7M ARR</div>
-              <div class="sc-attach">$1.2M + $0.8M + $0.7M</div>
+              <div class="sc-val cons" style="font-size:20px">$3.0M ARR</div>
+              <div class="sc-attach" style="line-height:1.8">$1.2M calls<br>+ $0.25M CSR bundle<br>+ $0.8M est. follow-up<br>+ $0.7M est. quality</div>
             </td>
             <td>
-              <div class="sc-val base" style="font-size:20px">$6.2M ARR</div>
-              <div class="sc-attach">$2.8M + $2.0M + $1.4M</div>
+              <div class="sc-val base" style="font-size:20px">$6.5M ARR</div>
+              <div class="sc-attach" style="line-height:1.8">$2.8M calls<br>+ $0.3M CSR bundle<br>+ $2.0M est. follow-up<br>+ $1.4M est. quality</div>
             </td>
             <td>
-              <div class="sc-val agg" style="font-size:20px">$11.8M ARR</div>
-              <div class="sc-attach">$5.1M + $3.8M + $2.9M</div>
+              <div class="sc-val agg" style="font-size:20px">$12.2M ARR</div>
+              <div class="sc-attach" style="line-height:1.8">$5.1M calls<br>+ $0.4M CSR bundle<br>+ $3.8M est. follow-up<br>+ $2.9M est. quality</div>
             </td>
           </tr>
 
