@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inbound Call Marketplace — HCP Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     HCP DESIGN TOKENS — single source of truth
+     All hex values below come from Figma node 128:116198
+     ============================================================ */
+  :root {
+    --color-action-primary: #0e6fbe;
+    --color-action-primary-dark: #0d47a1;
+    --background-page: #fafafa;
+    --surface-card: #ffffff;
+    --text-primary: #212121;
+    --text-muted: #616161;
+    --border-subtle: #e0e0e0;
+    --status-success: #00a344;
+    --status-warning: #bf8600;
+    --status-error: #d81b60;
+    --radius-card: 8px;
+    --radius-button: 200px;
+    --shadow-card: 0 0 12px 2px rgba(0,0,0,0.1);
+    --color-white: #ffffff;
+    --sidenav-bg: #1a2333;
+
+    /* Derived from tokens */
+    --status-success-bg: rgba(0, 163, 68, 0.08);
+    --status-warning-bg: rgba(191, 134, 0, 0.08);
+    --status-error-bg: rgba(216, 27, 96, 0.08);
+    --color-action-primary-bg: rgba(14, 111, 190, 0.08);
+  }
+
+  /* ============================================================
+     RESET & BASE
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
+    color: var(--text-primary);
+    background: var(--background-page);
+  }
+
+  /* ============================================================
+     OPTION SWITCHER (top-level wireframe navigation)
+     ============================================================ */
+  .wireframe-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-action-primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 24px;
+    height: 48px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .wireframe-nav__label {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 20px;
+    white-space: nowrap;
+  }
+  .wireframe-nav__tab {
+    padding: 0 20px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .wireframe-nav__tab:hover { color: var(--color-white); }
+  .wireframe-nav__tab.active {
+    color: var(--color-white);
+    border-bottom-color: var(--color-white);
+  }
+
+  /* ============================================================
+     SCREEN PANELS
+     ============================================================ */
+  .screen-panel { display: none; height: calc(100vh - 48px); }
+  .screen-panel.active { display: flex; }
+
+  /* ============================================================
+     HCP LEFT NAV
+     ============================================================ */
+  .hcp-sidenav {
+    width: 220px;
+    min-width: 220px;
+    background: var(--sidenav-bg);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+  }
+  .sidenav__logo {
+    padding: 20px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidenav__logo-mark {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-white);
+    letter-spacing: -0.02em;
+  }
+  .sidenav__logo-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 500;
+  }
+  .sidenav__section-label {
+    padding: 16px 16px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+  .sidenav__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.12s, color 0.12s;
+    text-decoration: none;
+  }
+  .sidenav__item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+  .sidenav__item.active { background: rgba(14,111,190,0.3); color: var(--color-white); font-weight: 600; border-left: 3px solid var(--color-action-primary); padding-left: 13px; }
+  .sidenav__icon { font-size: 16px; width: 18px; text-align: center; flex-shrink: 0; }
+  .sidenav__badge {
+    margin-left: auto;
+    background: var(--color-action-primary);
+    color: var(--color-white);
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 1px 6px;
+    line-height: 16px;
+  }
+
+  /* ============================================================
+     MAIN CONTENT AREA
+     ============================================================ */
+  .hcp-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--background-page);
+  }
+  .page-header {
+    padding: 24px 32px 0;
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .page-header__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 36px;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+  .page-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 32px;
+  }
+
+  /* ============================================================
+     TAB BAR (in-page)
+     ============================================================ */
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .tab-bar__item {
+    padding: 0 20px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .tab-bar__item:hover { color: var(--text-primary); }
+  .tab-bar__item.active {
+    color: var(--color-action-primary);
+    border-bottom-color: var(--color-action-primary);
+    font-weight: 600;
+  }
+
+  /* ============================================================
+     CARDS
+     ============================================================ */
+  .card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+  }
+  .card + .card { margin-top: 16px; }
+  .card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .card__title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: var(--text-primary);
+  }
+  .card__subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 20px;
+    margin-top: 2px;
+  }
+
+  /* ============================================================
+     BADGES / PILLS
+     ============================================================ */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  .badge--success { background: var(--status-success-bg); color: var(--status-success); }
+  .badge--warning { background: var(--status-warning-bg); color: var(--status-warning); }
+  .badge--error { background: var(--status-error-bg); color: var(--status-error); }
+  .badge--neutral { background: rgba(97,97,97,0.1); color: var(--text-muted); }
+  .badge--info { background: var(--color-action-primary-bg); color: var(--color-action-primary); }
+  .badge__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* ============================================================
+     STAT CHIPS
+     ============================================================ */
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .stat-chip {
+    flex: 1;
+    min-width: 140px;
+    background: var(--background-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 14px 16px;
+  }
+  .stat-chip__label {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .stat-chip__value {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 30px;
+    color: var(--text-primary);
+  }
+  .stat-chip__delta {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--status-success);
+    margin-top: 2px;
+  }
+
+  /* ============================================================
+     KPI CARDS (4-up)
+     ============================================================ */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .kpi-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 20px;
+  }
+  .kpi-card__label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    line-height: 20px;
+    margin-bottom: 6px;
+  }
+  .kpi-card__value {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 36px;
+    color: var(--text-primary);
+  }
+  .kpi-card__sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .kpi-card__delta-up { color: var(--status-success); font-size: 12px; font-weight: 500; }
+  .kpi-card__delta-down { color: var(--status-error); font-size: 12px; font-weight: 500; }
+
+  /* ============================================================
+     TABLE
+     ============================================================ */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-subtle);
+    white-space: nowrap;
+    background: var(--background-page);
+  }
+  .data-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    vertical-align: middle;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(14,111,190,0.03); }
+  .table-wrap {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .table-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: var(--radius-button);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background 0.12s, box-shadow 0.12s;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .btn--primary {
+    background: var(--color-action-primary);
+    color: var(--color-white);
+    padding: 10px 20px;
+  }
+  .btn--primary:hover { background: var(--color-action-primary-dark); }
+  .btn--outline {
+    background: transparent;
+    color: var(--color-action-primary);
+    border-color: var(--color-action-primary);
+    padding: 9px 20px;
+  }
+  .btn--outline:hover { background: var(--color-action-primary-bg); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: var(--border-subtle);
+    padding: 9px 16px;
+  }
+  .btn--ghost:hover { background: var(--background-page); color: var(--text-primary); }
+  .btn--sm { font-size: 12px; padding: 6px 14px; }
+  .btn--icon { padding: 8px; border-radius: 6px; }
+  .link-action {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-action-primary);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .link-action:hover { text-decoration: underline; }
+
+  /* ============================================================
+     FORM ELEMENTS
+     ============================================================ */
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .form-input {
+    width: 100%;
+    height: 40px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--color-action-primary); box-shadow: 0 0 0 3px var(--color-action-primary-bg); }
+  .input-prefix-wrap { position: relative; display: flex; align-items: center; }
+  .input-prefix {
+    position: absolute;
+    left: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .input-prefix-wrap .form-input { padding-left: 24px; }
+  .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 18px; }
+  .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
+  .checkbox-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .checkbox-box {
+    width: 16px;
+    height: 16px;
+    background: var(--surface-card);
+    border: 1.5px solid var(--color-action-primary);
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+  .checkbox-box.checked { background: var(--color-action-primary); color: var(--color-white); }
+  .checkbox-label { font-size: 14px; color: var(--text-primary); }
+  .radio-group { display: flex; flex-direction: column; gap: 10px; }
+  .radio-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .radio-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-action-primary);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .radio-circle.checked::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-action-primary);
+  }
+
+  /* ============================================================
+     ZIP CHIPS
+     ============================================================ */
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: var(--color-action-primary-bg);
+    border: 1px solid rgba(14,111,190,0.25);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-action-primary);
+  }
+  .chip__remove {
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--color-action-primary);
+    opacity: 0.6;
+  }
+  .chip__remove:hover { opacity: 1; }
+
+  /* ============================================================
+     BANNER / ALERT
+     ============================================================ */
+  .banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-card);
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 20px;
+  }
+  .banner--info {
+    background: var(--color-action-primary-bg);
+    border: 1px solid rgba(14,111,190,0.25);
+    color: var(--color-action-primary-dark);
+  }
+  .banner--success {
+    background: var(--status-success-bg);
+    border: 1px solid rgba(0,163,68,0.25);
+    color: var(--status-success);
+  }
+  .banner--warning {
+    background: var(--status-warning-bg);
+    border: 1px solid rgba(191,134,0,0.25);
+    color: var(--status-warning);
+  }
+  .banner__icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .banner__body { flex: 1; }
+  .banner__title { font-weight: 600; margin-bottom: 2px; }
+
+  /* ============================================================
+     INTEGRATION CARDS (Option 1)
+     ============================================================ */
+  .integration-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .integration-card + .integration-card { margin-top: 16px; }
+  .integration-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: var(--color-action-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--color-white);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .integration-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .integration-info { flex: 1; }
+  .integration-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .integration-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 20px;
+  }
+  .integration-actions { display: flex; align-items: center; gap: 10px; }
+
+  /* ============================================================
+     DISCONNECTED INTEGRATION CARD
+     ============================================================ */
+  .integration-card--disconnected {
+    background: var(--background-page);
+    border-style: dashed;
+  }
+  .integration-logo--grey {
+    background: var(--border-subtle);
+    color: var(--text-muted);
+  }
+
+  /* ============================================================
+     PROVIDER SELECTOR (Option 3)
+     ============================================================ */
+  .provider-selector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .provider-card {
+    flex: 1;
+    min-width: 180px;
+    border: 2px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 16px 20px;
+    cursor: pointer;
+    background: var(--surface-card);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .provider-card.active {
+    border-color: var(--color-action-primary);
+    box-shadow: 0 0 0 3px var(--color-action-primary-bg);
+  }
+  .provider-card__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .provider-card__meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 18px;
+  }
+  .provider-card__badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  /* ============================================================
+     DIVIDER
+     ============================================================ */
+  .divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 20px 0;
+  }
+
+  /* ============================================================
+     SECTION HEADING
+     ============================================================ */
+  .section-heading {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    margin-top: 4px;
+  }
+
+  /* ============================================================
+     COMPARE TABLE (Option 3)
+     ============================================================ */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--surface-card);
+    box-shadow: var(--shadow-card);
+    margin-top: 16px;
+  }
+  .compare-grid__cell {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 13px;
+    line-height: 20px;
+    border-right: 1px solid var(--border-subtle);
+  }
+  .compare-grid__cell:last-child { border-right: none; }
+  .compare-grid__cell.header {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--background-page);
+  }
+  .compare-grid__cell.row-label { font-weight: 500; color: var(--text-primary); }
+  .compare-grid__cell.active-col { background: var(--color-action-primary-bg); }
+  .compare-grid__row-last .compare-grid__cell { border-bottom: none; }
+
+  /* ============================================================
+     UTILITY
+     ============================================================ */
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .items-center { align-items: center; }
+  .items-start { align-items: flex-start; }
+  .justify-between { justify-content: space-between; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .gap-16 { gap: 16px; }
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-20 { margin-top: 20px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mb-20 { margin-bottom: 20px; }
+  .text-muted { color: var(--text-muted); font-size: 13px; }
+  .text-small { font-size: 12px; line-height: 20px; }
+  .font-medium { font-weight: 500; }
+  .font-semibold { font-weight: 600; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .action-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: background 0.1s, color 0.1s;
+  }
+  .action-icon:hover { background: var(--background-page); color: var(--text-primary); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TOP-LEVEL WIREFRAME NAVIGATION
+     ============================================================ -->
+<nav class="wireframe-nav">
+  <span class="wireframe-nav__label">Inbound Call Marketplace — Wireframes</span>
+  <div class="wireframe-nav__tab active" onclick="showOption(1, this)">Option 1: eLocal Pass-Through</div>
+  <div class="wireframe-nav__tab" onclick="showOption(2, this)">Option 2: Full Native Marketplace</div>
+  <div class="wireframe-nav__tab" onclick="showOption(3, this)">Option 3: Multi-Provider Marketplace</div>
+</nav>
+
+
+<!-- ============================================================
+     OPTION 1 — eLocal Pass-Through (Marketing Hub Integration Card)
+     ============================================================ -->
+<div class="screen-panel active" id="option1">
+
+  <!-- Left Nav -->
+  <nav class="hcp-sidenav">
+    <div class="sidenav__logo">
+      <div class="sidenav__logo-mark">HCP Pro</div>
+      <div class="sidenav__logo-sub">Streamline Home</div>
+    </div>
+
+    <div class="sidenav__section-label">Business</div>
+    <a class="sidenav__item"><span class="sidenav__icon">📊</span>Dashboard</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📅</span>Schedule</a>
+    <a class="sidenav__item"><span class="sidenav__icon">👥</span>Customers</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📋</span>Jobs</a>
+    <a class="sidenav__item"><span class="sidenav__icon">💬</span>Messages<span class="sidenav__badge">3</span></a>
+
+    <div class="sidenav__section-label">Finance</div>
+    <a class="sidenav__item"><span class="sidenav__icon">💰</span>Payments</a>
+    <a class="sidenav__item"><span class="sidenav__icon">🧾</span>Invoices</a>
+
+    <div class="sidenav__section-label">Growth</div>
+    <a class="sidenav__item active"><span class="sidenav__icon">📣</span>Marketing Hub</a>
+    <a class="sidenav__item"><span class="sidenav__icon">⭐</span>Reviews</a>
+    <a class="sidenav__item"><span class="sidenav__icon">🔗</span>Referrals</a>
+
+    <div class="sidenav__section-label">Settings</div>
+    <a class="sidenav__item"><span class="sidenav__icon">⚙️</span>Settings</a>
+    <a class="sidenav__item"><span class="sidenav__icon">🔔</span>Notifications</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="hcp-main">
+    <div class="page-header">
+      <h1 class="page-header__title">Marketing Hub</h1>
+      <div class="tab-bar">
+        <div class="tab-bar__item">Advertising</div>
+        <div class="tab-bar__item">Lead Marketplace</div>
+        <div class="tab-bar__item active">Integrations</div>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- Connected eLocal Card -->
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo">eL</div>
+          <div class="integration-info">
+            <div class="integration-name">eLocal Call Marketplace</div>
+            <div class="integration-desc">Inbound calls from homeowners matched to your trade categories — billed per call.</div>
+          </div>
+          <div class="integration-actions">
+            <span class="badge badge--success"><span class="badge__dot"></span>Connected</span>
+            <button class="btn btn--ghost btn--sm">Disconnect</button>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-chip">
+            <div class="stat-chip__label">Spend This Month</div>
+            <div class="stat-chip__value">$1,240</div>
+            <div class="stat-chip__delta">↑ $180 vs last month</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip__label">Calls Received</div>
+            <div class="stat-chip__value">31</div>
+            <div class="stat-chip__delta">↑ 4 vs last month</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip__label">Booked Jobs</div>
+            <div class="stat-chip__value">18</div>
+            <div class="stat-chip__delta" style="color: var(--text-muted);">58% connect rate</div>
+          </div>
+        </div>
+
+        <!-- Mini call log -->
+        <div>
+          <div class="section-heading">Recent Calls</div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Duration</th>
+                  <th>Booked</th>
+                  <th>Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-muted">Feb 18</td>
+                  <td>HVAC Repair</td>
+                  <td>4m 12s</td>
+                  <td><span class="badge badge--success">Booked</span></td>
+                  <td><span class="badge badge--info">eLocal</span></td>
+                </tr>
+                <tr>
+                  <td class="text-muted">Feb 17</td>
+                  <td>Furnace Install</td>
+                  <td>6m 08s</td>
+                  <td><span class="badge badge--success">Booked</span></td>
+                  <td><span class="badge badge--info">eLocal</span></td>
+                </tr>
+                <tr>
+                  <td class="text-muted">Feb 17</td>
+                  <td>AC Service</td>
+                  <td>1m 44s</td>
+                  <td><span class="badge badge--neutral">No answer</span></td>
+                  <td><span class="badge badge--info">eLocal</span></td>
+                </tr>
+                <tr>
+                  <td class="text-muted">Feb 16</td>
+                  <td>Plumbing</td>
+                  <td>3m 22s</td>
+                  <td><span class="badge badge--warning">Follow-up</span></td>
+                  <td><span class="badge badge--info">eLocal</span></td>
+                </tr>
+                <tr>
+                  <td class="text-muted">Feb 15</td>
+                  <td>HVAC Repair</td>
+                  <td>5m 01s</td>
+                  <td><span class="badge badge--success">Booked</span></td>
+                  <td><span class="badge badge--info">eLocal</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-12 flex gap-12 items-center">
+            <button class="btn btn--outline btn--sm">Manage in eLocal ↗</button>
+            <a class="link-action" style="font-size:13px;">View All Calls →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disconnected card -->
+      <div class="integration-card integration-card--disconnected">
+        <div class="integration-header">
+          <div class="integration-logo integration-logo--grey">📞</div>
+          <div class="integration-info">
+            <div class="integration-name" style="color: var(--text-muted);">Connect Another Call Provider</div>
+            <div class="integration-desc">Add additional inbound call sources to diversify your lead flow.</div>
+          </div>
+          <div class="integration-actions">
+            <button class="btn btn--primary btn--sm">Connect Account</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-body -->
+  </main>
+</div><!-- /#option1 -->
+
+
+<!-- ============================================================
+     OPTION 2 — Full Native Marketplace (Configure + Dashboard)
+     ============================================================ -->
+<div class="screen-panel" id="option2">
+
+  <!-- Left Nav -->
+  <nav class="hcp-sidenav">
+    <div class="sidenav__logo">
+      <div class="sidenav__logo-mark">HCP Pro</div>
+      <div class="sidenav__logo-sub">Streamline Home</div>
+    </div>
+
+    <div class="sidenav__section-label">Business</div>
+    <a class="sidenav__item"><span class="sidenav__icon">📊</span>Dashboard</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📅</span>Schedule</a>
+    <a class="sidenav__item"><span class="sidenav__icon">👥</span>Customers</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📋</span>Jobs</a>
+    <a class="sidenav__item"><span class="sidenav__icon">💬</span>Messages<span class="sidenav__badge">3</span></a>
+
+    <div class="sidenav__section-label">Finance</div>
+    <a class="sidenav__item"><span class="sidenav__icon">💰</span>Payments</a>
+    <a class="sidenav__item"><span class="sidenav__icon">🧾</span>Invoices</a>
+
+    <div class="sidenav__section-label">Growth</div>
+    <a class="sidenav__item active"><span class="sidenav__icon">📞</span>Call Marketplace</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📣</span>Marketing Hub</a>
+    <a class="sidenav__item"><span class="sidenav__icon">⭐</span>Reviews</a>
+
+    <div class="sidenav__section-label">Settings</div>
+    <a class="sidenav__item"><span class="sidenav__icon">⚙️</span>Settings</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="hcp-main">
+    <div class="page-header">
+      <h1 class="page-header__title">Call Marketplace</h1>
+      <div class="tab-bar">
+        <div class="tab-bar__item active" id="opt2-configure-tab" onclick="switchInnerTab('opt2','configure')">Configure</div>
+        <div class="tab-bar__item" id="opt2-dashboard-tab" onclick="switchInnerTab('opt2','dashboard')">Dashboard</div>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- CONFIGURE TAB -->
+      <div id="opt2-configure">
+
+        <div class="banner banner--info">
+          <span class="banner__icon">🤖</span>
+          <div class="banner__body">
+            <div class="banner__title">AI Virtual Agent Required</div>
+            All purchased calls are answered instantly by your AI Virtual Agent — no manual answering needed. Your CSR AI handles scheduling, qualification, and booking automatically.
+          </div>
+        </div>
+
+        <div class="two-col">
+
+          <!-- Left column -->
+          <div>
+            <div class="card">
+              <div class="card__header">
+                <div>
+                  <div class="card__title">Budget</div>
+                  <div class="card__subtitle">Set a weekly spend cap for inbound calls</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Weekly Budget</label>
+                <div class="input-prefix-wrap">
+                  <span class="input-prefix">$</span>
+                  <input class="form-input" type="text" value="500">
+                </div>
+                <div class="form-hint">Current account balance: <strong>$1,240.00</strong> — <a class="link-action" style="font-size:12px;">Add Funds</a></div>
+              </div>
+
+              <div class="form-group mb-0">
+                <label class="form-label">Cost Per Call Estimate</label>
+                <div class="flex gap-12">
+                  <div class="stat-chip" style="min-width:unset;">
+                    <div class="stat-chip__label">Avg Cost / Call</div>
+                    <div class="stat-chip__value" style="font-size:18px;">$38</div>
+                  </div>
+                  <div class="stat-chip" style="min-width:unset;">
+                    <div class="stat-chip__label">Est. Calls / Week</div>
+                    <div class="stat-chip__value" style="font-size:18px;">~13</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mt-16">
+              <div class="card__header">
+                <div>
+                  <div class="card__title">Availability</div>
+                  <div class="card__subtitle">When should calls be routed to your AI?</div>
+                </div>
+              </div>
+              <div class="radio-group">
+                <label class="radio-item">
+                  <div class="radio-circle"><div style="width:8px;height:8px;border-radius:50%;background:var(--color-action-primary);display:none;"></div></div>
+                  <span class="checkbox-label">Business hours (Mon–Fri, 8am–6pm)</span>
+                </label>
+                <label class="radio-item">
+                  <div class="radio-circle checked"></div>
+                  <span class="checkbox-label">Extended hours (Mon–Sat, 7am–9pm)</span>
+                </label>
+                <label class="radio-item">
+                  <div class="radio-circle"></div>
+                  <span class="checkbox-label">24 / 7 (all calls, all times)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div>
+            <div class="card">
+              <div class="card__header">
+                <div>
+                  <div class="card__title">Service Categories</div>
+                  <div class="card__subtitle">Which job types should we send you calls for?</div>
+                </div>
+              </div>
+              <div class="checkbox-group">
+                <label class="checkbox-item">
+                  <div class="checkbox-box checked">✓</div>
+                  <span class="checkbox-label">HVAC — Repair &amp; Maintenance</span>
+                </label>
+                <label class="checkbox-item">
+                  <div class="checkbox-box checked">✓</div>
+                  <span class="checkbox-label">HVAC — Install &amp; Replacement</span>
+                </label>
+                <label class="checkbox-item">
+                  <div class="checkbox-box"></div>
+                  <span class="checkbox-label">Plumbing</span>
+                </label>
+                <label class="checkbox-item">
+                  <div class="checkbox-box"></div>
+                  <span class="checkbox-label">Electrical</span>
+                </label>
+                <label class="checkbox-item">
+                  <div class="checkbox-box"></div>
+                  <span class="checkbox-label">Cleaning &amp; Janitorial</span>
+                </label>
+                <label class="checkbox-item">
+                  <div class="checkbox-box"></div>
+                  <span class="checkbox-label">Pest Control</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="card mt-16">
+              <div class="card__header">
+                <div>
+                  <div class="card__title">Coverage Area</div>
+                  <div class="card__subtitle">ZIP codes where you accept calls</div>
+                </div>
+              </div>
+              <div class="chip-row">
+                <div class="chip">90210 <span class="chip__remove">×</span></div>
+                <div class="chip">90211 <span class="chip__remove">×</span></div>
+                <div class="chip">90212 <span class="chip__remove">×</span></div>
+                <div class="chip">90220 <span class="chip__remove">×</span></div>
+                <div class="chip">90221 <span class="chip__remove">×</span></div>
+                <div class="chip">91301 <span class="chip__remove">×</span></div>
+              </div>
+              <div class="flex gap-8 items-center mt-8">
+                <input class="form-input" style="width:140px;" type="text" placeholder="Add ZIP code">
+                <button class="btn btn--outline btn--sm">+ Add</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /two-col -->
+
+        <div class="flex gap-12 mt-20">
+          <button class="btn btn--primary">Save &amp; Go Live</button>
+          <button class="btn btn--outline">Pause Marketplace</button>
+        </div>
+
+      </div><!-- /#opt2-configure -->
+
+      <!-- DASHBOARD TAB -->
+      <div id="opt2-dashboard" style="display:none;">
+
+        <div class="flex justify-between items-center mb-20">
+          <div>
+            <div style="font-size:14px; font-weight:600; color: var(--text-primary);">Feb 1 – Feb 20, 2026</div>
+            <div class="text-muted">Showing 20 days of activity</div>
+          </div>
+          <div class="flex gap-8">
+            <button class="btn btn--primary btn--sm">+ Add Funds</button>
+            <button class="btn btn--ghost btn--sm">Export CSV</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-card__label">Account Balance</div>
+            <div class="kpi-card__value">$1,240</div>
+            <div class="kpi-card__sub">Weekly budget: $500</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__label">Spend This Month</div>
+            <div class="kpi-card__value">$1,178</div>
+            <div class="kpi-card__delta-up mt-4">↑ 17% vs last month</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__label">Calls Received</div>
+            <div class="kpi-card__value">31</div>
+            <div class="kpi-card__sub">18 booked (58%)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__label">Cost Per Booking</div>
+            <div class="kpi-card__value">$65</div>
+            <div class="kpi-card__delta-down mt-4">↓ $8 vs last month</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">Call Log</div>
+            <div class="flex gap-8">
+              <button class="btn btn--ghost btn--sm">Filter</button>
+              <button class="btn btn--ghost btn--sm">Export</button>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>ZIP</th>
+                <th>Duration</th>
+                <th>Booked</th>
+                <th>CPA</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-muted">Feb 20</td>
+                <td>HVAC Repair</td>
+                <td>90210</td>
+                <td>4m 12s</td>
+                <td><span class="badge badge--success">Booked</span></td>
+                <td>$38</td>
+                <td><span class="action-icon" title="Flag call">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 19</td>
+                <td>Furnace Install</td>
+                <td>90211</td>
+                <td>6m 08s</td>
+                <td><span class="badge badge--success">Booked</span></td>
+                <td>$42</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 18</td>
+                <td>AC Service</td>
+                <td>90212</td>
+                <td>1m 44s</td>
+                <td><span class="badge badge--neutral">No answer</span></td>
+                <td>—</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 17</td>
+                <td>HVAC Repair</td>
+                <td>90220</td>
+                <td>3m 55s</td>
+                <td><span class="badge badge--success">Booked</span></td>
+                <td>$38</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 16</td>
+                <td>HVAC Repair</td>
+                <td>91301</td>
+                <td>5m 01s</td>
+                <td><span class="badge badge--warning">Follow-up</span></td>
+                <td>—</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 15</td>
+                <td>Furnace Install</td>
+                <td>90221</td>
+                <td>7m 14s</td>
+                <td><span class="badge badge--success">Booked</span></td>
+                <td>$42</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /#opt2-dashboard -->
+
+    </div><!-- /page-body -->
+  </main>
+</div><!-- /#option2 -->
+
+
+<!-- ============================================================
+     OPTION 3 — Multi-Provider Marketplace
+     ============================================================ -->
+<div class="screen-panel" id="option3">
+
+  <!-- Left Nav -->
+  <nav class="hcp-sidenav">
+    <div class="sidenav__logo">
+      <div class="sidenav__logo-mark">HCP Pro</div>
+      <div class="sidenav__logo-sub">Streamline Home</div>
+    </div>
+
+    <div class="sidenav__section-label">Business</div>
+    <a class="sidenav__item"><span class="sidenav__icon">📊</span>Dashboard</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📅</span>Schedule</a>
+    <a class="sidenav__item"><span class="sidenav__icon">👥</span>Customers</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📋</span>Jobs</a>
+    <a class="sidenav__item"><span class="sidenav__icon">💬</span>Messages<span class="sidenav__badge">3</span></a>
+
+    <div class="sidenav__section-label">Finance</div>
+    <a class="sidenav__item"><span class="sidenav__icon">💰</span>Payments</a>
+    <a class="sidenav__item"><span class="sidenav__icon">🧾</span>Invoices</a>
+
+    <div class="sidenav__section-label">Growth</div>
+    <a class="sidenav__item active"><span class="sidenav__icon">📞</span>Call Marketplace</a>
+    <a class="sidenav__item"><span class="sidenav__icon">📣</span>Marketing Hub</a>
+    <a class="sidenav__item"><span class="sidenav__icon">⭐</span>Reviews</a>
+
+    <div class="sidenav__section-label">Settings</div>
+    <a class="sidenav__item"><span class="sidenav__icon">⚙️</span>Settings</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="hcp-main">
+    <div class="page-header">
+      <h1 class="page-header__title">Call Marketplace</h1>
+      <div class="tab-bar">
+        <div class="tab-bar__item active" id="opt3-configure-tab" onclick="switchInnerTab('opt3','configure')">Configure</div>
+        <div class="tab-bar__item" id="opt3-dashboard-tab" onclick="switchInnerTab('opt3','dashboard')">Dashboard</div>
+        <div class="tab-bar__item" id="opt3-compare-tab" onclick="switchInnerTab('opt3','compare')">Compare Providers</div>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- CONFIGURE TAB -->
+      <div id="opt3-configure">
+
+        <div class="section-heading">Select Providers</div>
+
+        <div class="provider-selector">
+          <div class="provider-card active">
+            <div class="provider-card__badge"><span class="badge badge--success"><span class="badge__dot"></span>Active</span></div>
+            <div class="provider-card__name">eLocal</div>
+            <div class="provider-card__meta">Avg $38 / call<br>HVAC, Plumbing, Electrical</div>
+          </div>
+          <div class="provider-card">
+            <div class="provider-card__badge"><span class="badge badge--neutral">Coming Soon</span></div>
+            <div class="provider-card__name">ResultCalls</div>
+            <div class="provider-card__meta">Avg ~$32 / call<br>HVAC, Pest, Cleaning</div>
+          </div>
+          <div class="provider-card">
+            <div class="provider-card__badge"><span class="badge badge--neutral">Coming Soon</span></div>
+            <div class="provider-card__name">Google LSA</div>
+            <div class="provider-card__meta">Pay per verified lead<br>All categories</div>
+          </div>
+        </div>
+
+        <!-- Per-provider config for eLocal -->
+        <div class="banner banner--info mb-16">
+          <span class="banner__icon">ℹ️</span>
+          <div class="banner__body">
+            <div class="banner__title">Configuring: eLocal</div>
+            Set budgets and preferences per provider. When additional providers launch, each gets its own configuration tab.
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="card">
+              <div class="card__header">
+                <div>
+                  <div class="card__title">eLocal Budget</div>
+                  <div class="card__subtitle">Weekly spend cap for eLocal calls</div>
+                </div>
+                <span class="badge badge--success"><span class="badge__dot"></span>Live</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Weekly Budget</label>
+                <div class="input-prefix-wrap">
+                  <span class="input-prefix">$</span>
+                  <input class="form-input" type="text" value="300">
+                </div>
+                <div class="form-hint">Balance: <strong>$1,240.00</strong> — <a class="link-action" style="font-size:12px;">Add Funds</a></div>
+              </div>
+
+              <div class="form-group mb-0">
+                <label class="form-label">Availability</label>
+                <div class="radio-group">
+                  <label class="radio-item">
+                    <div class="radio-circle"></div>
+                    <span class="checkbox-label">Business hours</span>
+                  </label>
+                  <label class="radio-item">
+                    <div class="radio-circle checked"></div>
+                    <span class="checkbox-label">Extended hours</span>
+                  </label>
+                  <label class="radio-item">
+                    <div class="radio-circle"></div>
+                    <span class="checkbox-label">24/7</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card__header">
+                <div>
+                  <div class="card__title">Categories &amp; Coverage</div>
+                  <div class="card__subtitle">Applied across all active providers</div>
+                </div>
+              </div>
+              <div class="checkbox-group mb-16">
+                <label class="checkbox-item">
+                  <div class="checkbox-box checked">✓</div>
+                  <span class="checkbox-label">HVAC — Repair &amp; Maintenance</span>
+                </label>
+                <label class="checkbox-item">
+                  <div class="checkbox-box checked">✓</div>
+                  <span class="checkbox-label">HVAC — Install &amp; Replacement</span>
+                </label>
+                <label class="checkbox-item">
+                  <div class="checkbox-box"></div>
+                  <span class="checkbox-label">Plumbing</span>
+                </label>
+              </div>
+              <div class="divider" style="margin: 12px 0;"></div>
+              <div class="form-label">Coverage ZIPs</div>
+              <div class="chip-row">
+                <div class="chip">90210 <span class="chip__remove">×</span></div>
+                <div class="chip">90211 <span class="chip__remove">×</span></div>
+                <div class="chip">90212 <span class="chip__remove">×</span></div>
+                <div class="chip">91301 <span class="chip__remove">×</span></div>
+              </div>
+              <div class="flex gap-8 items-center mt-8">
+                <input class="form-input" style="width:140px;" type="text" placeholder="Add ZIP">
+                <button class="btn btn--outline btn--sm">+ Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-12 mt-20">
+          <button class="btn btn--primary">Save Configuration</button>
+          <button class="btn btn--outline">Pause eLocal</button>
+        </div>
+
+      </div><!-- /#opt3-configure -->
+
+      <!-- DASHBOARD TAB -->
+      <div id="opt3-dashboard" style="display:none;">
+
+        <div class="flex justify-between items-center mb-20">
+          <div>
+            <div style="font-size:14px; font-weight:600; color: var(--text-primary);">Feb 1 – Feb 20, 2026</div>
+            <div class="text-muted">Combined across all active providers</div>
+          </div>
+          <div class="flex gap-8">
+            <button class="btn btn--primary btn--sm">+ Add Funds</button>
+            <button class="btn btn--ghost btn--sm">Export CSV</button>
+          </div>
+        </div>
+
+        <!-- Provider KPI row -->
+        <div class="section-heading">Per-Provider Summary</div>
+        <div class="flex gap-12 mb-20">
+          <div class="card" style="flex:1; padding:16px;">
+            <div class="flex justify-between items-center mb-8">
+              <div class="card__title" style="font-size:14px;">eLocal</div>
+              <span class="badge badge--success"><span class="badge__dot"></span>Active</span>
+            </div>
+            <div class="flex gap-16">
+              <div>
+                <div class="stat-chip__label">Calls</div>
+                <div style="font-size:18px; font-weight:600;">31</div>
+              </div>
+              <div>
+                <div class="stat-chip__label">Booked</div>
+                <div style="font-size:18px; font-weight:600;">18</div>
+              </div>
+              <div>
+                <div class="stat-chip__label">Spend</div>
+                <div style="font-size:18px; font-weight:600;">$1,178</div>
+              </div>
+              <div>
+                <div class="stat-chip__label">CPB</div>
+                <div style="font-size:18px; font-weight:600;">$65</div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="flex:1; padding:16px; opacity:0.5;">
+            <div class="flex justify-between items-center mb-8">
+              <div class="card__title" style="font-size:14px;">ResultCalls</div>
+              <span class="badge badge--neutral">Coming Soon</span>
+            </div>
+            <div class="text-muted" style="font-size:13px;">Stats will appear once provider is live in your market.</div>
+          </div>
+          <div class="card" style="flex:1; padding:16px; opacity:0.5;">
+            <div class="flex justify-between items-center mb-8">
+              <div class="card__title" style="font-size:14px;">Google LSA</div>
+              <span class="badge badge--neutral">Coming Soon</span>
+            </div>
+            <div class="text-muted" style="font-size:13px;">Stats will appear once provider is live in your market.</div>
+          </div>
+        </div>
+
+        <!-- Combined call log with provider column -->
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">Combined Call Log</div>
+            <div class="flex gap-8">
+              <button class="btn btn--ghost btn--sm">Filter by Provider</button>
+              <button class="btn btn--ghost btn--sm">Export</button>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Provider</th>
+                <th>Category</th>
+                <th>ZIP</th>
+                <th>Duration</th>
+                <th>Booked</th>
+                <th>CPA</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-muted">Feb 20</td>
+                <td><span class="badge badge--info">eLocal</span></td>
+                <td>HVAC Repair</td>
+                <td>90210</td>
+                <td>4m 12s</td>
+                <td><span class="badge badge--success">Booked</span></td>
+                <td>$38</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 19</td>
+                <td><span class="badge badge--info">eLocal</span></td>
+                <td>Furnace Install</td>
+                <td>90211</td>
+                <td>6m 08s</td>
+                <td><span class="badge badge--success">Booked</span></td>
+                <td>$42</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 18</td>
+                <td><span class="badge badge--info">eLocal</span></td>
+                <td>AC Service</td>
+                <td>90212</td>
+                <td>1m 44s</td>
+                <td><span class="badge badge--neutral">No answer</span></td>
+                <td>—</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Feb 17</td>
+                <td><span class="badge badge--info">eLocal</span></td>
+                <td>HVAC Repair</td>
+                <td>91301</td>
+                <td>5m 01s</td>
+                <td><span class="badge badge--success">Booked</span></td>
+                <td>$38</td>
+                <td><span class="action-icon">🚩</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /#opt3-dashboard -->
+
+      <!-- COMPARE PROVIDERS TAB -->
+      <div id="opt3-compare" style="display:none;">
+
+        <div class="banner banner--success">
+          <span class="banner__icon">✅</span>
+          <div class="banner__body">
+            <div class="banner__title">You're using eLocal today</div>
+            Compare upcoming providers to understand pricing and coverage before they launch in your area.
+          </div>
+        </div>
+
+        <div class="section-heading">Pricing &amp; Coverage Comparison</div>
+
+        <div class="compare-grid">
+          <!-- Header row -->
+          <div class="compare-grid__cell header">Feature</div>
+          <div class="compare-grid__cell header active-col" style="background: var(--color-action-primary-bg);">
+            eLocal <span class="badge badge--success" style="margin-left:6px; font-size:10px;"><span class="badge__dot"></span>Active</span>
+          </div>
+          <div class="compare-grid__cell header">ResultCalls</div>
+          <div class="compare-grid__cell header">Google LSA</div>
+
+          <div class="compare-grid__cell row-label">Avg Cost / Call</div>
+          <div class="compare-grid__cell active-col">$35 – $45</div>
+          <div class="compare-grid__cell">$28 – $38</div>
+          <div class="compare-grid__cell">Pay per lead (varies)</div>
+
+          <div class="compare-grid__cell row-label">Billing Model</div>
+          <div class="compare-grid__cell active-col">Per call (30s+ qualify)</div>
+          <div class="compare-grid__cell">Per call (60s+ qualify)</div>
+          <div class="compare-grid__cell">Per verified lead</div>
+
+          <div class="compare-grid__cell row-label">Categories</div>
+          <div class="compare-grid__cell active-col">HVAC, Plumbing, Electrical</div>
+          <div class="compare-grid__cell">HVAC, Pest, Cleaning</div>
+          <div class="compare-grid__cell">All (Google-verified)</div>
+
+          <div class="compare-grid__cell row-label">AI Answering Required</div>
+          <div class="compare-grid__cell active-col"><span class="badge badge--success">Yes</span></div>
+          <div class="compare-grid__cell"><span class="badge badge--success">Yes</span></div>
+          <div class="compare-grid__cell"><span class="badge badge--success">Yes</span></div>
+
+          <div class="compare-grid__cell row-label">Dispute Credits</div>
+          <div class="compare-grid__cell active-col">Manual review (3–5 days)</div>
+          <div class="compare-grid__cell">Automatic (wrong category)</div>
+          <div class="compare-grid__cell">Google dispute portal</div>
+
+          <div class="compare-grid__cell row-label">Availability in LA Market</div>
+          <div class="compare-grid__cell active-col"><span class="badge badge--success">Live</span></div>
+          <div class="compare-grid__cell"><span class="badge badge--warning">Q2 2026</span></div>
+          <div class="compare-grid__cell row-last"><span class="badge badge--warning">Q3 2026</span></div>
+
+          <div class="compare-grid__cell compare-grid__row-last row-label">Setup Required</div>
+          <div class="compare-grid__cell compare-grid__row-last active-col">API key from eLocal account</div>
+          <div class="compare-grid__cell compare-grid__row-last">ResultCalls portal account</div>
+          <div class="compare-grid__cell compare-grid__row-last">Google Business Profile</div>
+        </div>
+
+        <div class="flex gap-12 mt-20">
+          <button class="btn btn--primary btn--sm" disabled style="opacity:0.5; cursor:not-allowed;">Add ResultCalls — Coming Q2 2026</button>
+          <button class="btn btn--outline btn--sm" disabled style="opacity:0.5; cursor:not-allowed;">Add Google LSA — Coming Q3 2026</button>
+        </div>
+
+      </div><!-- /#opt3-compare -->
+
+    </div><!-- /page-body -->
+  </main>
+</div><!-- /#option3 -->
+
+
+<!-- ============================================================
+     JAVASCRIPT — tab switching
+     ============================================================ -->
+<script>
+  function showOption(num, clickedTab) {
+    // Hide all panels
+    document.querySelectorAll('.screen-panel').forEach(p => p.classList.remove('active'));
+    // Deactivate all top nav tabs
+    document.querySelectorAll('.wireframe-nav__tab').forEach(t => t.classList.remove('active'));
+    // Show selected panel
+    document.getElementById('option' + num).classList.add('active');
+    // Activate clicked tab
+    clickedTab.classList.add('active');
+  }
+
+  function switchInnerTab(prefix, tabName) {
+    // Map tab names to content IDs for each option
+    const tabMaps = {
+      opt2: ['configure', 'dashboard'],
+      opt3: ['configure', 'dashboard', 'compare']
+    };
+
+    const tabs = tabMaps[prefix];
+    if (!tabs) return;
+
+    // Hide all content divs for this option
+    tabs.forEach(t => {
+      const el = document.getElementById(prefix + '-' + t);
+      if (el) el.style.display = 'none';
+    });
+
+    // Deactivate all tab-bar items for this option (within the parent screen-panel)
+    tabs.forEach(t => {
+      const tab = document.getElementById(prefix + '-' + t + '-tab');
+      if (tab) tab.classList.remove('active');
+    });
+
+    // Show selected content
+    const target = document.getElementById(prefix + '-' + tabName);
+    if (target) target.style.display = '';
+
+    // Activate selected tab
+    const activeTab = document.getElementById(prefix + '-' + tabName + '-tab');
+    if (activeTab) activeTab.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
