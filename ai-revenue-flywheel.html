@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Revenue Flywheel — HCP Product Vision 1Q26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #0f1117;
+      --surface:       #181c27;
+      --surface-2:     #1e2332;
+      --border:        #2a2f42;
+      --border-2:      #353c55;
+      --text:          #e8eaf0;
+      --muted:         #8b92a5;
+      --muted-2:       #6a7089;
+
+      /* PM / Stage colors */
+      --blue:    #4f8ef7;
+      --blue-d:  rgba(79,142,247,0.12);
+      --purple:  #a78bfa;
+      --purple-d:rgba(167,139,250,0.10);
+      --green:   #3ecf8e;
+      --green-d: rgba(62,207,142,0.08);
+      --gold:    #f5c84c;
+      --gold-d:  rgba(245,200,76,0.08);
+      --orange:  #f59e0b;
+      --orange-d:rgba(245,158,11,0.10);
+      --teal:    #2dd4bf;
+      --teal-d:  rgba(45,212,191,0.08);
+      --pink:    #f472b6;
+      --pink-d:  rgba(244,114,182,0.08);
+      --red:     #f06060;
+      --red-d:   rgba(240,96,96,0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 32px;
+      height: 48px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .nav-logo { font-weight: 700; color: var(--text); margin-right: 20px; font-size: 13px; }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    nav a:hover { color: var(--text); background: var(--surface-2); }
+
+    /* ── Page wrapper ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 56px 32px 96px; }
+
+    /* ── Section headers ── */
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    h1 { font-size: 36px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; }
+    h2 { font-size: 22px; font-weight: 700; line-height: 1.25; margin-bottom: 8px; }
+    h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .page-sub { font-size: 16px; color: var(--muted); line-height: 1.65; max-width: 680px; margin-bottom: 36px; }
+
+    .meta-row {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      font-size: 12px; color: var(--muted);
+      padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+    }
+    .meta-row strong { color: var(--text); }
+
+    /* ── Section divider ── */
+    .section { margin-bottom: 64px; }
+    .section-head {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 24px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-head h2 { margin-bottom: 0; }
+    .section-head .section-sub { font-size: 13px; color: var(--muted); }
+
+    /* ── Thesis block ── */
+    .thesis {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--blue);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+    }
+    .thesis p { font-size: 14px; color: var(--text); line-height: 1.75; }
+    .thesis p + p { margin-top: 12px; }
+    .thesis strong { color: var(--blue); }
+
+    /* ── Journey map ── */
+    .journey-scroll {
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin: 0 -32px;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+    .journey-track {
+      display: flex;
+      gap: 0;
+      min-width: max-content;
+      align-items: stretch;
+    }
+    .journey-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      color: var(--border-2);
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: -20px; /* align to card mid */
+    }
+    .stage {
+      width: 210px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .stage-head {
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .stage-num { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2px; }
+    .stage-name { font-size: 14px; font-weight: 700; }
+    .stage-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .stage-row-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--muted-2); margin-bottom: 3px;
+    }
+    .stage-row-text { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .stage-row-ai { font-size: 11px; color: var(--blue); font-style: italic; line-height: 1.5; }
+    .stage-footer {
+      padding: 8px 14px;
+      border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; gap: 4px;
+    }
+
+    /* Stage color accents */
+    .s-gold   .stage-head { border-top: 3px solid var(--gold); }
+    .s-gold   .stage-num  { color: var(--gold); }
+    .s-gold   .stage-name { color: var(--gold); }
+    .s-blue   .stage-head { border-top: 3px solid var(--blue); }
+    .s-blue   .stage-num  { color: var(--blue); }
+    .s-blue   .stage-name { color: var(--blue); }
+    .s-purple .stage-head { border-top: 3px solid var(--purple); }
+    .s-purple .stage-num  { color: var(--purple); }
+    .s-purple .stage-name { color: var(--purple); }
+    .s-orange .stage-head { border-top: 3px solid var(--orange); }
+    .s-orange .stage-num  { color: var(--orange); }
+    .s-orange .stage-name { color: var(--orange); }
+    .s-green  .stage-head { border-top: 3px solid var(--green); }
+    .s-green  .stage-num  { color: var(--green); }
+    .s-green  .stage-name { color: var(--green); }
+    .s-teal   .stage-head { border-top: 3px solid var(--teal); }
+    .s-teal   .stage-num  { color: var(--teal); }
+    .s-teal   .stage-name { color: var(--teal); }
+    .s-pink   .stage-head { border-top: 3px solid var(--pink); }
+    .s-pink   .stage-num  { color: var(--pink); }
+    .s-pink   .stage-name { color: var(--pink); }
+
+    /* ── PM owner pill ── */
+    .pm-pill {
+      font-size: 9px; font-weight: 600; padding: 2px 7px;
+      border-radius: 20px; white-space: nowrap;
+    }
+    .pm-andre   { background: rgba(79,142,247,0.15); color: var(--blue); }
+    .pm-kasia   { background: rgba(167,139,250,0.15); color: var(--purple); }
+    .pm-aj      { background: rgba(245,158,11,0.15); color: var(--orange); }
+    .pm-anyssa  { background: rgba(62,207,142,0.15); color: var(--green); }
+    .pm-sani    { background: rgba(245,200,76,0.15); color: var(--gold); }
+    .pm-natalie { background: rgba(244,114,182,0.15); color: var(--pink); }
+
+    /* ── Status badges ── */
+    .badge {
+      font-size: 9px; font-weight: 700; padding: 2px 7px;
+      border-radius: 20px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .badge-flight { background: rgba(62,207,142,0.12); color: var(--green); }
+    .badge-gap    { background: rgba(240,96,96,0.12); color: var(--red); }
+    .badge-new    { background: rgba(79,142,247,0.12); color: var(--blue); }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      font-size: 11px; color: var(--muted);
+      margin-top: 16px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── PM Portfolio ── */
+    .pm-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 800px) {
+      .pm-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .pm-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .pm-card-head {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .pm-card-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .pm-card-squad { font-size: 11px; color: var(--muted); }
+    .pm-card-body { padding: 14px 16px; }
+    .pm-card-section { margin-bottom: 12px; }
+    .pm-card-section:last-child { margin-bottom: 0; }
+    .pm-card-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--muted-2); margin-bottom: 5px;
+    }
+    .pm-card-list { list-style: none; }
+    .pm-card-list li {
+      font-size: 12px; color: var(--muted); line-height: 1.5; padding: 3px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .pm-card-list li:last-child { border-bottom: none; }
+    .li-dot { font-size: 10px; margin-top: 2px; flex-shrink: 0; }
+    .li-green { color: var(--green); }
+    .li-gold  { color: var(--gold); }
+    .li-red   { color: var(--red); }
+    .li-blue  { color: var(--blue); }
+    .pm-stage-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .stage-tag {
+      font-size: 9px; font-weight: 600; padding: 2px 7px;
+      border-radius: 4px; color: var(--muted); background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+
+    /* Andre card accent */
+    .pm-andre-card .pm-card-head { border-top: 3px solid var(--blue); }
+    .pm-andre-card .pm-card-name { color: var(--blue); }
+    .pm-kasia-card .pm-card-head { border-top: 3px solid var(--purple); }
+    .pm-kasia-card .pm-card-name { color: var(--purple); }
+    .pm-aj-card .pm-card-head { border-top: 3px solid var(--orange); }
+    .pm-aj-card .pm-card-name { color: var(--orange); }
+    .pm-anyssa-card .pm-card-head { border-top: 3px solid var(--green); }
+    .pm-anyssa-card .pm-card-name { color: var(--green); }
+    .pm-sani-card .pm-card-head { border-top: 3px solid var(--gold); }
+    .pm-sani-card .pm-card-name { color: var(--gold); }
+    .pm-natalie-card .pm-card-head { border-top: 3px solid var(--pink); }
+    .pm-natalie-card .pm-card-name { color: var(--pink); }
+
+    /* ── Flywheel ── */
+    .flywheel-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .flywheel-loop {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+    .flywheel-loop h3 { margin-bottom: 12px; font-size: 13px; }
+    .flywheel-steps { display: flex; flex-direction: column; gap: 4px; }
+    .fw-step {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: var(--muted); padding: 5px 0;
+    }
+    .fw-arrow { color: var(--border-2); font-size: 13px; flex-shrink: 0; }
+
+    /* ── White space / opportunity cards ── */
+    .opportunity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .opp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .opp-card.high-conf { border-top: 3px solid var(--green); }
+    .opp-card.med-conf  { border-top: 3px solid var(--gold); }
+    .opp-card.early     { border-top: 3px solid var(--blue); }
+    .opp-flag {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .opp-flag.green { color: var(--green); }
+    .opp-flag.gold  { color: var(--gold); }
+    .opp-flag.blue  { color: var(--blue); }
+    .opp-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .opp-owner { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+    .opp-why { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+    .opp-impact {
+      background: var(--surface-2);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px; color: var(--muted); line-height: 1.5;
+    }
+    .opp-impact strong { color: var(--text); }
+
+    /* ── CSR Connective Tissue ── */
+    .connective {
+      background: linear-gradient(135deg, rgba(79,142,247,0.08) 0%, rgba(167,139,250,0.06) 100%);
+      border: 1px solid rgba(79,142,247,0.25);
+      border-radius: 12px;
+      padding: 28px 32px;
+    }
+    .connective h2 { color: var(--blue); margin-bottom: 12px; }
+    .connective p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 12px; }
+    .connective p:last-child { margin-bottom: 0; }
+    .connective strong { color: var(--text); }
+    .connective-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .csr-touchpoint {
+      background: rgba(79,142,247,0.08);
+      border: 1px solid rgba(79,142,247,0.2);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .csr-tp-icon { font-size: 20px; margin-bottom: 6px; }
+    .csr-tp-label { font-size: 11px; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+    .csr-tp-desc { font-size: 10px; color: var(--muted); line-height: 1.4; }
+
+    /* ── Business case ── */
+    .biz-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .biz-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .biz-card-stage { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 6px; }
+    .biz-metric { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .biz-metric.green { color: var(--green); }
+    .biz-metric.gold  { color: var(--gold); }
+    .biz-metric.blue  { color: var(--blue); }
+    .biz-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 80px;
+      padding: 24px 32px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted-2);
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">HCP Product</span>
+  <a href="#journey">Journey Map</a>
+  <a href="#pms">PM Portfolio</a>
+  <a href="#flywheel">Flywheel</a>
+  <a href="#whitespace">White Space</a>
+  <a href="#csr">CSR AI Layer</a>
+  <a href="#biz">Business Case</a>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="eyebrow">HCP · 1Q26 · Director Vision</div>
+  <h1>The AI Revenue Flywheel</h1>
+  <p class="page-sub">Six PM bets, one customer journey. How AI becomes the connective tissue across every stage from discovery to re-engagement — and the case for prioritizing hard outcomes over feature count.</p>
+  <div class="meta-row">
+    <span><strong>Author:</strong> Chris Kosednar</span>
+    <span><strong>Date:</strong> Feb 23, 2026</span>
+    <span><strong>Status:</strong> Working draft</span>
+    <span><strong>Team:</strong> Andre · Sani · AJ · Kasia · Anyssa · Natalie</span>
+  </div>
+
+  <!-- THESIS -->
+  <div class="section">
+    <div class="section-head">
+      <h2>The Thesis</h2>
+    </div>
+    <div class="thesis">
+      <p>HCP's six PM bets aren't independent features — they're sequential stages of a single homeowner journey. A Pro who gets discovered through a strong GBP listing, captures the inquiry through OLB or inbound call, converts it with a sharp AI-drafted estimate, and follows up automatically is running a fundamentally different business than one who doesn't. <strong>The individual features matter less than closing the loop between them.</strong></p>
+      <p>The constraint isn't capability — it's conversion. At every handoff (discovery → inquiry, inquiry → estimate, estimate → booking, job → review), there's revenue falling out of the funnel. Each PM bet we're running maps to a specific leak. <strong>CSR AI is the connective tissue</strong> — the AI layer that should eventually handle every real-time communication touchpoint so the Pro never has to be present for the conversation to happen.</p>
+    </div>
+    <div class="thesis" style="border-left-color: var(--gold)">
+      <p>Two specific conversion problems are not yet clearly owned and deserve focused attention: <strong style="color:var(--gold)">(1) AI-powered estimate improvement</strong> — using job history, competitive context, and sales psychology to send better estimates — and <strong style="color:var(--gold)">(2) automated estimate follow-up</strong> — a multi-touch AI sequence to get unaccepted estimates across the line. Both have well-understood economics and can move revenue meaningfully without requiring new product surface.</p>
+    </div>
+  </div>
+
+  <!-- JOURNEY MAP -->
+  <div class="section" id="journey">
+    <div class="section-head">
+      <h2>Customer Journey Map</h2>
+      <span class="section-sub">Every PM bet mapped to the stage it unlocks</span>
+    </div>
+
+    <div class="journey-scroll">
+      <div class="journey-track">
+
+        <!-- Stage 1: Discover -->
+        <div class="stage s-gold">
+          <div class="stage-head">
+            <div class="stage-num">01 · Discover</div>
+            <div class="stage-name">Homeowner finds a Pro</div>
+          </div>
+          <div class="stage-body">
+            <div>
+              <div class="stage-row-label">Homeowner</div>
+              <div class="stage-row-text">Searches Google, sees GBP listing, reads reviews, checks website</div>
+            </div>
+            <div>
+              <div class="stage-row-label">HCP touchpoint</div>
+              <div class="stage-row-text">GBP listing quality, HCP-hosted website, reviews widget</div>
+            </div>
+            <div>
+              <div class="stage-row-label">AI opportunity</div>
+              <div class="stage-row-ai">Auto-push job photos → GBP. AI-respond to reviews. Build website content from job history.</div>
+            </div>
+          </div>
+          <div class="stage-footer">
+            <span class="pm-pill pm-sani">Sani</span>
+            <span class="pm-pill pm-anyssa">Anyssa</span>
+            <span class="badge badge-flight">In flight</span>
+            <span class="badge badge-gap">GBP gap</span>
+          </div>
+        </div>
+
+        <div class="journey-arrow">›</div>
+
+        <!-- Stage 2: Inquire -->
+        <div class="stage s-blue">
+          <div class="stage-head">
+            <div class="stage-num">02 · Inquire</div>
+            <div class="stage-name">Lead reaches out</div>
+          </div>
+          <div class="stage-body">
+            <div>
+              <div class="stage-row-label">Homeowner</div>
+              <div class="stage-row-text">Calls the number, fills OLB form, or sends a message via Job Inbox</div>
+            </div>
+            <div>
+              <div class="stage-row-label">HCP touchpoint</div>
+              <div class="stage-row-text">CSR AI answers calls, OLB form captures bookings, Job Inbox handles messages</div>
+            </div>
+            <div>
+              <div class="stage-row-label">AI opportunity</div>
+              <div class="stage-row-ai">CSR AI → 100% answer rate. AI replies to inbox instantly. Simplified OLB → higher form conversion.</div>
+            </div>
+          </div>
+          <div class="stage-footer">
+            <span class="pm-pill pm-andre">Andre</span>
+            <span class="pm-pill pm-kasia">Kasia</span>
+            <span class="pm-pill pm-aj">AJ</span>
+            <span class="badge badge-flight">In flight</span>
+          </div>
+        </div>
+
+        <div class="journey-arrow">›</div>
+
+        <!-- Stage 3: Quote -->
+        <div class="stage s-purple">
+          <div class="stage-head">
+            <div class="stage-num">03 · Quote</div>
+            <div class="stage-name">Estimate sent</div>
+          </div>
+          <div class="stage-body">
+            <div>
+              <div class="stage-row-label">Homeowner</div>
+              <div class="stage-row-text">Receives estimate, evaluates it vs. other quotes</div>
+            </div>
+            <div>
+              <div class="stage-row-label">HCP touchpoint</div>
+              <div class="stage-row-text">HCP estimate tool — line items, photos, pricing</div>
+            </div>
+            <div>
+              <div class="stage-row-label">AI opportunity</div>
+              <div class="stage-row-ai">AI drafts estimate from call transcript + job type. Applies sales tactics: anchoring, social proof, urgency.</div>
+            </div>
+          </div>
+          <div class="stage-footer">
+            <span class="pm-pill pm-kasia">Kasia</span>
+            <span class="badge badge-gap">Not owned</span>
+            <span class="badge badge-new">High value</span>
+          </div>
+        </div>
+
+        <div class="journey-arrow">›</div>
+
+        <!-- Stage 4: Follow-up -->
+        <div class="stage s-orange">
+          <div class="stage-head">
+            <div class="stage-num">04 · Follow-Up</div>
+            <div class="stage-name">Estimate closes</div>
+          </div>
+          <div class="stage-body">
+            <div>
+              <div class="stage-row-label">Homeowner</div>
+              <div class="stage-row-text">Hasn't accepted yet. Shopping around. Needs a nudge.</div>
+            </div>
+            <div>
+              <div class="stage-row-label">HCP touchpoint</div>
+              <div class="stage-row-text">Automation sequences, AI reply in automations</div>
+            </div>
+            <div>
+              <div class="stage-row-label">AI opportunity</div>
+              <div class="stage-row-ai">AI-timed follow-up SMS/email. Handles objections. "5 spots left this week" type nudges. CSR AI closes.</div>
+            </div>
+          </div>
+          <div class="stage-footer">
+            <span class="pm-pill pm-kasia">Kasia</span>
+            <span class="pm-pill pm-andre">Andre</span>
+            <span class="badge badge-flight">In flight</span>
+            <span class="badge badge-gap">Sequence gap</span>
+          </div>
+        </div>
+
+        <div class="journey-arrow">›</div>
+
+        <!-- Stage 5: Job -->
+        <div class="stage s-green">
+          <div class="stage-head">
+            <div class="stage-num">05 · Job</div>
+            <div class="stage-name">Work is done</div>
+          </div>
+          <div class="stage-body">
+            <div>
+              <div class="stage-row-label">Homeowner</div>
+              <div class="stage-row-text">Receives service. Tech captures photos and job notes.</div>
+            </div>
+            <div>
+              <div class="stage-row-label">HCP touchpoint</div>
+              <div class="stage-row-text">HCP mobile app — job completion, photos, invoicing</div>
+            </div>
+            <div>
+              <div class="stage-row-label">AI opportunity</div>
+              <div class="stage-row-ai">Auto-tag best photos for GBP/website use. Detect upsell moments. Trigger review request at peak satisfaction.</div>
+            </div>
+          </div>
+          <div class="stage-footer">
+            <span class="pm-pill pm-anyssa">Anyssa</span>
+            <span class="pm-pill pm-sani">Sani</span>
+            <span class="badge badge-gap">Photo routing gap</span>
+          </div>
+        </div>
+
+        <div class="journey-arrow">›</div>
+
+        <!-- Stage 6: Post-job -->
+        <div class="stage s-teal">
+          <div class="stage-head">
+            <div class="stage-num">06 · Post-Job</div>
+            <div class="stage-name">Reputation built</div>
+          </div>
+          <div class="stage-body">
+            <div>
+              <div class="stage-row-label">Homeowner</div>
+              <div class="stage-row-text">Receives review request. Leaves a review (or doesn't). Gets invoice.</div>
+            </div>
+            <div>
+              <div class="stage-row-label">HCP touchpoint</div>
+              <div class="stage-row-text">Review request SMS/email, customizable follow-up flow, GBP update push</div>
+            </div>
+            <div>
+              <div class="stage-row-label">AI opportunity</div>
+              <div class="stage-row-ai">AI personalizes review request. Drafts Pro's response to every review. Auto-pushes job proof to GBP.</div>
+            </div>
+          </div>
+          <div class="stage-footer">
+            <span class="pm-pill pm-anyssa">Anyssa</span>
+            <span class="pm-pill pm-sani">Sani</span>
+            <span class="badge badge-flight">In flight</span>
+          </div>
+        </div>
+
+        <div class="journey-arrow">›</div>
+
+        <!-- Stage 7: Re-engage -->
+        <div class="stage s-pink">
+          <div class="stage-head">
+            <div class="stage-num">07 · Re-Engage</div>
+            <div class="stage-name">Repeat + referral</div>
+          </div>
+          <div class="stage-body">
+            <div>
+              <div class="stage-row-label">Homeowner</div>
+              <div class="stage-row-text">Receives campaign. Books seasonal service. Refers a neighbor.</div>
+            </div>
+            <div>
+              <div class="stage-row-label">HCP touchpoint</div>
+              <div class="stage-row-text">Campaigns (email/SMS), one-click campaigns, CSR AI responds to replies</div>
+            </div>
+            <div>
+              <div class="stage-row-label">AI opportunity</div>
+              <div class="stage-row-ai">AI selects cohort + right offer + timing. CSR AI handles all campaign response conversations end-to-end.</div>
+            </div>
+          </div>
+          <div class="stage-footer">
+            <span class="pm-pill pm-natalie">Natalie</span>
+            <span class="pm-pill pm-andre">Andre</span>
+            <span class="badge badge-flight">In flight</span>
+            <span class="badge badge-gap">AI cohort gap</span>
+          </div>
+        </div>
+
+      </div><!-- .journey-track -->
+    </div><!-- .journey-scroll -->
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> In flight — actively being built</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Gap — known need, not yet owned</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> High value — unlocked with minimal surface</div>
+    </div>
+  </div>
+
+  <!-- PM PORTFOLIO -->
+  <div class="section" id="pms">
+    <div class="section-head">
+      <h2>PM Portfolio</h2>
+      <span class="section-sub">What each PM owns, what's in flight, and what's next</span>
+    </div>
+
+    <div class="pm-grid">
+
+      <!-- Andre -->
+      <div class="pm-card pm-andre-card">
+        <div class="pm-card-head">
+          <div class="pm-card-name">Andre Ottoni</div>
+          <div class="pm-card-squad">HCPA / CSR AI</div>
+          <div class="pm-stage-tags">
+            <span class="stage-tag">02 Inquire</span>
+            <span class="stage-tag">04 Follow-Up</span>
+            <span class="stage-tag">07 Re-Engage</span>
+          </div>
+        </div>
+        <div class="pm-card-body">
+          <div class="pm-card-section">
+            <div class="pm-card-label">In flight (1Q26)</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-green">●</span> Call quality + trust + prompts workshop → booking rate lift</li>
+              <li><span class="li-dot li-green">●</span> AB testing framework (tickets ready to pull)</li>
+              <li><span class="li-dot li-green">●</span> CSR AI text reply to leads from lead forms</li>
+              <li><span class="li-dot li-blue">●</span> CSR into AI Manager v3 (agent architecture)</li>
+              <li><span class="li-dot li-blue">●</span> Knowledge graph Phase 1 in 1Q</li>
+            </ul>
+          </div>
+          <div class="pm-card-section">
+            <div class="pm-card-label">Horizon / gaps</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-gold">●</span> Booking fallback — more discovery needed</li>
+              <li><span class="li-dot li-gold">●</span> CSR AI handling campaign reply conversations</li>
+              <li><span class="li-dot li-red">●</span> Estimate follow-up SMS sequences</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kasia -->
+      <div class="pm-card pm-kasia-card">
+        <div class="pm-card-head">
+          <div class="pm-card-name">Kasia Szenajch</div>
+          <div class="pm-card-squad">OLB + Pipeline</div>
+          <div class="pm-stage-tags">
+            <span class="stage-tag">02 Inquire</span>
+            <span class="stage-tag">03 Quote</span>
+            <span class="stage-tag">04 Follow-Up</span>
+          </div>
+        </div>
+        <div class="pm-card-body">
+          <div class="pm-card-section">
+            <div class="pm-card-label">In flight (1Q26)</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-green">●</span> Pipeline & Automations research complete</li>
+              <li><span class="li-dot li-green">●</span> Automations list improvements (Figma ready)</li>
+              <li><span class="li-dot li-green">●</span> Reply with AI in automations (Figma Jan 29)</li>
+            </ul>
+          </div>
+          <div class="pm-card-section">
+            <div class="pm-card-label">Horizon / gaps</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-red">●</span> OLB form simplification → conversion lift</li>
+              <li><span class="li-dot li-red">●</span> Estimate AI improvement (not yet scoped)</li>
+              <li><span class="li-dot li-gold">●</span> Multi-touch estimate follow-up sequence</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- AJ -->
+      <div class="pm-card pm-aj-card">
+        <div class="pm-card-head">
+          <div class="pm-card-name">AJ McCraw</div>
+          <div class="pm-card-squad">Job Inbox</div>
+          <div class="pm-stage-tags">
+            <span class="stage-tag">02 Inquire</span>
+          </div>
+        </div>
+        <div class="pm-card-body">
+          <div class="pm-card-section">
+            <div class="pm-card-label">In flight (1Q26)</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-green">●</span> Job Inbox Settings Page for Partner Integrations</li>
+            </ul>
+          </div>
+          <div class="pm-card-section">
+            <div class="pm-card-label">Horizon / gaps</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-red">●</span> AI-first response to all inbox inquiries</li>
+              <li><span class="li-dot li-red">●</span> Inbound call marketplace routing to inbox</li>
+              <li><span class="li-dot li-gold">●</span> Pro never needs to manually triage leads</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Anyssa -->
+      <div class="pm-card pm-anyssa-card">
+        <div class="pm-card-head">
+          <div class="pm-card-name">Anyssa Barbour</div>
+          <div class="pm-card-squad">Websites + Reviews</div>
+          <div class="pm-stage-tags">
+            <span class="stage-tag">01 Discover</span>
+            <span class="stage-tag">05 Job</span>
+            <span class="stage-tag">06 Post-Job</span>
+          </div>
+        </div>
+        <div class="pm-card-body">
+          <div class="pm-card-section">
+            <div class="pm-card-label">In flight (1Q26)</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-green">●</span> Redesigned Reviews Widget (demo Feb 12)</li>
+              <li><span class="li-dot li-green">●</span> Review follow-up customization (email + SMS)</li>
+              <li><span class="li-dot li-green">●</span> Follow-up request flow redesign</li>
+            </ul>
+          </div>
+          <div class="pm-card-section">
+            <div class="pm-card-label">Horizon / gaps</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-red">●</span> AI draft Pro responses to every review</li>
+              <li><span class="li-dot li-gold">●</span> Auto-trigger review request at job completion</li>
+              <li><span class="li-dot li-gold">●</span> Website content generated from job history</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sani -->
+      <div class="pm-card pm-sani-card">
+        <div class="pm-card-head">
+          <div class="pm-card-name">Sani Djaya</div>
+          <div class="pm-card-squad">Campaigns / Marketing Hub → GBP</div>
+          <div class="pm-stage-tags">
+            <span class="stage-tag">01 Discover</span>
+            <span class="stage-tag">06 Post-Job</span>
+            <span class="stage-tag">07 Re-Engage</span>
+          </div>
+        </div>
+        <div class="pm-card-body">
+          <div class="pm-card-section">
+            <div class="pm-card-label">In flight (1Q26)</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-green">●</span> One-click campaigns (design Jan 15)</li>
+              <li><span class="li-dot li-green">●</span> Sales & Marketing Dashboard v1</li>
+              <li><span class="li-dot li-green">●</span> Marketing Hub audit</li>
+            </ul>
+          </div>
+          <div class="pm-card-section">
+            <div class="pm-card-label">Horizon / gaps</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-red">●</span> GBP auto-update from completed jobs + photos</li>
+              <li><span class="li-dot li-red">●</span> Build Pro website from GBP data + job history</li>
+              <li><span class="li-dot li-gold">●</span> GBP performance metrics in Marketing Hub</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Natalie -->
+      <div class="pm-card pm-natalie-card">
+        <div class="pm-card-head">
+          <div class="pm-card-name">Natalie (new hire)</div>
+          <div class="pm-card-squad">Campaigns</div>
+          <div class="pm-stage-tags">
+            <span class="stage-tag">07 Re-Engage</span>
+          </div>
+        </div>
+        <div class="pm-card-body">
+          <div class="pm-card-section">
+            <div class="pm-card-label">In flight (1Q26)</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-green">●</span> Ramping — campaigns domain</li>
+              <li><span class="li-dot li-blue">●</span> One-click campaigns (with Sani handoff)</li>
+            </ul>
+          </div>
+          <div class="pm-card-section">
+            <div class="pm-card-label">Horizon / gaps</div>
+            <ul class="pm-card-list">
+              <li><span class="li-dot li-red">●</span> AI cohort identification — right message for right segment</li>
+              <li><span class="li-dot li-red">●</span> CSR AI closes campaign-triggered conversations</li>
+              <li><span class="li-dot li-gold">●</span> Campaigns → measurable revenue attribution</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .pm-grid -->
+  </div>
+
+  <!-- FLYWHEEL -->
+  <div class="section" id="flywheel">
+    <div class="section-head">
+      <h2>The Two Flywheels</h2>
+      <span class="section-sub">Why these bets compound — they feed each other</span>
+    </div>
+
+    <div class="flywheel-wrap">
+      <div class="flywheel-loop">
+        <h3 style="color:var(--green)">Reputation Flywheel</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">More reviews → better GBP → more calls → more jobs → more reviews</p>
+        <div class="flywheel-steps">
+          <div class="fw-step"><span class="fw-arrow">→</span> Job completed (photos taken)</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> AI sends personalized review request</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> 5-star review posted to Google</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> Job photos auto-pushed to GBP</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> Pro ranks higher in local search</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> More homeowners discover the Pro</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> More inbound calls → CSR AI answers</div>
+          <div class="fw-step" style="color:var(--green)"><span class="fw-arrow" style="color:var(--green)">↻</span> More jobs booked → loop repeats</div>
+        </div>
+        <div style="margin-top:14px;font-size:11px;color:var(--muted-2)">Owners: Anyssa (reviews) + Sani (GBP) + Andre (CSR AI)</div>
+      </div>
+
+      <div class="flywheel-loop">
+        <h3 style="color:var(--pink)">Revenue Flywheel</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Better estimates + follow-up → higher close rate → more LTV → more campaigns</p>
+        <div class="flywheel-steps">
+          <div class="fw-step"><span class="fw-arrow">→</span> Homeowner inquires (call or OLB)</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> CSR AI qualifies + books or escalates</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> AI drafts estimate with sales tactics</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> Multi-touch follow-up gets it accepted</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> Job completed → invoice paid</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> Customer added to campaign cohort</div>
+          <div class="fw-step"><span class="fw-arrow">→</span> AI campaign → CSR AI re-engages</div>
+          <div class="fw-step" style="color:var(--pink)"><span class="fw-arrow" style="color:var(--pink)">↻</span> Repeat booking → LTV grows</div>
+        </div>
+        <div style="margin-top:14px;font-size:11px;color:var(--muted-2)">Owners: Kasia (OLB/pipeline) + Andre (CSR AI) + Natalie (campaigns)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHITE SPACE -->
+  <div class="section" id="whitespace">
+    <div class="section-head">
+      <h2>Unlocked White Space</h2>
+      <span class="section-sub">High-value opportunities not yet owned — need a decision</span>
+    </div>
+
+    <div class="opportunity-grid">
+
+      <div class="opp-card high-conf">
+        <div class="opp-flag green">Highest Confidence</div>
+        <div class="opp-title">Estimate Follow-Up Automation</div>
+        <div class="opp-owner">Likely owner: Kasia + Andre · Stage 04</div>
+        <div class="opp-why">A Pro sends an estimate. The homeowner doesn't respond. Currently: nothing happens unless the Pro manually follows up. 40-60% of unaccepted estimates go cold without any contact. AI knows the estimate exists, the amount, the service type, and how long it's been sitting. This is a solved problem with automation sequences + AI-drafted messages.</div>
+        <div class="opp-impact">
+          <strong>Business case:</strong> If 20% of cold estimates are recovered by automated follow-up at an avg ticket of $400, a cohort of 10K pros sending 2 estimates/month = ~$16M/year in recovered Pro revenue. HCP's take rate on recovered jobs (through bookings) has a clear multiplier.
+        </div>
+      </div>
+
+      <div class="opp-card med-conf">
+        <div class="opp-flag gold">Strong Signal</div>
+        <div class="opp-title">AI-Powered Estimate Quality</div>
+        <div class="opp-owner">Likely owner: Kasia or new bet · Stage 03</div>
+        <div class="opp-why">Estimates are the most important document a Pro sends — but they're built manually, inconsistently, and without any sales strategy behind them. AI has the job transcript, Pro's past winning estimates, competitive price benchmarks, and social proof data. It can draft better estimates than most Pros write themselves — and apply proven sales tactics (scarcity, urgency, anchoring, social proof) to improve acceptance rate.</div>
+        <div class="opp-impact">
+          <strong>Business case:</strong> If estimate acceptance rate improves from 30% to 40% (a 33% lift), and HCP has 50K active Pros each sending 10 estimates/month, the revenue impact is significant. Harder to measure directly but clear in LTV and booking volume.
+        </div>
+      </div>
+
+      <div class="opp-card early">
+        <div class="opp-flag blue">Accelerator Bet</div>
+        <div class="opp-title">Inbound Call Marketplace</div>
+        <div class="opp-owner">Sponsor: Chris K · Stage 02</div>
+        <div class="opp-why">Pros buy exclusive inbound phone calls from a provider (eLocal), routed to CSR AI for 100% answer rate and booking. Solves the shared-lead failure loop entirely: exclusive, live, AI-answered. The 7K warm cohort (CSR AI + active lead spend) is the addressable market for Phase 1.</div>
+        <div class="opp-impact">
+          <strong>Business case:</strong> $2.8M ARR base case at 25% cohort attach. $5.1M at 35%. Requires CSR AI spam billing fix as prerequisite. Three implementation options scoped. <a href="../inbound-call-marketplace/index.html" style="color:var(--blue);text-decoration:none;font-weight:600">→ Full brief</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CSR AI CONNECTIVE TISSUE -->
+  <div class="section" id="csr">
+    <div class="connective">
+      <div class="eyebrow" style="color:var(--blue)">The Connective Tissue</div>
+      <h2>CSR AI is the infrastructure, not just a feature</h2>
+      <p>Every communication touchpoint in the customer journey — answering a call, replying to an inbox message, following up on an estimate, closing a campaign response, recovering a dropped booking, requesting a review — is a place where <strong>the Pro needs to be present but can't be.</strong> CSR AI's job is to be present for all of them.</p>
+      <p>Andre's "AI Manager v3" direction (making CSR AI an agent) is the right architectural bet: an AI that doesn't just answer calls but manages the entire communication relationship on the Pro's behalf. The value of each other PM's work compounds when CSR AI is the handoff layer — OLB captures the lead and hands it to CSR AI, campaigns send the message and CSR AI handles the reply, the estimate is sent and CSR AI follows up.</p>
+      <div class="connective-grid">
+        <div class="csr-touchpoint">
+          <div class="csr-tp-icon">📞</div>
+          <div class="csr-tp-label">Inbound calls</div>
+          <div class="csr-tp-desc">100% answer rate, qualifies + books</div>
+        </div>
+        <div class="csr-touchpoint">
+          <div class="csr-tp-icon">💬</div>
+          <div class="csr-tp-label">Lead replies</div>
+          <div class="csr-tp-desc">Text reply to web form + OLB leads</div>
+        </div>
+        <div class="csr-touchpoint">
+          <div class="csr-tp-icon">📋</div>
+          <div class="csr-tp-label">Estimate follow-up</div>
+          <div class="csr-tp-desc">Multi-touch nudge to get estimates closed</div>
+        </div>
+        <div class="csr-touchpoint">
+          <div class="csr-tp-icon">📣</div>
+          <div class="csr-tp-label">Campaign response</div>
+          <div class="csr-tp-desc">AI handles every campaign reply conversation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS CASE -->
+  <div class="section" id="biz">
+    <div class="section-head">
+      <h2>Business Case by Stage</h2>
+      <span class="section-sub">What we can measure, what we can hypothesize</span>
+    </div>
+    <div class="biz-grid">
+
+      <div class="biz-card">
+        <div class="biz-card-stage">01 Discover</div>
+        <div class="biz-metric gold">Harder to measure</div>
+        <div class="biz-desc">GBP quality improvements affect organic call volume — directionally clear, difficult to attribute directly. Reviews → rating → conversion is the chain. Proxy metric: inbound call volume from GBP.</div>
+      </div>
+
+      <div class="biz-card">
+        <div class="biz-card-stage">02 Inquire</div>
+        <div class="biz-metric green">Measurable</div>
+        <div class="biz-desc">CSR AI answer rate, OLB form conversion rate. Simplifying OLB has industry benchmarks (20-40% lift on shorter forms). Call answer rate → booking rate is a direct line.</div>
+      </div>
+
+      <div class="biz-card">
+        <div class="biz-card-stage">03 Quote</div>
+        <div class="biz-metric gold">Strong signal</div>
+        <div class="biz-desc">Estimate acceptance rate is trackable in HCP. Baseline needed. A 10pp lift at scale is worth tens of millions in Pro revenue. We likely don't know current baseline — that's a gap.</div>
+      </div>
+
+      <div class="biz-card">
+        <div class="biz-card-stage">04 Follow-Up</div>
+        <div class="biz-metric green">Measurable</div>
+        <div class="biz-desc">Estimate → accepted rate with vs. without follow-up sequence. Cold estimate recovery rate. Clean A/B test candidate once in flight. High confidence on positive impact.</div>
+      </div>
+
+      <div class="biz-card">
+        <div class="biz-card-stage">05–06 Job + Post-Job</div>
+        <div class="biz-metric gold">Compound</div>
+        <div class="biz-desc">Reviews volume → star rating → discovery (feeds Stage 01). GBP freshness → ranking. Both are downstream multipliers on every upstream bet. Hard to isolate, easy to observe at cohort level.</div>
+      </div>
+
+      <div class="biz-card">
+        <div class="biz-card-stage">07 Re-Engage</div>
+        <div class="biz-metric blue">LTV play</div>
+        <div class="biz-desc">Repeat booking rate from campaigns. Revenue per customer per year. Campaign → booked job attribution. Natalie's build-up phase should focus on getting the attribution right before scaling spend.</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted-2);margin-bottom:10px;">The Measurement Priority</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;">Before making the business case for any of these bets to leadership, the highest-value diagnostic is: <strong style="color:var(--text)">what is our current estimate acceptance rate, and what is our CSR AI booking rate?</strong> Those are the two numbers that anchor the revenue model for everything in stages 03 and 02 respectively. If we don't know them, we're arguing with intuition. If we do know them, we can model the value of a 10-point improvement in each with confidence.</p>
+    </div>
+  </div>
+
+</div><!-- .page -->
+
+<footer>
+  HCP Product · AI Revenue Flywheel · Director Vision · Chris Kosednar · Feb 2026
+</footer>
+
+</body>
+</html>
