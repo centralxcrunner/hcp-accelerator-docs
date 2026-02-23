@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Options Doc — Inbound Call Marketplace & AI Fulfillment</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3250;
+    --text: #e4e6f0;
+    --muted: #8b90a8;
+    --accent: #5b7fff;
+    --accent-dim: rgba(91,127,255,0.1);
+    --gold: #f5c542;
+    --gold-dim: rgba(245,197,66,0.1);
+    --green: #3ecf8e;
+    --green-dim: rgba(62,207,142,0.08);
+    --red: #f06060;
+    --red-dim: rgba(240,96,96,0.08);
+    --orange: #f59e42;
+    --orange-dim: rgba(245,158,66,0.08);
+    --purple: #9b7fff;
+    --purple-dim: rgba(155,127,255,0.08);
+    --teal: #38bdf8;
+    --teal-dim: rgba(56,189,248,0.08);
+    --o1: #3ecf8e;
+    --o1-dim: rgba(62,207,142,0.08);
+    --o2: #5b7fff;
+    --o2-dim: rgba(91,127,255,0.1);
+    --o3: #9b7fff;
+    --o3-dim: rgba(155,127,255,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── Layout ── */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 32px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .sidebar-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    padding: 0 20px 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .nav-item {
+    display: block;
+    padding: 6px 20px;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
+  .nav-section {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 16px 20px 5px;
+  }
+  .nav-item.o1 { color: var(--o1); }
+  .nav-item.o2 { color: var(--o2); }
+  .nav-item.o3 { color: var(--o3); }
+
+  .main {
+    flex: 1;
+    max-width: 860px;
+    padding: 48px 44px 80px;
+    min-width: 0;
+  }
+
+  /* ── Doc header ── */
+  .doc-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 44px;
+  }
+  .doc-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .doc-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .doc-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .doc-meta-item { font-size: 13px; color: var(--muted); }
+  .doc-meta-item strong { color: var(--text); }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(245,197,66,0.25);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .related-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .rel-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(91,127,255,0.2);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .rel-link:hover { background: rgba(91,127,255,0.18); }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon { font-size: 17px; }
+  h2 { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+  h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 22px 0 10px; }
+  p { font-size: 14px; color: var(--text); margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: #fff; }
+  ul { padding-left: 18px; }
+  ul li { font-size: 14px; color: var(--text); margin-bottom: 5px; line-height: 1.55; }
+
+  /* ── Prereq banner ── */
+  .prereq-banner {
+    background: var(--orange-dim);
+    border: 1px solid rgba(245,158,66,0.3);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+  }
+  .prereq-banner .pb-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .prereq-banner ul li { font-size: 13px; color: var(--text); margin-bottom: 4px; }
+
+  /* ── Option block ── */
+  .option-block {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+  .option-header {
+    padding: 18px 22px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .option-block.o1 .option-header { background: var(--o1-dim); border-bottom: 1px solid rgba(62,207,142,0.2); }
+  .option-block.o2 .option-header { background: var(--o2-dim); border-bottom: 1px solid rgba(91,127,255,0.2); }
+  .option-block.o3 .option-header { background: var(--o3-dim); border-bottom: 1px solid rgba(155,127,255,0.2); }
+  .option-num {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 2px;
+  }
+  .o1 .option-num { background: var(--o1); }
+  .o2 .option-num { background: var(--o2); }
+  .o3 .option-num { background: var(--o3); }
+  .option-title-group { flex: 1; }
+  .option-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .o1 .option-label { color: var(--o1); }
+  .o2 .option-label { color: var(--o2); }
+  .o3 .option-label { color: var(--o3); }
+  .option-title { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 6px; }
+  .effort-badges { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .badge-pts { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .badge-sprints { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .rec-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(245,197,66,0.15);
+    border: 1px solid rgba(245,197,66,0.35);
+    color: var(--gold);
+  }
+  .option-body { padding: 20px 22px; }
+  .option-desc { font-size: 14px; color: var(--text); margin-bottom: 18px; line-height: 1.65; }
+
+  /* ── Effort breakdown ── */
+  .effort-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .effort-list-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .effort-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .effort-row:last-child { border-bottom: none; }
+  .effort-area { color: var(--muted); }
+  .effort-pts { color: var(--text); font-weight: 600; }
+
+  /* ── Two-col scope / pros-cons ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .col-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .col-box h4 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .col-box.scope-in h4 { color: var(--teal); }
+  .col-box.scope-out h4 { color: var(--muted); }
+  .col-box.pros h4 { color: var(--green); }
+  .col-box.cons h4 { color: var(--red); }
+  .col-box ul { padding-left: 0; list-style: none; }
+  .col-box li { font-size: 12.5px; color: var(--text); margin-bottom: 6px; line-height: 1.5; padding-left: 16px; position: relative; }
+  .col-box li::before { position: absolute; left: 0; top: 0; }
+  .col-box.pros li::before { content: '✅'; font-size: 11px; }
+  .col-box.cons li::before { content: '⚠️'; font-size: 11px; }
+  .col-box.scope-in li::before { content: '→'; color: var(--teal); }
+  .col-box.scope-out li::before { content: '—'; color: var(--muted); }
+
+  /* ── Sub-sections within option ── */
+  .sub-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 20px 0 8px;
+  }
+  .complexity-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .complexity-low { background: var(--green-dim); color: var(--green); border: 1px solid rgba(62,207,142,0.3); }
+  .complexity-med { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(245,197,66,0.3); }
+  .complexity-high { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(245,158,66,0.3); }
+  .complexity-vhigh { background: var(--red-dim); color: var(--red); border: 1px solid rgba(240,96,96,0.3); }
+
+  /* ── Assumptions list ── */
+  .assumption-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  .assumption-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: flex-start;
+  }
+  .assumption-item:last-child { border-bottom: none; }
+  .assumption-dot {
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ── Warning box ── */
+  .warn-box {
+    background: var(--red-dim);
+    border: 1px solid rgba(240,96,96,0.25);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 10px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .warn-box ul { padding-left: 0; list-style: none; }
+  .warn-box li { font-size: 12.5px; color: var(--text); margin-bottom: 5px; padding-left: 16px; position: relative; }
+  .warn-box li::before { content: '↑'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+  /* ── Tags (deps / risks) ── */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .tag.req { background: var(--orange-dim); border-color: rgba(245,158,66,0.3); color: var(--orange); }
+
+  /* ── Risk items ── */
+  .risk-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: flex-start;
+  }
+  .risk-item:last-child { border-bottom: none; }
+  .risk-icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+  .risk-mitigation { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th {
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── OQ items ── */
+  .oq-group { margin-bottom: 22px; }
+  .oq-group-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .oq-group-title.o1 { background: var(--o1-dim); color: var(--o1); }
+  .oq-group-title.o2 { background: var(--o2-dim); color: var(--o2); }
+  .oq-group-title.o3 { background: var(--o3-dim); color: var(--o3); }
+  .oq-group-title.general { background: var(--surface); color: var(--muted); }
+  .oq-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; align-items: flex-start; }
+  .oq-item:last-child { border-bottom: none; }
+  .oq-num {
+    width: 22px; height: 22px; min-width: 22px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Recommendation box ── */
+  .rec-box {
+    background: var(--accent-dim);
+    border: 1px solid rgba(91,127,255,0.3);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 20px;
+    margin: 14px 0;
+  }
+  .rec-box .rec-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent); margin-bottom: 10px;
+  }
+  .rec-box p { font-size: 14px; margin-bottom: 10px; }
+  .rec-seq {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+  .rec-seq-item {
+    display: flex;
+    gap: 14px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: flex-start;
+  }
+  .rec-seq-item:last-child { border-bottom: none; }
+  .seq-num {
+    width: 22px; height: 22px; min-width: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    font-size: 11px; font-weight: 700; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── Phase cards ── */
+  .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .phase-card.full { grid-column: 1 / -1; }
+  .phase-num {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 6px;
+  }
+  .phase-card:nth-child(1) .phase-num { color: var(--orange); }
+  .phase-card:nth-child(2) .phase-num { color: var(--o1); }
+  .phase-card:nth-child(3) .phase-num { color: var(--o2); }
+  .phase-card:nth-child(4) .phase-num { color: var(--o3); }
+  .phase-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .phase-card ul { padding-left: 0; list-style: none; }
+  .phase-card li { font-size: 12px; color: var(--muted); margin-bottom: 4px; padding-left: 12px; position: relative; }
+  .phase-card li::before { content: '·'; position: absolute; left: 0; color: var(--muted); }
+  .phase-gate {
+    margin-top: 8px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+  .phase-card:nth-child(2) .phase-gate { background: var(--o1-dim); color: var(--o1); }
+  .phase-card:nth-child(3) .phase-gate { background: var(--o2-dim); color: var(--o2); }
+  .phase-card:nth-child(4) .phase-gate { background: var(--o3-dim); color: var(--o3); }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar ── -->
+<nav class="sidebar">
+  <div class="sidebar-title">Options Doc</div>
+  <a href="#problem" class="nav-item">Customer Problem</a>
+  <a href="#technical" class="nav-item">Technical Problem</a>
+  <div class="nav-section">Options</div>
+  <a href="#option1" class="nav-item o1">1 — Pass-Through</a>
+  <a href="#option2" class="nav-item o2">2 — Native Marketplace</a>
+  <a href="#option3" class="nav-item o3">3 — Multi-Provider</a>
+  <a href="#decision" class="nav-item">Decision</a>
+  <a href="#questions" class="nav-item">Open Questions</a>
+  <a href="#recommendation" class="nav-item">Recommendation</a>
+  <a href="#phases" class="nav-item">Phased Rollout</a>
+</nav>
+
+<!-- ── Main ── -->
+<main class="main">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div class="doc-eyebrow">Options Doc · Revenue / Sales AI</div>
+    <div class="doc-title">Inbound Call Marketplace & AI Fulfillment</div>
+    <div class="doc-meta-row">
+      <span class="doc-meta-item"><strong>Author:</strong> Chris Kosednar</span>
+      <span class="doc-meta-item"><strong>Date:</strong> Feb 23, 2026</span>
+      <span class="doc-meta-item"><strong>Area:</strong> Revenue / Sales AI</span>
+      <span class="status-pill">Draft — Eng Review</span>
+    </div>
+    <div class="related-links">
+      <a href="one-pager.html" target="_blank" class="rel-link">📋 1-Pager</a>
+      <a href="insights-brief.html" target="_blank" class="rel-link">📄 Insights Brief</a>
+    </div>
+  </div>
+
+
+  <!-- 1. Customer Problem -->
+  <div class="section" id="problem">
+    <div class="section-header">
+      <span class="section-icon">👤</span>
+      <h2>Customer Problem</h2>
+    </div>
+    <p>Pros who buy shared data leads from Angi, Thumbtack, and Google LSA are paying ~$1,000 per booked customer because leads are sent simultaneously to 3–7 competitors and the Pro is often in the field when the homeowner calls — the window to win is gone before the Pro even knows they have a lead.</p>
+    <p>Exclusive inbound phone calls solve all three failure modes (exclusivity, availability, freshness), but the mechanism to buy them inside HCP doesn't exist. Pros who want call buying today go directly to ResultCalls or eLocal outside HCP — we have no visibility, no attribution, and no retention hook on that spend.</p>
+
+    <div class="prereq-banner">
+      <div class="pb-label">⚠️ Two prerequisites must ship before any option can launch</div>
+      <ul>
+        <li><strong>Prerequisite 1 — CSR AI spam billing fix:</strong> Purchased calls that route into CSR AI and get billed as spam destroy the ROI math instantly. Eng has LLM-based spam classification (~6% flagged); billing exemption is the missing piece.</li>
+        <li><strong>Prerequisite 2 — SMS follow-up for new prospects:</strong> Not every purchased call will book live. AI-driven SMS follow-up (Feature #6, 3-month agentic roadmap) must work for new prospects, not just saved HCP customers.</li>
+      </ul>
+    </div>
+
+    <h3>VOC Signal</h3>
+    <table>
+      <thead><tr><th>Signal</th><th>Snippets</th><th>Match Rate</th></tr></thead>
+      <tbody>
+        <tr><td>AI answering / after-hours availability</td><td>2,657</td><td style="color:var(--green);font-weight:700">60%</td></tr>
+        <tr><td>Missed calls / off-hours</td><td>915</td><td style="color:var(--green);font-weight:700">51%</td></tr>
+        <tr><td>Missed-call SMS / automated text</td><td>~4,600</td><td style="color:var(--green);font-weight:700">Top-searched feature</td></tr>
+        <tr><td>Call buying / pay-per-call</td><td>262</td><td>29%</td></tr>
+        <tr><td>CSR AI spam calls (internal telemetry)</td><td>470,034 spam calls handled</td><td>3.81% of CSR AI total</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prereq-banner" style="background:var(--green-dim);border-color:rgba(62,207,142,0.3);margin-top:14px">
+      <div class="pb-label" style="color:var(--green)">Known Data Points — Real Cohort Sizing (Feb 2026)</div>
+      <ul>
+        <li><strong>~7,000 Pros</strong> received ≥1 lead via Job Inbox in January 2026 — the warm call-buying audience (already lead buyers inside HCP, upgrade motion not cold acquisition)</li>
+        <li><strong>~2,000 Pros</strong> currently on CSR AI = 3.6% of ~55K Pro base. ~96% of call buyers will be net-new CSR AI attaches → clean forced-attach kicker with no double-counting risk</li>
+        <li>Revenue model: $1.2M conservative → $2.8M base → $5.1M aggressive ARR (call marketplace alone). Full Marketing AI portfolio: $8–20M ARR.</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 2. Technical Problem -->
+  <div class="section" id="technical">
+    <div class="section-header">
+      <span class="section-icon">⚙️</span>
+      <h2>Technical Problem</h2>
+    </div>
+
+    <h3>What we know from research</h3>
+    <ul>
+      <li>eLocal integration already exists in HCP (owned by #eng_job_inbox / Christian Hong) — scope is <strong>unknown</strong>: live call routing or data lead records only? This determines the build delta between all three options.</li>
+      <li>CSR AI is built on VAPI / Twilio. Purchased calls need Pro-specific DID numbers that VAPI can answer and assign to the correct CSR AI context.</li>
+      <li>LLM spam classification exists (~6% flagged) but billing exemption has never shipped.</li>
+      <li>Missed-call SMS fires for existing HCP customers only — new prospect numbers get nothing.</li>
+    </ul>
+
+    <h3>What we need to validate with engineering</h3>
+    <ul>
+      <li>What does the current eLocal integration actually do — live call routing or data lead records only?</li>
+      <li>Can VAPI/Twilio provision Pro-specific tracking numbers at scale for marketplace routing?</li>
+      <li>What is the billing infrastructure path for pass-through spend (Pro funds balance → eLocal charges → HCP invoices Pro)?</li>
+      <li>How does CSR AI context get populated for eLocal calls vs. organic? Does source tag change the agent flow?</li>
+      <li>What's the effort to extend CSR AI's intake to accept a source parameter that drives job attribution?</li>
+    </ul>
+
+    <div class="prereq-banner" style="background:var(--red-dim);border-color:rgba(240,96,96,0.3)">
+      <div class="pb-label" style="color:var(--red)">Critical unknown affecting all estimates</div>
+      <p style="font-size:13px;margin:0">All three options assume the eLocal integration can be extended to live call routing. If the current integration is data-only, effort estimates increase materially — particularly for Options 1 and 2.</p>
+    </div>
+  </div>
+
+
+  <!-- OPTIONS -->
+  <div class="section" id="options">
+    <div class="section-header">
+      <span class="section-icon">🔀</span>
+      <h2>Options</h2>
+    </div>
+
+    <!-- Option 1 -->
+    <div class="option-block o1" id="option1">
+      <div class="option-header">
+        <div class="option-num">1</div>
+        <div class="option-title-group">
+          <div class="option-label">Option 1 · Minimum Viable Integration</div>
+          <div class="option-title">Lightweight eLocal Pass-Through</div>
+          <div class="effort-badges">
+            <span class="badge badge-pts">M · 20 pts</span>
+            <span class="badge badge-sprints">1 sprint</span>
+          </div>
+        </div>
+      </div>
+      <div class="option-body">
+        <p class="option-desc">Surface the existing eLocal integration as a call-buying channel inside HCP with minimal new product. Pro connects their existing eLocal account, eLocal routes purchased calls to the Pro's CSR AI line, and HCP displays basic call + spend telemetry. No marketplace configuration UI. No HCP billing pass-through. eLocal billing stays with eLocal.</p>
+
+        <div class="effort-list">
+          <div class="effort-list-title">Effort Breakdown</div>
+          <div class="effort-row"><span class="effort-area">API — eLocal account connect / OAuth handshake, call event webhook ingestion</span><span class="effort-pts">~7 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Attribution — Map eLocal tracking numbers → HCP call log + job source tag</span><span class="effort-pts">~5 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Web — Spend-to-date + calls received dashboard card in Marketing Hub</span><span class="effort-pts">~5 pts</span></div>
+          <div class="effort-row"><span class="effort-area">CSR AI — Source parameter pass-through → job record eLocal tag</span><span class="effort-pts">~3 pts</span></div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-box scope-in">
+            <h4>In Scope</h4>
+            <ul>
+              <li>Connect Pro's eLocal account to HCP</li>
+              <li>Route eLocal calls → Pro's CSR AI line</li>
+              <li>Spend-to-date, Calls Received, Billable Calls (≥60s)</li>
+              <li>Tag HCP jobs with eLocal as lead source</li>
+              <li>Basic call log: source, duration, disposition, outcome</li>
+            </ul>
+          </div>
+          <div class="col-box scope-out">
+            <h4>Out of Scope</h4>
+            <ul>
+              <li>Pro configuration of ZIPs / categories inside HCP</li>
+              <li>HCP-managed billing or balance top-up</li>
+              <li>Dispute workflow inside HCP</li>
+              <li>SMS follow-up attribution to eLocal calls</li>
+              <li>Multi-provider support</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-box pros">
+            <h4>Pros</h4>
+            <ul>
+              <li>Fastest to ship — weeks not quarters</li>
+              <li>Lowest risk — extends existing integration</li>
+              <li>Proves eLocal → CSR AI routing path before bigger build</li>
+              <li>Gets attribution data flowing to measure ROI</li>
+              <li>De-risks assumptions before Options 2 / 3</li>
+            </ul>
+          </div>
+          <div class="col-box cons">
+            <h4>Cons</h4>
+            <ul>
+              <li>Not a marketplace — Pro configures in eLocal's UI</li>
+              <li>No HCP margin — all spend stays with eLocal</li>
+              <li>No Pro discoverability — requires existing eLocal relationship</li>
+              <li>Doesn't solve acquisition — new-to-eLocal Pros can't find it</li>
+              <li>Retention risk — eLocal is the relationship holder</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sub-label">Technical Complexity</div>
+        <div><span class="complexity-pill complexity-low">Low–Medium</span></div>
+        <p style="font-size:13px">Primarily an API integration and data pipeline problem. Complexity is concentrated in reliably mapping eLocal call events to HCP call logs in real time. VAPI routing configuration is the only telephony change needed.</p>
+
+        <div class="sub-label">Technical Assumptions</div>
+        <div class="assumption-list">
+          <div class="assumption-item"><div class="assumption-dot"></div><div>Current eLocal integration supports live call event webhooks (not just daily data syncs)</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>VAPI can accept a source parameter on inbound call context without CSR AI agent flow changes</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>eLocal tracking numbers can be mapped to HCP Pro accounts via existing integration handshake</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>Job record schema already supports lead source tagging (or field can be added trivially)</div></div>
+        </div>
+
+        <div class="warn-box">
+          <div class="warn-label">Estimate changes if assumptions are wrong</div>
+          <ul>
+            <li>eLocal integration is data-only (no call webhooks): M (20pts) → L (40pts) — new telephony integration required</li>
+            <li>VAPI source parameter requires CSR AI agent flow changes: Add S (10pts)</li>
+            <li>Job source field doesn't exist: Add S (5pts) — schema migration + attribution logic</li>
+          </ul>
+        </div>
+
+        <div class="sub-label">Dependencies</div>
+        <div class="tag-list">
+          <span class="tag req">#eng_job_inbox / Christian Hong</span>
+          <span class="tag req">CSR AI / VAPI team (Andre Ottoni)</span>
+          <span class="tag req">eLocal partnership</span>
+          <span class="tag req">Prereq: CSR AI spam billing fix</span>
+        </div>
+
+        <div class="sub-label">Risks</div>
+        <div class="risk-item">
+          <div class="risk-icon">🔴</div>
+          <div>
+            <strong>eLocal integration scope</strong> — if current integration is data leads only, this isn't a fast option at all
+            <div class="risk-mitigation">Mitigation: Clarify with Christian Hong before sizing.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🟡</div>
+          <div>
+            <strong>Attribution accuracy</strong> — eLocal call events must arrive before job is created in HCP; race condition risk
+            <div class="risk-mitigation">Mitigation: Async attribution with webhook retry logic.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🟡</div>
+          <div>
+            <strong>Pro adoption</strong> — no HCP marketplace UI means only Pros already on eLocal benefit
+            <div class="risk-mitigation">Mitigation: Acceptable for POC phase; justify Option 2 with conversion data.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Option 2 -->
+    <div class="option-block o2" id="option2">
+      <div class="option-header">
+        <div class="option-num">2</div>
+        <div class="option-title-group">
+          <div class="option-label">Option 2 · Full Product</div>
+          <div class="option-title">Full Native Call Marketplace — eLocal, HCP-Owned Experience</div>
+          <div class="effort-badges">
+            <span class="badge badge-pts">L–XL · 60–80 pts</span>
+            <span class="badge badge-sprints">3 sprints</span>
+            <span class="rec-badge">⭐ Recommended</span>
+          </div>
+        </div>
+      </div>
+      <div class="option-body">
+        <p class="option-desc">Build a full marketplace experience inside HCP. Pros fund a balance, configure categories, ZIPs, and time windows, and purchase exclusive inbound calls from eLocal — all from inside HCP. All purchased calls route to CSR AI for guaranteed answer, booking, and job creation. HCP owns the billing relationship and earns margin on call spend.</p>
+
+        <div class="effort-list">
+          <div class="effort-list-title">Effort Breakdown</div>
+          <div class="effort-row"><span class="effort-area">Web — Marketplace configuration UI (categories, ZIPs, hours, budget cap)</span><span class="effort-pts">~15 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Web — Spend dashboard (balance, calls, billable ≥60s, bookings, CPA, ROAS)</span><span class="effort-pts">~10 pts</span></div>
+          <div class="effort-row"><span class="effort-area">API — HCP billing pass-through (Pro funds balance in HCP, HCP invoices eLocal)</span><span class="effort-pts">~15 pts</span></div>
+          <div class="effort-row"><span class="effort-area">eLocal — Category/ZIP/hour config sync, tracking number provisioning at scale</span><span class="effort-pts">~10 pts</span></div>
+          <div class="effort-row"><span class="effort-area">CSR AI — Source context on intake → attribution in job record + Pro notification</span><span class="effort-pts">~5 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Dispute workflow — Flag bad calls, credit flow inside HCP</span><span class="effort-pts">~5 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Testing, rollback, pilot controls (feature flag, cohort gating)</span><span class="effort-pts">~10 pts</span></div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-box scope-in">
+            <h4>In Scope</h4>
+            <ul>
+              <li>Marketplace configuration UI (categories, ZIPs, hours, budget)</li>
+              <li>HCP-managed balance + billing pass-through</li>
+              <li>eLocal tracking number provisioning per Pro config</li>
+              <li>All purchased calls → CSR AI (eligibility gate)</li>
+              <li>Call log: source tag, transcript link, disposition, outcome</li>
+              <li>Dispute workflow inside HCP</li>
+              <li>Spend dashboard: balance, spend-to-date, calls, CPA, ROAS</li>
+              <li>Job record attribution — eLocal as lead source</li>
+              <li>Pilot controls: category/ZIP whitelist, cohort gating</li>
+            </ul>
+          </div>
+          <div class="col-box scope-out">
+            <h4>Out of Scope</h4>
+            <ul>
+              <li>Multi-provider (eLocal only for MVP)</li>
+              <li>Call recording surfaced in HCP timeline (Phase 1.5)</li>
+              <li>AI-driven bid optimization (future)</li>
+              <li>Homeowner-facing booking UI changes</li>
+              <li>Off-hours pricing differentiation</li>
+              <li>Franchise / multi-location config</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-box pros">
+            <h4>Pros</h4>
+            <ul>
+              <li>Full HCP ownership — Pro never leaves the platform</li>
+              <li>HCP margin opportunity — billing pass-through = revenue stream</li>
+              <li>Pro discoverability — new Pros find it in Marketing Hub</li>
+              <li>Attribution + ROI visibility native to HCP</li>
+              <li>Positions for multi-provider in Option 3</li>
+              <li>Defensible moat — call buying + AI + attribution in HCP</li>
+            </ul>
+          </div>
+          <div class="col-box cons">
+            <h4>Cons</h4>
+            <ul>
+              <li>Larger build — 3 sprints vs. 1 for Option 1</li>
+              <li>eLocal dependency — single provider, pricing controlled by eLocal</li>
+              <li>Billing infrastructure complexity — new payment flow, balance management</li>
+              <li>CSR AI prerequisite must be solid — spam fix + strong book rate required</li>
+              <li>Dispute workflow non-trivial — credits require eLocal coordination</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sub-label">Technical Complexity</div>
+        <div><span class="complexity-pill complexity-med">Medium–High</span></div>
+        <p style="font-size:13px">Marketplace UI, balance management, and billing pass-through are the primary complexity drivers. eLocal API integration for per-Pro configuration and HCP billing infrastructure for pass-through payments are the two highest-risk areas. CSR AI changes are relatively contained.</p>
+
+        <div class="sub-label">Technical Assumptions</div>
+        <div class="assumption-list">
+          <div class="assumption-item"><div class="assumption-dot"></div><div>eLocal API supports per-Pro configuration of categories, ZIPs, and hours programmatically</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>eLocal can provision tracking numbers per Pro at scale (not just static numbers)</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>HCP billing infrastructure can support a new balance/pass-through model (distinct from subscription billing)</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>CSR AI can accept enriched call context (source: eLocal, Pro config snapshot) without major agent flow changes</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>VAPI can scale to marketplace-scale call volume without degrading existing CSR AI calls</div></div>
+        </div>
+
+        <div class="warn-box">
+          <div class="warn-label">Estimate changes if assumptions are wrong</div>
+          <ul>
+            <li>eLocal doesn't support per-Pro API configuration: L–XL (60–80pts) → XL (80pts+) — custom routing layer required</li>
+            <li>HCP billing infrastructure can't support pass-through natively: Add L (40pts) — new billing service</li>
+            <li>VAPI can't handle marketplace-scale routing separately from organic CSR AI: Add M (20pts)</li>
+            <li>Dispute workflow requires real-time eLocal API calls: Add S (10pts)</li>
+          </ul>
+        </div>
+
+        <div class="sub-label">Dependencies</div>
+        <div class="tag-list">
+          <span class="tag req">#eng_job_inbox / Christian Hong</span>
+          <span class="tag req">CSR AI / VAPI team (Andre Ottoni)</span>
+          <span class="tag req">Finance / Billing infrastructure</span>
+          <span class="tag req">eLocal partnership / Legal</span>
+          <span class="tag req">Design</span>
+          <span class="tag req">Prereq: CSR AI spam fix</span>
+          <span class="tag req">Prereq: SMS follow-up (new prospects)</span>
+          <span class="tag req">Prereq: CSR AI 7-agent overhaul</span>
+        </div>
+
+        <div class="sub-label">Risks</div>
+        <div class="risk-item">
+          <div class="risk-icon">🔴</div>
+          <div>
+            <strong>eLocal API limitations</strong> — if eLocal API doesn't support per-Pro config, we're building a routing layer, which is Option 3 scope
+            <div class="risk-mitigation">Mitigation: Validate eLocal API capabilities before committing to Option 2.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🔴</div>
+          <div>
+            <strong>Billing complexity underestimated</strong> — pass-through billing is a new payment model; may require significant billing infrastructure work
+            <div class="risk-mitigation">Mitigation: Scope billing as a separate workstream; consider Phase 1 with eLocal direct billing, Phase 2 HCP pass-through.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🟡</div>
+          <div>
+            <strong>CSR AI performance dependency</strong> — if book rate stays at 15%, call buying ROI breaks down; Pros won't rebuy
+            <div class="risk-mitigation">Mitigation: Gate call buying launch on 7-agent overhaul hitting meaningful book rate improvement.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🔴</div>
+          <div>
+            <strong>Spam at scale</strong> — purchased calls from eLocal routing into CSR AI at scale with spam billing unfixed = Pro complaints
+            <div class="risk-mitigation">Mitigation: Hard prerequisite — do not launch without spam fix.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Option 3 -->
+    <div class="option-block o3" id="option3">
+      <div class="option-header">
+        <div class="option-num">3</div>
+        <div class="option-title-group">
+          <div class="option-label">Option 3 · Platform Play</div>
+          <div class="option-title">Platform-Agnostic Call Marketplace — Multi-Provider, HCP-Owned Routing</div>
+          <div class="effort-badges">
+            <span class="badge badge-pts">XL–XXL · 100–120 pts</span>
+            <span class="badge badge-sprints">4–5 sprints</span>
+          </div>
+        </div>
+      </div>
+      <div class="option-body">
+        <p class="option-desc">Build HCP-owned call routing infrastructure that can accept inbound calls from any provider — eLocal, ResultCalls, Google LSA, or any future partner. HCP provisions tracking numbers, owns the routing layer, and becomes the provider-agnostic marketplace. eLocal is the launch partner, but the architecture supports competitive sourcing.</p>
+
+        <div class="effort-list">
+          <div class="effort-list-title">Effort Breakdown</div>
+          <div class="effort-row"><span class="effort-area">Telephony infrastructure — HCP-owned DID pool, routing engine (Twilio/VAPI at HCP layer)</span><span class="effort-pts">~30 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Provider abstraction layer — standardized call event API any provider can post to</span><span class="effort-pts">~20 pts</span></div>
+          <div class="effort-row"><span class="effort-area">eLocal integration — first provider on the abstraction layer</span><span class="effort-pts">~10 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Web — Full marketplace UI (same as Option 2)</span><span class="effort-pts">~15 pts</span></div>
+          <div class="effort-row"><span class="effort-area">HCP billing — balance management, per-provider billing terms, pass-through</span><span class="effort-pts">~15 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Call log, attribution, dispute workflow</span><span class="effort-pts">~5 pts</span></div>
+          <div class="effort-row"><span class="effort-area">Testing, rollback, pilot controls</span><span class="effort-pts">~10 pts</span></div>
+          <div class="effort-row"><span class="effort-area">ResultCalls integration (second provider — Phase 2, design for)</span><span class="effort-pts">~15 pts sep.</span></div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-box scope-in">
+            <h4>In Scope</h4>
+            <ul>
+              <li>HCP-owned DID pool and routing engine</li>
+              <li>Provider abstraction API (standardized webhook contract)</li>
+              <li>eLocal as launch provider</li>
+              <li>All purchased calls → CSR AI (eligibility gate)</li>
+              <li>Full marketplace configuration UI (same as Option 2)</li>
+              <li>Per-provider billing terms + HCP pass-through</li>
+              <li>Call log, attribution, dispute workflow</li>
+              <li>Architecture designed for ResultCalls / Google LSA</li>
+            </ul>
+          </div>
+          <div class="col-box scope-out">
+            <h4>Out of Scope</h4>
+            <ul>
+              <li>Call recording surfaced in HCP (Phase 2)</li>
+              <li>AI-driven bid optimization</li>
+              <li>Homeowner-facing UI changes</li>
+              <li>Franchise / multi-location</li>
+              <li>Third provider onboarding at launch</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="col-box pros">
+            <h4>Pros</h4>
+            <ul>
+              <li>Not locked to eLocal — competitive sourcing drives better pricing</li>
+              <li>HCP owns the routing — full visibility, control, quality enforcement</li>
+              <li>Platform defensibility — providers compete for HCP distribution</li>
+              <li>True marketplace — price competition improves Pro ROI</li>
+              <li>Foundation for HCP as a performance marketing platform</li>
+            </ul>
+          </div>
+          <div class="col-box cons">
+            <h4>Cons</h4>
+            <ul>
+              <li>4–5× the build time of Option 1; 1.5–2× Option 2</li>
+              <li>HCP becomes a telephony infrastructure company — new operational burden</li>
+              <li>Provider abstraction adds complexity before demand is proven</li>
+              <li>Longer time to first value — Pros wait while we build infrastructure</li>
+              <li>Highest risk — building infrastructure for an unvalidated hypothesis</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sub-label">Technical Complexity</div>
+        <div><span class="complexity-pill complexity-vhigh">Very High</span></div>
+        <p style="font-size:13px">HCP would need to own and operate telephony infrastructure (DID provisioning, routing engine, call event ingestion at scale). This is a platform build, not a product feature. Primary risks: telephony reliability, routing latency, DID provisioning at scale, and provider schema incompatibilities.</p>
+
+        <div class="sub-label">Technical Assumptions</div>
+        <div class="assumption-list">
+          <div class="assumption-item"><div class="assumption-dot"></div><div>HCP can operate a Twilio/VAPI routing layer independently with acceptable reliability SLAs</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>DID provisioning at scale (100s–1000s of Pro-specific tracking numbers) is operationally manageable</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>Provider webhook abstraction can accommodate eLocal's and ResultCalls' different schemas without significant per-provider translation</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>HCP billing infrastructure can support multiple provider billing terms simultaneously</div></div>
+          <div class="assumption-item"><div class="assumption-dot"></div><div>CSR AI architecture can handle calls from HCP-owned routing without reliability degradation</div></div>
+        </div>
+
+        <div class="warn-box">
+          <div class="warn-label">Estimate changes if assumptions are wrong</div>
+          <ul>
+            <li>HCP-owned routing requires significant DevOps / SRE investment for reliability SLAs: Add XL (80pts)</li>
+            <li>Provider schemas are incompatible — per-provider translation middleware required: Add M (20pts) per provider</li>
+            <li>DID provisioning at scale requires a dedicated provisioning service: Add M (20pts)</li>
+            <li>CSR AI migration from VAPI-hosted to HCP-routing layer required: could be XL (80pts) additional</li>
+          </ul>
+        </div>
+
+        <div class="sub-label">Dependencies</div>
+        <div class="tag-list">
+          <span class="tag req">All Option 2 dependencies</span>
+          <span class="tag req">Infrastructure / Platform team</span>
+          <span class="tag req">Legal / Compliance (TCPA)</span>
+          <span class="tag req">Security</span>
+          <span class="tag req">ResultCalls / second provider partnership</span>
+        </div>
+
+        <div class="sub-label">Risks</div>
+        <div class="risk-item">
+          <div class="risk-icon">🔴</div>
+          <div>
+            <strong>Premature abstraction</strong> — building multi-provider before validating single-provider demand; stranded investment if call buying doesn't prove out
+            <div class="risk-mitigation">Mitigation: Only choose Option 3 if Option 2 has proven strong demand and eLocal pricing is a constraint.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🔴</div>
+          <div>
+            <strong>Telephony reliability</strong> — HCP owns the routing layer, HCP owns the missed call complaints
+            <div class="risk-mitigation">Mitigation: SLA-backed telephony partner, circuit breaker patterns, transparent SLA dashboard.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🟡</div>
+          <div>
+            <strong>Regulatory complexity</strong> — operating as a telephony intermediary may have TCPA and carrier compliance implications
+            <div class="risk-mitigation">Mitigation: Legal review before design is finalized.</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🟡</div>
+          <div>
+            <strong>Provider onboarding</strong> — abstraction layer only has value if multiple providers actually integrate
+            <div class="risk-mitigation">Mitigation: Validate provider interest before committing to Option 3 architecture.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Decision -->
+  <div class="section" id="decision">
+    <div class="section-header">
+      <span class="section-icon">✅</span>
+      <h2>Decision and Outcome</h2>
+    </div>
+    <table>
+      <thead><tr><th>Decision Selected</th><th>Updated Effort</th><th>Business Context</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--o2)"><strong>Pending eng review</strong> — PM recommendation: Option 2 (Full Native Marketplace), with Option 1 as validation sprint</td>
+          <td style="color:var(--text)">L–XL · 60–80 pts (Option 2) / M · 20 pts (Option 1 POC)</td>
+          <td><strong>Warm cohort:</strong> ~7,000 Pros already buying leads via Job Inbox (Jan 2026) = upgrade motion, not cold acquisition. <strong>CSR AI baseline:</strong> ~2,000 Pros at 3.6% attach → ~96% of call buyers are net-new. <strong>Revenue:</strong> $1.2M–$5.1M ARR call marketplace; $8–20M full Marketing AI portfolio.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- Open Questions -->
+  <div class="section" id="questions">
+    <div class="section-header">
+      <span class="section-icon">❓</span>
+      <h2>Open Questions for Engineering</h2>
+    </div>
+
+    <div class="oq-group">
+      <div class="oq-group-title o1">Option 1 — Lightweight Pass-Through</div>
+      <div class="oq-item"><div class="oq-num">1</div><div><strong>eLocal integration current state:</strong> Does the existing integration support live call event webhooks, or is it data-only? This is the go/no-go question for Option 1 as a fast path.</div></div>
+      <div class="oq-item"><div class="oq-num">2</div><div><strong>VAPI source parameter:</strong> Can inbound calls from eLocal be tagged with a source context that flows to the CSR AI agent and the resulting job record without changes to the agent flow?</div></div>
+      <div class="oq-item"><div class="oq-num">3</div><div><strong>Tracking number mapping:</strong> How does eLocal's tracking number get associated with a specific Pro's CSR AI line — already wired, or requires new configuration logic?</div></div>
+      <div class="oq-item"><div class="oq-num">4</div><div><strong>Sizing validation:</strong> Does M (20pts) hold if eLocal webhooks exist and the VAPI source parameter is trivial? What would push this to L?</div></div>
+    </div>
+
+    <div class="oq-group">
+      <div class="oq-group-title o2">Option 2 — Full Native Marketplace</div>
+      <div class="oq-item"><div class="oq-num">1</div><div><strong>eLocal per-Pro API:</strong> Does eLocal's API support programmatic configuration of categories, ZIPs, and hours per Pro account?</div></div>
+      <div class="oq-item"><div class="oq-num">2</div><div><strong>Tracking number provisioning:</strong> Can eLocal provision unique tracking numbers per Pro at marketplace scale (100s of Pros)? Is there a cost/quota on DID provisioning?</div></div>
+      <div class="oq-item"><div class="oq-num">3</div><div><strong>HCP billing pass-through:</strong> Is there existing infrastructure for HCP to manage a Pro balance that draws down as calls are billed? How different from the HCP Ads model?</div></div>
+      <div class="oq-item"><div class="oq-num">4</div><div><strong>Dispute workflow:</strong> What does the credit/dispute API look like on eLocal's side? Can HCP trigger a credit request programmatically?</div></div>
+      <div class="oq-item"><div class="oq-num">5</div><div><strong>Sizing validation:</strong> Does L–XL (60–80pts) include billing infrastructure, or is that a separate workstream? What's the highest-risk assumption that could push this to XXL?</div></div>
+    </div>
+
+    <div class="oq-group">
+      <div class="oq-group-title o3">Option 3 — Multi-Provider Platform</div>
+      <div class="oq-item"><div class="oq-num">1</div><div><strong>HCP telephony ownership:</strong> What would it take to own a Twilio routing layer independently? What SLA could we commit to Pros for purchased call reliability?</div></div>
+      <div class="oq-item"><div class="oq-num">2</div><div><strong>DID provisioning at scale:</strong> Is there an existing pattern in HCP for managing pools of phone numbers that we could extend?</div></div>
+      <div class="oq-item"><div class="oq-num">3</div><div><strong>Provider abstraction feasibility:</strong> Looking at eLocal's and ResultCalls' webhook schemas — how different are they? Thin abstraction or significant per-provider translation?</div></div>
+      <div class="oq-item"><div class="oq-num">4</div><div><strong>CSR AI impact:</strong> Would migrating inbound routing from VAPI-hosted to HCP-owned routing require changes to CSR AI agent behavior or reliability guarantees?</div></div>
+      <div class="oq-item"><div class="oq-num">5</div><div><strong>Regulatory flags:</strong> Any TCPA or carrier compliance concerns with HCP owning the routing layer?</div></div>
+    </div>
+
+    <div class="oq-group">
+      <div class="oq-group-title general">General</div>
+      <div class="oq-item"><div class="oq-num">1</div><div><strong>What does the eLocal integration actually do today?</strong> Most important input to option selection — please pull Christian Hong into this conversation.</div></div>
+      <div class="oq-item"><div class="oq-num">2</div><div><strong>What's the highest-risk assumption</strong> in each option that could derail the effort estimate?</div></div>
+      <div class="oq-item"><div class="oq-num">3</div><div><strong>Prerequisite sequencing:</strong> Can the spam billing fix ship independently, or is it bundled with CSR AI work that affects the timeline?</div></div>
+      <div class="oq-item"><div class="oq-num">4</div><div><strong>Are there existing HCP patterns</strong> (e.g., marketing spend balance, Angi integration) that reduce billing pass-through effort for Option 2?</div></div>
+    </div>
+  </div>
+
+
+  <!-- Recommendation -->
+  <div class="section" id="recommendation">
+    <div class="section-header">
+      <span class="section-icon">⭐</span>
+      <h2>Recommendation</h2>
+    </div>
+    <div class="rec-box">
+      <div class="rec-label">PM Recommendation — for use before the eng review meeting</div>
+      <p><strong>Recommended path: Option 2 (Full Native Marketplace), with Option 1 as the prerequisite validation sprint.</strong></p>
+      <p>Option 2 is the right product — it gives Pros a native call-buying experience inside HCP, creates a margin opportunity, drives CSR AI attach rate, and positions HCP defensibly. Option 3 is architecturally correct long-term but is premature abstraction before call buying demand is proven at all. Option 1 alone is not a durable product — it requires Pros to have an existing eLocal relationship and gives HCP no retention or margin.</p>
+    </div>
+
+    <h3>The sequencing that makes sense</h3>
+    <div class="rec-seq">
+      <div class="rec-seq-item"><div class="seq-num">1</div><div>Ship <strong>Option 1 first</strong> as a 1-sprint POC — validates the eLocal → CSR AI routing path, gets attribution data flowing, and proves (or disproves) that call buying economics work before the larger Option 2 build.</div></div>
+      <div class="rec-seq-item"><div class="seq-num">2</div><div>If Option 1 POC shows strong conversion (<strong>&gt;30% book rate on purchased calls, Pros rebuy</strong>), accelerate to Option 2.</div></div>
+      <div class="rec-seq-item"><div class="seq-num">3</div><div>If Option 2 reveals eLocal pricing as a competitive constraint, architect <strong>Option 3's routing layer as Phase 2 of Option 2</strong> — not a separate greenfield build.</div></div>
+    </div>
+
+    <h3>Hard prerequisites before any option ships</h3>
+    <div class="tag-list" style="margin-top:8px">
+      <span class="tag req">CSR AI spam billing fix must be live</span>
+      <span class="tag req">SMS follow-up for new prospects live or close</span>
+    </div>
+  </div>
+
+
+  <!-- Phased Rollout -->
+  <div class="section" id="phases">
+    <div class="section-header">
+      <span class="section-icon">📅</span>
+      <h2>Phased Rollout</h2>
+    </div>
+    <div class="phase-grid">
+      <div class="phase-card full">
+        <div class="phase-num">Phase 0 — Prerequisites</div>
+        <div class="phase-title">Before any call buying</div>
+        <ul>
+          <li>CSR AI spam billing fix (Prerequisite 1)</li>
+          <li>SMS follow-up for new prospects (Prerequisite 2)</li>
+          <li>Clarify eLocal integration scope with Christian Hong</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">Phase 1 — POC</div>
+        <div class="phase-title">Option 1 Pass-Through · 1 sprint</div>
+        <ul>
+          <li>eLocal account connect, call routing → CSR AI, spend telemetry card</li>
+          <li>Pilot: 10–20 Pros with existing eLocal relationships</li>
+        </ul>
+        <div class="phase-gate">Success gate: &gt;30% book rate on purchased calls, ≥50% of pilot Pros recharge</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">Phase 2 — Marketplace</div>
+        <div class="phase-title">Option 2 Full Native · 3 sprints</div>
+        <ul>
+          <li>Full marketplace config UI, HCP billing pass-through, dispute workflow</li>
+          <li>Pilot expansion: 30–50 Pros across 3–5 categories</li>
+        </ul>
+        <div class="phase-gate">Success gate: 30–50 Pros active with ≥1 billable call/week, CPA &lt; $300</div>
+      </div>
+      <div class="phase-card full">
+        <div class="phase-num">Phase 3 — Multi-Provider (if warranted)</div>
+        <div class="phase-title">Option 3 · Only if eLocal pricing becomes a competitive constraint</div>
+        <ul>
+          <li>Only if Pros are requesting specific alternative providers or eLocal pricing is a blocker</li>
+          <li>Architect routing abstraction as an extension of Option 2 infrastructure — not a greenfield build</li>
+        </ul>
+        <div class="phase-gate" style="background:var(--o3-dim);color:var(--o3)">Trigger: eLocal pricing complaints in VOC, or active Pro demand for ResultCalls / Google LSA</div>
+      </div>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:20px"><em>Sources: Reforge Insights VOC (HCP workspace), Slack (#ai-csr-eng, #csr-ai-triad, #eng_job_inbox), Confluence (3 Month Agentic Roadmap, Revenue Roadmap Feb26, [Template] Options Doc) · Research date: 2026-02-20</em></p>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

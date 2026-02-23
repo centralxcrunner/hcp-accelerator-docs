@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1-Pager — Inbound Call Marketplace & AI Fulfillment</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3250;
+    --text: #e4e6f0;
+    --muted: #8b90a8;
+    --accent: #5b7fff;
+    --accent-dim: rgba(91,127,255,0.1);
+    --gold: #f5c542;
+    --gold-dim: rgba(245,197,66,0.1);
+    --green: #3ecf8e;
+    --green-dim: rgba(62,207,142,0.08);
+    --red: #f06060;
+    --red-dim: rgba(240,96,96,0.08);
+    --orange: #f59e42;
+    --orange-dim: rgba(245,158,66,0.08);
+    --purple: #9b7fff;
+    --purple-dim: rgba(155,127,255,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── Doc header ── */
+  .doc-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+  .doc-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .doc-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .doc-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+  }
+  .doc-meta-item { font-size: 13px; color: var(--muted); }
+  .doc-meta-item strong { color: var(--text); }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(245,197,66,0.25);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .brief-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(91,127,255,0.25);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-left: auto;
+    transition: background 0.15s;
+  }
+  .brief-link:hover { background: rgba(91,127,255,0.18); }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 44px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon { font-size: 17px; }
+  h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+  h3 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 20px 0 8px;
+  }
+  p { font-size: 14px; color: var(--text); margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: #fff; }
+  ul { padding-left: 18px; }
+  ul li { font-size: 14px; color: var(--text); margin-bottom: 5px; line-height: 1.55; }
+
+  /* ── Executive summary ── */
+  .exec-summary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 22px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* ── Failure loop ── */
+  .loop-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 16px 0;
+  }
+  .loop-step {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.45;
+  }
+  .loop-step .step-num {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+  .loop-arrow {
+    color: var(--muted);
+    font-size: 16px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+  .loop-result {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--red-dim);
+    border: 1px solid rgba(240,96,96,0.25);
+    border-radius: 7px;
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* ── Prereq path ── */
+  .prereq-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 16px 0 8px;
+  }
+  .prereq-box {
+    flex: 1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 13px;
+  }
+  .prereq-box.p1 { background: var(--orange-dim); border: 1px solid rgba(245,158,66,0.3); }
+  .prereq-box.p2 { background: var(--purple-dim); border: 1px solid rgba(155,127,255,0.3); }
+  .prereq-box.main { background: var(--accent-dim); border: 1px solid rgba(91,127,255,0.35); }
+  .prereq-box .box-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .p1 .box-label { color: var(--orange); }
+  .p2 .box-label { color: var(--purple); }
+  .main .box-label { color: var(--accent); }
+  .prereq-box strong { font-size: 13px; }
+  .plus { color: var(--muted); font-size: 18px; padding: 0 8px; }
+  .down-arrow { text-align: center; color: var(--muted); font-size: 18px; margin: 6px 0; }
+
+  /* ── Callout ── */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+  }
+  .callout.green { border-color: rgba(62,207,142,0.3); background: var(--green-dim); }
+  .callout.orange { border-color: rgba(245,158,66,0.3); background: var(--orange-dim); }
+  .callout .callout-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .callout.green .callout-label { color: var(--green); }
+  .callout.orange .callout-label { color: var(--orange); }
+  .callout p { font-size: 13px; margin: 0; }
+
+  /* ── Quote ── */
+  .quote {
+    border-left: 3px solid var(--gold);
+    padding: 8px 14px;
+    margin: 10px 0;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text);
+    background: var(--surface);
+    border-radius: 0 6px 6px 0;
+  }
+  .quote-meta { font-size: 11px; color: var(--muted); font-style: normal; margin-top: 4px; }
+
+  /* ── Two-col ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  .col-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .col-box.green { border-top: 3px solid var(--green); }
+  .col-box.accent { border-top: 3px solid var(--accent); }
+  .col-box h4 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .col-box.green h4 { color: var(--green); }
+  .col-box.accent h4 { color: var(--accent); }
+  .col-box ul { padding-left: 16px; }
+  .col-box li { font-size: 13px; color: var(--muted); margin-bottom: 5px; }
+  .col-box li strong { color: var(--text); }
+
+  /* ── Metrics table ── */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+  th {
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  .baseline { color: var(--muted); }
+  .target { color: var(--green); font-weight: 700; }
+  .dep-yes { color: var(--orange); font-weight: 600; }
+  .dep-no { color: var(--muted); }
+
+  /* ── Research card ── */
+  .research-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .research-card:hover { border-color: var(--accent); background: var(--surface2); }
+  .research-card-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 10px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(91,127,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .research-card-text h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .research-card-text p { font-size: 12px; color: var(--muted); margin: 0; }
+  .research-card-arrow { color: var(--accent); font-size: 18px; margin-left: auto; }
+
+  /* ── Cost compare inline ── */
+  .cost-row {
+    display: flex;
+    gap: 12px;
+    margin: 14px 0;
+    align-items: stretch;
+  }
+  .cost-card {
+    flex: 1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .cost-card.bad { background: var(--red-dim); border: 1px solid rgba(240,96,96,0.25); }
+  .cost-card.good { background: var(--green-dim); border: 1px solid rgba(62,207,142,0.25); }
+  .cost-card .cost-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .cost-card.bad .cost-label { color: var(--red); }
+  .cost-card.good .cost-label { color: var(--green); }
+  .cost-card .cost-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .cost-card.bad .cost-num { color: var(--red); }
+  .cost-card.good .cost-num { color: var(--green); }
+  .cost-card .cost-sub { font-size: 11px; color: var(--muted); }
+  .vs { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--muted); padding: 0 4px; }
+
+  /* ── Open Qs ── */
+  .oq-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    align-items: flex-start;
+  }
+  .oq-item:last-child { border-bottom: none; }
+  .oq-num {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .oq-item:first-child .oq-num { background: var(--orange-dim); border-color: rgba(245,158,66,0.4); color: var(--orange); }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="doc-header">
+  <div class="doc-eyebrow">Product 1-Pager · Revenue</div>
+  <div class="doc-title">Inbound Call Marketplace & AI Fulfillment</div>
+  <div class="doc-meta-row">
+    <span class="doc-meta-item"><strong>Author:</strong> Chris Kosednar</span>
+    <span class="doc-meta-item"><strong>Date:</strong> Feb 23, 2026</span>
+    <span class="doc-meta-item"><strong>Area:</strong> Revenue / Sales AI</span>
+    <span class="status-pill">Draft — for review</span>
+    <a href="insights-brief.html" class="brief-link" target="_blank">📄 Full Insights Brief</a>
+  </div>
+</div>
+
+
+<!-- ── 1. Executive Summary ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">🎯</span>
+    <h2>Executive Summary</h2>
+  </div>
+  <div class="exec-summary">
+    HCP Pros spend hundreds of dollars a month on shared data leads that don't convert — they're in the field when homeowners call, competitors answer first, and Pros pay for leads they never had a real shot at winning. We propose enabling Pros to purchase <strong>exclusive inbound phone calls</strong> directly inside HCP, fulfilled automatically by CSR AI for guaranteed 24/7 answer and booking — turning call buying from an external workaround into a native, high-ROI acquisition channel. Think of it as <strong>adding a dedicated marketing employee to the Pro's team</strong>: at $49–59/month, a single incremental booked job pays for 4–6 months of the product. Two prerequisites must ship first: fix CSR AI spam billing, and add AI-driven SMS follow-up for dropped calls.
+  </div>
+</div>
+
+
+<!-- ── 2. Problem Definition ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">✍️</span>
+    <h2>Problem Definition</h2>
+  </div>
+
+  <h3>Jobs to be Done</h3>
+  <ul>
+    <li>Pros want <strong>booked jobs</strong>, not lead contacts — they measure success by closing rate, not lead volume</li>
+    <li>Pros want to <strong>grow revenue without adding office staff</strong> — especially owner-operators working solo</li>
+    <li>Pros want to <strong>capture off-hours demand</strong> without being available 24/7 — nights, weekends, and holidays are unmanaged today</li>
+  </ul>
+
+  <h3>The Problem</h3>
+  <p><strong>Current state:</strong> Pros buy shared data leads from Angi, Thumbtack, and Google LSA. Each lead is simultaneously sent to 3–7 competing Pros. The Pro is in the field, can't call back immediately, and by the time they do — the homeowner has already booked someone else. The Pro pays for a lead they never had a real shot at.</p>
+
+  <div class="loop-row">
+    <div class="loop-step"><div class="step-num">Step 1</div>Lead sent to<br><strong>3–7 Pros at once</strong></div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step"><div class="step-num">Step 2</div>Pro is in the field,<br><strong>can't call back</strong></div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step"><div class="step-num">Step 3</div>Homeowner books<br><strong>whoever called first</strong></div>
+  </div>
+  <div class="loop-result">→ Pro pays for a lead they never had a real shot at. Loop repeats every month.</div>
+
+  <h3>Pain Points</h3>
+  <ul>
+    <li>Wasted lead spend — $50/lead × ~5% conversion = <strong>$1,000 per booked customer</strong></li>
+    <li>Missed calls = direct revenue loss — Pros report losing $1,000+ in a single weekend</li>
+    <li>Current CSR AI is causing churn via spam billing — "I was over on minutes every month for them answering spam calls"</li>
+    <li>Missed-call SMS only fires for existing customers — new prospects get no follow-up at all</li>
+  </ul>
+
+  <h3>Users Impacted</h3>
+  <div class="two-col">
+    <div class="col-box accent">
+      <h4>Primary — Owner-Operator in the Field</h4>
+      <ul>
+        <li>Solo or 1–5 employee shop</li>
+        <li>HVAC, plumbing, electrical, cleaning, pest</li>
+        <li>No dedicated office staff — phone rings while on a job</li>
+        <li>After hours: fully unmanaged</li>
+        <li><strong>Motivated by:</strong> booked jobs per dollar spent</li>
+      </ul>
+    </div>
+    <div class="col-box accent">
+      <h4>Secondary — Small Crew Owner</h4>
+      <ul>
+        <li>5–20 employees, seasonal business</li>
+        <li>HVAC, roofing, landscaping</li>
+        <li>Part-time office staff — coverage gaps at night/weekends</li>
+        <li>Currently trying CSR AI; spam billing landing hardest here</li>
+        <li><strong>Motivated by:</strong> off-hours capture + conversion rate</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── 3. Problem Validation ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <h2>Problem Validation</h2>
+  </div>
+
+  <h3>Scale</h3>
+  <table>
+    <thead><tr><th>Signal</th><th>Volume</th><th>Match Rate</th></tr></thead>
+    <tbody>
+      <tr><td>AI answering / after-hours availability (Reforge VOC)</td><td>2,657 checked</td><td class="target">60%</td></tr>
+      <tr><td>Missed calls / off-hours (Reforge VOC)</td><td>915 checked</td><td class="target">51%</td></tr>
+      <tr><td>Missed-call SMS / automated text (Reforge VOC)</td><td>~4,600 checked</td><td class="target">Top-searched feature</td></tr>
+      <tr><td>Call buying / pay-per-call (Reforge VOC)</td><td>262 checked</td><td>29%</td></tr>
+      <tr><td>CSR AI spam calls (internal telemetry)</td><td>470,034 spam calls handled</td><td>3.81% of total</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key Evidence</h3>
+  <div class="quote">
+    60-70% of inquiries don't get real time attention, which ends up hurting conversions. how do you guys stay on top of the things while juggling jobs in the field?
+    <div class="quote-meta">Reforge VOC · score 0.763</div>
+  </div>
+  <div class="quote">
+    We paid $1,100/month, got 5-10 leads a month [promised 15-20], and most of those were also not responded since clients had multiple calls, emails, and texts sent to them from other contractors at the same time.
+    <div class="quote-meta">Reforge VOC · score 0.569</div>
+  </div>
+  <div class="quote">
+    Missed call text back was the #1 reason I almost didnt go with HCP.
+    <div class="quote-meta">Reforge VOC · score 0.342 — near-churn at acquisition</div>
+  </div>
+
+  <h3>Severity — Cost Per Booked Customer</h3>
+  <div class="cost-row">
+    <div class="cost-card bad">
+      <div class="cost-label">Shared Data Lead (today)</div>
+      <div class="cost-num">$1,000</div>
+      <div class="cost-sub">$50 lead × ~5% conversion</div>
+    </div>
+    <div class="vs">vs</div>
+    <div class="cost-card good">
+      <div class="cost-label">Exclusive Inbound Call (proposed)</div>
+      <div class="cost-num">$229</div>
+      <div class="cost-sub">$80 call × ~35% conversion</div>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--muted)">Industry benchmarks: 46% live call conversion rate in home services (Invoca 2025) · 78% of homeowners book the first Pro to respond (Verse.ai) · 2–3× appointment rate improvement, shared → exclusive leads (Service Direct)</p>
+</div>
+
+
+<!-- ── 4. Opportunity & Impact ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">💎</span>
+    <h2>Opportunity & Impact</h2>
+  </div>
+
+  <div class="two-col">
+    <div class="col-box green">
+      <h4>Customer Value (Pro)</h4>
+      <ul>
+        <li><strong>Lower cost per booked job</strong> — ~$229 vs ~$1,000 today</li>
+        <li><strong>Exclusive calls</strong> — no speed-to-lead race</li>
+        <li><strong>100% answer rate</strong> — AI answers every purchased call</li>
+        <li><strong>Off-hours revenue</strong> — capture nights/weekends without staffing</li>
+        <li><strong>SMS recovery</strong> — capture homeowners who don't book on first call</li>
+      </ul>
+    </div>
+    <div class="col-box green">
+      <h4>Business Value (HCP)</h4>
+      <ul>
+        <li><strong>New revenue stream</strong> — Marketing-as-a-Service; margin on call spend</li>
+        <li><strong>CSR AI adoption</strong> — call buying requires AI; drives attach rate</li>
+        <li><strong>Platform stickiness</strong> — Pros who buy calls + use AI are deeply embedded</li>
+        <li><strong>Differentiation</strong> — no competitor pairs call buying + AI answering + SMS follow-up</li>
+        <li><strong>Feeds Sales AI roadmap</strong> — fills the empty "Sales AI" bucket in Revenue Roadmap</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Success Metrics</h3>
+  <table>
+    <thead>
+      <tr><th>Outcome</th><th>Current State</th><th>Target</th><th>How We'll Track</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Inbound call → booked appt conversion</td>
+        <td class="baseline">~15%</td>
+        <td class="target">40%</td>
+        <td>CSR AI booking rate by call source</td>
+      </tr>
+      <tr>
+        <td>SMS follow-up conversion (dropped calls)</td>
+        <td class="baseline">0% (doesn't exist)</td>
+        <td class="target">20%</td>
+        <td>SMS sends → bookings attributed</td>
+      </tr>
+      <tr>
+        <td>Spam call billing churn rate</td>
+        <td class="baseline">Active (multiple Pro cancellations)</td>
+        <td class="target">0 churn attributable to spam billing</td>
+        <td>Cancellation reason tagging</td>
+      </tr>
+      <tr>
+        <td>Cost per booked job (Pro-reported)</td>
+        <td class="baseline">~$1,000 (shared leads)</td>
+        <td class="target">< $300 (exclusive calls)</td>
+        <td>Call source attribution in HCP jobs</td>
+      </tr>
+      <tr>
+        <td>Call marketplace adoption (pilot)</td>
+        <td class="baseline">—</td>
+        <td class="target">30–50 Pros in pilot cohort</td>
+        <td>Active call-buying Pros with ≥1 billable call</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ── 5. Revenue Model ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">💰</span>
+    <h2>Revenue Model</h2>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-label">The "Marketing Employee" Framing</div>
+    <p>At $49–59/month, this is not a software line item — it's <strong>the cost of adding a dedicated marketing employee to the Pro's team</strong>. A single incremental booked job at ~$200–300 average revenue pays for 4–6 months of the product. The ROI conversation is not "does the software cost too much?" — it's <strong>"did you get at least one more job this month?"</strong> For an owner-operator in the field, that answer is almost always yes.</p>
+  </div>
+
+  <h3>Warm Cohort — The Primary Audience</h3>
+  <p><strong>~7,000 Pros</strong> received at least one lead via Job Inbox in January 2026. They're already lead buyers inside HCP — this is an <strong>upgrade motion</strong> from shared data leads to exclusive inbound calls, not cold acquisition of the 55K Pro base. Additionally, <strong>~2,000 Pros</strong> are currently on CSR AI (3.6% baseline attach rate), giving us a clean starting point for the forced-attach kicker: ~96% of call buyers are net-new CSR AI attaches with no double-counting.</p>
+
+  <h3>Revenue Scenarios — Call Marketplace</h3>
+  <table>
+    <thead>
+      <tr><th>Scenario</th><th>Warm Cohort Attach</th><th>Pros on Marketplace</th><th>Monthly Price</th><th>ARR (incl. margin + kicker)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Conservative</td><td>20% of 7K</td><td>1,400</td><td>$49/mo</td><td class="target">$1.2M</td></tr>
+      <tr><td>Base</td><td>25% of 7K</td><td>1,750</td><td>$59/mo</td><td class="target">$2.8M</td></tr>
+      <tr><td>Aggressive</td><td>35% of 7K</td><td>2,450</td><td>$59/mo</td><td class="target">$5.1M</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:var(--muted)">ARR includes three streams: (1) subscription access fee, (2) ~15% marketplace margin on call spend, (3) net-new CSR AI forced-attach at $99–199/mo. Full portfolio including Marketing AI SaaS at higher attach rates (20–35% of 55K Pros): <strong style="color:var(--green)">$8.1M–$20.2M ARR</strong>.</p>
+
+  <div class="two-col">
+    <div class="col-box accent">
+      <h4>Why the Attach Rate is Defensible</h4>
+      <ul>
+        <li>7K warm cohort is already spending money on leads — this is an upgrade, not a new budget ask</li>
+        <li>Break-even = 1 job. Any month with ≥1 incremental booking is ROI-positive</li>
+        <li>Pro never leaves HCP to configure or monitor call spend</li>
+        <li><strong>Compare to a marketing hire:</strong> a part-time assistant costs $1,500–2,500/mo; this costs $49–59/mo</li>
+      </ul>
+    </div>
+    <div class="col-box green">
+      <h4>The CSR AI Forced-Attach Kicker</h4>
+      <ul>
+        <li>All purchased calls route to CSR AI — call buying <strong>requires</strong> CSR AI</li>
+        <li>~2,000 Pros already on CSR AI (3.6% attach)</li>
+        <li>~96% of the call-buying cohort are <strong>net new</strong> CSR AI attaches</li>
+        <li>Each new CSR AI Pro = $99–199/mo additional ARR — nearly clean incremental</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── 6. Solution & Prerequisites ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">🚀</span>
+    <h2>Proposed Solution</h2>
+  </div>
+
+  <p>Build an inbound call buying marketplace inside HCP. Pros fund a balance, configure categories/ZIPs/hours, and purchase exclusive inbound calls from eLocal (starting partner). All purchased calls route to CSR AI for guaranteed answer, booking, and job creation in HCP.</p>
+
+  <h3>Prerequisite Path</h3>
+  <div class="prereq-row">
+    <div class="prereq-box p1">
+      <div class="box-label">Prerequisite 1</div>
+      <strong>CSR AI Spam Fix</strong>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Billing exemption for spam-classified calls. Engineering has LLM classification (~6% flagged) — billing logic is the missing piece.</div>
+    </div>
+    <div class="plus">+</div>
+    <div class="prereq-box p2">
+      <div class="box-label">Prerequisite 2</div>
+      <strong>SMS Follow-up (new prospects)</strong>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">AI-driven SMS for all dropped/unanswered calls. Must work for new prospects — not just saved HCP customers.</div>
+    </div>
+  </div>
+  <div class="down-arrow">↓</div>
+  <div class="prereq-row" style="margin-top:0">
+    <div class="prereq-box main" style="flex:1">
+      <div class="box-label">Proposed Feature</div>
+      <strong>Call Buying Marketplace — eLocal integration</strong>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Pros buy exclusive inbound calls inside HCP. All calls route to CSR AI. Guaranteed answer, booking, and job creation.</div>
+    </div>
+  </div>
+
+  <div class="callout green" style="margin-top:16px">
+    <div class="callout-label">Competitive position</div>
+    <p>No competitor currently pairs call buying + AI answering + SMS follow-up in one product. ServiceTitan has AI answering (Contact Center Pro) but no call buying. eLocal has call buying but no AI answering. The combination is unclaimed territory.</p>
+  </div>
+</div>
+
+
+<!-- ── 6. Next Steps ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">🏃</span>
+    <h2>Next Steps</h2>
+  </div>
+
+  <h3>Further Research Needed</h3>
+  <div class="oq-item">
+    <div class="oq-num">1</div>
+    <div><strong>Clarify eLocal integration scope</strong> — Does the current HCP-eLocal integration route live calls or just send data lead records? This determines the build scope for the marketplace. Clarify with Christian Hong / #eng_job_inbox.</div>
+  </div>
+  <div class="oq-item">
+    <div class="oq-num">2</div>
+    <div><strong>Pricing model decision</strong> — Pure pass-through vs. HCP margin vs. subscription + reduced CPC. Needs input from Finance and Partnership.</div>
+  </div>
+  <div class="oq-item">
+    <div class="oq-num">3</div>
+    <div><strong>Spam fix gating strategy</strong> — Does spam fix need to ship before call buying, or can call buying be gated to Pros on unlimited plans only (where spam doesn't increase cost)?</div>
+  </div>
+
+  <h3>Dependencies</h3>
+  <table>
+    <thead>
+      <tr><th>Dependency</th><th>Impact?</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CSR AI / VAPI team (Andre Ottoni)</td>
+        <td class="dep-yes">Yes</td>
+        <td>Spam billing fix + 7-agent orchestration overhaul are both required before call buying scales</td>
+      </tr>
+      <tr>
+        <td>#eng_job_inbox (Christian Hong)</td>
+        <td class="dep-yes">Yes</td>
+        <td>Own existing eLocal integration. Scope clarification needed before scoping the marketplace build</td>
+      </tr>
+      <tr>
+        <td>eLocal partnership / Legal</td>
+        <td class="dep-yes">Yes</td>
+        <td>Partner terms, data schema, call routing API, and billing pass-through model need agreement</td>
+      </tr>
+      <tr>
+        <td>SMS follow-up (APM 3 on agentic roadmap)</td>
+        <td class="dep-yes">Yes</td>
+        <td>Feature #6 on 3-month agentic roadmap — must work for new prospects, not just existing customers</td>
+      </tr>
+      <tr>
+        <td>Mobile</td>
+        <td class="dep-no">TBD</td>
+        <td>Call marketplace configuration and call log UX — mobile scope TBD</td>
+      </tr>
+      <tr>
+        <td>Billing infrastructure</td>
+        <td class="dep-yes">Yes</td>
+        <td>Pass-through billing for call spend; transparent spend dashboard in HCP</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ── 7. Supporting Materials ── -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-icon">📚</span>
+    <h2>Supporting Materials</h2>
+  </div>
+
+  <a href="insights-brief.html" target="_blank" class="research-card">
+    <div class="research-card-icon">📄</div>
+    <div class="research-card-text">
+      <h4>Full Insights Brief</h4>
+      <p>Complete VOC analysis, competitive intelligence, persona deep-dives, current state gaps, and industry benchmarks. Sourced from Reforge (~12,000+ snippets), Slack, and Confluence.</p>
+    </div>
+    <div class="research-card-arrow">→</div>
+  </a>
+
+</div>
+
+</body>
+</html>
