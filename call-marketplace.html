@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Call Buying · HCP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #0e6fbe;
+      --primary-lt:    rgba(14,111,190,0.09);
+      --primary-mid:   rgba(14,111,190,0.18);
+      --bg:            #f2f4f7;
+      --surface:       #ffffff;
+      --text:          #1c1c1e;
+      --muted:         #6b7280;
+      --muted-lt:      #9ca3af;
+      --border:        #e5e7eb;
+      --green:         #00a344;
+      --green-lt:      rgba(0,163,68,0.10);
+      --amber:         #d97706;
+      --amber-lt:      rgba(217,119,6,0.10);
+      --red:           #dc2626;
+      --red-lt:        rgba(220,38,38,0.09);
+      --purple:        #7c3aed;
+      --purple-lt:     rgba(124,58,237,0.09);
+      --radius:        12px;
+      --radius-sm:     8px;
+      --shadow:        0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+      --nav-h:         64px;
+      --header-h:      56px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── App shell ── */
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      background: var(--bg);
+    }
+
+    /* ── Top header ── */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 10px;
+    }
+    .header-title { font-size: 17px; font-weight: 700; flex: 1; }
+    .header-badge {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-active { background: var(--green-lt); color: var(--green); }
+    .badge-paused { background: var(--amber-lt); color: var(--amber); }
+
+    /* ── Scrollable content ── */
+    .screen {
+      display: none;
+      padding: 16px 16px calc(var(--nav-h) + 16px);
+      min-height: calc(100vh - var(--header-h));
+    }
+    .screen.active { display: block; }
+
+    /* ── Bottom nav ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: var(--nav-h);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 50;
+    }
+    .nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted-lt);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      padding-bottom: 4px;
+      transition: color 0.15s;
+    }
+    .nav-btn.active { color: var(--primary); }
+    .nav-btn svg { width: 22px; height: 22px; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .card-label {
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--muted); margin-bottom: 12px;
+    }
+
+    /* ── Settings screen ── */
+    .budget-input-wrap {
+      display: flex; align-items: center;
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 10px;
+      margin: 6px 0 4px; transition: border-color 0.15s;
+    }
+    .budget-input-wrap:focus-within { border-color: var(--primary); background: var(--surface); }
+    .budget-input-sym { font-size: 20px; font-weight: 700; color: var(--muted); margin-right: 2px; }
+    .budget-input-num {
+      border: none; background: transparent;
+      font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800;
+      color: var(--text); width: 100%; outline: none;
+      -moz-appearance: textfield;
+    }
+    .budget-input-num::-webkit-outer-spin-button,
+    .budget-input-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .budget-context { font-size: 11px; color: var(--green); font-weight: 500; }
+    .budget-billing-line {
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+      font-size: 11px; color: var(--muted);
+    }
+    .visa-chip { font-size: 11px; font-weight: 600; color: var(--text); }
+    .visa-edit {
+      margin-left: auto; background: none; border: none;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+      color: var(--primary); cursor: pointer; padding: 0;
+    }
+    .bid-nudge {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: var(--green-lt); border: 1px solid rgba(0,163,68,0.2);
+      border-radius: var(--radius-sm); padding: 12px;
+      font-size: 12px; color: var(--text); line-height: 1.5;
+      margin-top: 14px;
+    }
+    .bid-nudge-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Category picker ── */
+    .cat-picker-label {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.07em;
+      display: block; margin-bottom: 8px;
+    }
+    .cat-select-wrap { position: relative; margin-bottom: 8px; }
+    .cat-select-wrap select {
+      width: 100%; -webkit-appearance: none; appearance: none;
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px 36px 12px 12px;
+      font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+      color: var(--text); cursor: pointer;
+    }
+    .cat-arrow {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); pointer-events: none; font-size: 13px;
+    }
+    .cat-price-range { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+    .subcat-divider { height: 1px; background: var(--border); margin: 14px 0 12px; }
+    .subcat-section-label {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px;
+    }
+
+    .budget-row { display: flex; gap: 10px; }
+    .budget-field { flex: 1; }
+    .budget-field-label { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    .zip-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .chip {
+      display: flex; align-items: center; gap: 4px;
+      background: var(--primary-lt); color: var(--primary);
+      border-radius: 20px; padding: 5px 11px;
+      font-size: 12px; font-weight: 600;
+    }
+    .chip-remove { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 14px; padding: 0; line-height: 1; }
+    .chip-add {
+      background: none; border: 1.5px dashed var(--border); color: var(--muted);
+      border-radius: 20px; padding: 5px 11px;
+      font-size: 12px; font-weight: 500; cursor: pointer;
+    }
+    .pulled-note {
+      font-size: 11px; color: var(--muted);
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    .category-list { display: flex; flex-direction: column; gap: 8px; }
+    .category-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .category-row:last-child { border-bottom: none; }
+    .cat-info { flex: 1; min-width: 0; }
+    .category-name { font-size: 15px; font-weight: 500; }
+    .category-price { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+    /* ── Bid per call ── */
+    .bid-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      flex-shrink: 0; transition: opacity 0.15s;
+    }
+    .bid-wrap.bid-off { opacity: 0.28; pointer-events: none; }
+    .bid-label {
+      font-size: 9px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted-lt);
+    }
+    .bid-field {
+      display: flex; align-items: center;
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 5px 7px; width: 66px;
+      transition: border-color 0.15s;
+    }
+    .bid-field:focus-within { border-color: var(--primary); background: var(--surface); }
+    .bid-sym { font-size: 13px; font-weight: 600; color: var(--text); margin-right: 2px; line-height: 1; }
+    .bid-input {
+      border: none; background: transparent;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+      color: var(--text); width: 34px; outline: none; padding: 0;
+      -moz-appearance: textfield;
+    }
+    .bid-input::-webkit-outer-spin-button,
+    .bid-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .bid-auto-tag {
+      font-size: 9px; font-weight: 500; color: var(--primary);
+      letter-spacing: 0.02em;
+    }
+    .bid-wrap:not(.bid-smart) .bid-auto-tag { visibility: hidden; }
+    .toggle {
+      width: 44px; height: 26px; border-radius: 13px;
+      background: var(--border); position: relative; cursor: pointer;
+      transition: background 0.2s; flex-shrink: 0;
+      border: none;
+    }
+    .toggle.on { background: var(--primary); }
+    .toggle::after {
+      content: ''; position: absolute;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: white; top: 3px; left: 3px;
+      transition: left 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle.on::after { left: 21px; }
+
+    .csrai-note {
+      font-size: 11px; color: var(--muted); margin-top: 10px;
+      padding-top: 10px; border-top: 1px solid var(--border);
+    }
+
+    .settings-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-primary {
+      flex: 1; background: var(--primary); color: #fff;
+      border: none; border-radius: 200px; font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 600; padding: 14px; cursor: pointer;
+    }
+    .btn-outline {
+      flex: 0 0 auto; background: none; color: var(--primary);
+      border: 1.5px solid var(--primary); border-radius: 200px;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
+      padding: 14px 20px; cursor: pointer;
+    }
+
+    /* ── Dashboard screen ── */
+    .period-pills {
+      display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 2px;
+    }
+    .period-pill {
+      flex-shrink: 0; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer;
+    }
+    .period-pill.active {
+      background: var(--primary); color: white; border-color: var(--primary);
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 12px;
+    }
+    .kpi-card {
+      background: var(--surface); border-radius: var(--radius);
+      padding: 14px; box-shadow: var(--shadow);
+    }
+    .kpi-label { font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+    .kpi-val { font-size: 24px; font-weight: 800; color: var(--text); line-height: 1; }
+    .kpi-val.green { color: var(--green); }
+    .kpi-val.primary { color: var(--primary); }
+    .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    .roi-card {
+      background: var(--primary-lt);
+      border: 1px solid var(--primary-mid);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .roi-left {}
+    .roi-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--primary); margin-bottom: 2px; }
+    .roi-val { font-size: 32px; font-weight: 800; color: var(--primary); line-height: 1; }
+    .roi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .roi-vs { font-size: 11px; color: var(--muted); text-align: right; }
+    .roi-vs strong { color: var(--primary); }
+
+    .chart-card { background: var(--surface); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); margin-bottom: 12px; }
+    .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+    .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+    .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .bar-pair { display: flex; gap: 2px; align-items: flex-end; width: 100%; }
+    .bar {
+      flex: 1; border-radius: 3px 3px 0 0; min-height: 4px;
+      transition: height 0.3s;
+    }
+    .bar.spend { background: var(--primary-mid); }
+    .bar.revenue { background: var(--green); }
+    .chart-label { font-size: 9px; color: var(--muted); }
+    .chart-legend { display: flex; gap: 14px; margin-top: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    .insight-card {
+      background: var(--surface); border-radius: var(--radius);
+      padding: 14px; box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .insight-icon { font-size: 24px; }
+    .insight-text { font-size: 13px; line-height: 1.45; }
+    .insight-text strong { color: var(--text); }
+
+    /* ── Call Log screen ── */
+    .filter-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; }
+    .filter-chip {
+      flex-shrink: 0; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer;
+    }
+    .filter-chip.active { background: var(--text); color: white; border-color: var(--text); }
+
+    .call-card {
+      background: var(--surface); border-radius: var(--radius);
+      box-shadow: var(--shadow); margin-bottom: 10px; overflow: hidden;
+      cursor: pointer; transition: transform 0.1s;
+    }
+    .call-card:active { transform: scale(0.98); }
+    .call-card-main {
+      display: flex; align-items: center; gap: 12px; padding: 14px 14px 10px;
+    }
+    .call-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
+    }
+    .dot-booked { background: var(--green); }
+    .dot-pending { background: var(--amber); }
+    .dot-not_booked { background: var(--muted-lt); }
+    .dot-disputed { background: var(--red); }
+
+    .call-info { flex: 1; min-width: 0; }
+    .call-cat { font-size: 15px; font-weight: 600; }
+    .call-meta { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .call-right { text-align: right; flex-shrink: 0; }
+    .call-cost { font-size: 15px; font-weight: 700; }
+    .call-dur { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+    .call-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 14px 12px;
+    }
+    .outcome-badge {
+      font-size: 11px; font-weight: 600; padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .badge-booked { background: var(--green-lt); color: var(--green); }
+    .badge-pending { background: var(--amber-lt); color: var(--amber); }
+    .badge-not_booked { background: var(--bg); color: var(--muted); }
+    .badge-disputed { background: var(--red-lt); color: var(--red); }
+    .badge-sms_converted { background: rgba(217,119,6,0.12); color: #92400e; font-weight: 700; }
+    .dot-sms_converted { background: var(--amber); }
+    .sms-save-note {
+      font-size: 11px; font-weight: 500; color: var(--amber);
+      padding: 6px 12px 10px; letter-spacing: 0.01em;
+    }
+    .call-context-note {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 12px;
+      font-size: 12px; color: var(--muted); line-height: 1.5; align-self: stretch;
+    }
+    .call-context-note strong { color: var(--text); }
+    .call-context-divider {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted-lt); margin: 4px 0;
+    }
+    .call-context-divider::before, .call-context-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .status-sms_converted { background: rgba(217,119,6,0.08); color: #92400e; }
+
+    .conv-link {
+      font-size: 12px; font-weight: 600; color: var(--primary);
+      display: flex; align-items: center; gap: 3px;
+    }
+
+    /* ── SMS Panel ── */
+    .panel-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+    }
+    .panel-overlay.open { display: block; }
+
+    .sms-panel {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: var(--bg);
+      border-radius: 20px 20px 0 0;
+      max-height: 90vh;
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .panel-overlay.open .sms-panel { transform: translateY(0); }
+
+    .panel-handle {
+      display: flex; justify-content: center;
+      padding: 12px 0 8px;
+    }
+    .panel-handle::after {
+      content: ''; width: 36px; height: 4px;
+      border-radius: 2px; background: var(--border);
+    }
+
+    .panel-header {
+      background: var(--surface); padding: 12px 16px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .panel-close {
+      background: var(--bg); border: none; border-radius: 50%;
+      width: 28px; height: 28px; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); flex-shrink: 0;
+    }
+    .panel-call-cat { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .panel-call-meta { font-size: 12px; color: var(--muted); }
+    .panel-call-badges { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .meta-badge {
+      font-size: 11px; font-weight: 500; padding: 3px 9px;
+      border-radius: 20px; background: var(--bg);
+      color: var(--muted);
+    }
+
+    .panel-status-bar {
+      padding: 10px 16px;
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .status-booked { background: var(--green-lt); color: #065f46; }
+    .status-pending { background: var(--amber-lt); color: #92400e; }
+    .status-not_booked { background: var(--bg); color: var(--muted); border-bottom: 1px solid var(--border); }
+    .status-disputed { background: var(--red-lt); color: #991b1b; }
+
+    .messages-scroll {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .msg { display: flex; flex-direction: column; max-width: 78%; gap: 3px; }
+    .msg.ai { align-self: flex-start; }
+    .msg.ho { align-self: flex-end; align-items: flex-end; }
+
+    .msg-sender { font-size: 10px; font-weight: 600; color: var(--muted); padding: 0 4px; }
+    .msg-bubble {
+      padding: 10px 13px; border-radius: 16px;
+      font-size: 14px; line-height: 1.45;
+    }
+    .msg.ai .msg-bubble {
+      background: var(--surface); color: var(--text);
+      border-radius: 4px 16px 16px 16px;
+      box-shadow: var(--shadow);
+    }
+    .msg.ho .msg-bubble {
+      background: var(--primary); color: white;
+      border-radius: 16px 4px 16px 16px;
+    }
+    .msg-time { font-size: 10px; color: var(--muted-lt); padding: 0 4px; }
+
+    .appt-confirmed {
+      align-self: center; background: var(--green-lt);
+      border: 1px solid var(--green); border-radius: var(--radius-sm);
+      padding: 10px 16px; font-size: 13px; font-weight: 600; color: #065f46;
+      text-align: center; margin: 4px 0;
+    }
+
+    .panel-actions {
+      padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 12px);
+      background: var(--surface); border-top: 1px solid var(--border);
+      display: flex; gap: 8px;
+    }
+    .dispute-btn {
+      flex: 0; background: none; border: 1px solid var(--border);
+      border-radius: 200px; padding: 10px 14px; font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer;
+      white-space: nowrap;
+    }
+    .close-btn {
+      flex: 1; background: var(--primary); color: white;
+      border: none; border-radius: 200px; padding: 12px;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Top header -->
+  <header class="app-header">
+    <div class="header-title">Call Buying</div>
+    <span class="header-badge badge-active">● Active</span>
+  </header>
+
+  <!-- ═══ SETTINGS SCREEN ═══ -->
+  <div class="screen active" id="screen-settings">
+
+    <!-- Budget & Billing -->
+    <div class="card">
+      <div class="card-label">Budget</div>
+      <div class="budget-row">
+        <div class="budget-field">
+          <div class="budget-field-label">Daily Max</div>
+          <div class="budget-input-wrap">
+            <span class="budget-input-sym">$</span>
+            <input type="number" class="budget-input-num" value="150">
+          </div>
+          <div class="budget-context">$28 spent today · 2 calls</div>
+        </div>
+        <div class="budget-field">
+          <div class="budget-field-label">Monthly Cap</div>
+          <div class="budget-input-wrap">
+            <span class="budget-input-sym">$</span>
+            <input type="number" class="budget-input-num" value="2000">
+          </div>
+          <div class="budget-context">$625 spent · $1,375 left · 12 calls</div>
+        </div>
+      </div>
+      <div class="budget-billing-line">
+        <span>Charged to</span>
+        <span class="visa-chip">Visa ····4242</span>
+        <button class="visa-edit">Edit</button>
+      </div>
+    </div>
+
+    <!-- Service Area -->
+    <div class="card">
+      <div class="card-label">Service Area — Zip Codes</div>
+      <div class="zip-chips">
+        <div class="chip">85014 <button class="chip-remove">×</button></div>
+        <div class="chip">85003 <button class="chip-remove">×</button></div>
+        <div class="chip">85007 <button class="chip-remove">×</button></div>
+        <div class="chip">85012 <button class="chip-remove">×</button></div>
+        <div class="chip">85015 <button class="chip-remove">×</button></div>
+        <div class="chip">85001 <button class="chip-remove">×</button></div>
+        <div class="chip">85004 <button class="chip-remove">×</button></div>
+        <div class="chip">85008 <button class="chip-remove">×</button></div>
+        <div class="chip">85013 <button class="chip-remove">×</button></div>
+        <div class="chip">85006 <button class="chip-remove">×</button></div>
+        <button class="chip-add">+ Add zip</button>
+      </div>
+      <div class="pulled-note">↑ Pulled from your HCP service area · tap × to remove</div>
+    </div>
+
+    <!-- Service Categories -->
+    <div class="card">
+      <div class="card-label">Call Categories</div>
+
+      <label class="cat-picker-label">Your Trade</label>
+      <div class="cat-select-wrap">
+        <select id="cat-select" onchange="renderSubcats()">
+          <option value="hvac">HVAC</option>
+          <option value="electrical">Electrical</option>
+          <option value="plumbing">Plumbing</option>
+          <option value="pest">Pest Control</option>
+          <option value="roofing">Roofing</option>
+        </select>
+        <div class="cat-arrow">▾</div>
+      </div>
+      <div class="cat-price-range" id="cat-price-range">$15–$365 per call · Phoenix avg ~$48</div>
+
+      <div class="subcat-divider"></div>
+      <div class="subcat-section-label">Job types — toggle on to receive calls</div>
+      <div class="category-list" id="subcat-list"></div>
+
+      <div class="bid-nudge">
+        <span class="bid-nudge-icon">📈</span>
+        <div>Your ROI is <strong>4×</strong> — raise bids on active job types to win more calls. Higher bids beat competitors on the same ping.</div>
+      </div>
+      <div class="csrai-note">All purchased calls answered 24/7 by your Virtual Agent — 100% answer rate, SMS follow-up on every call.</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="settings-actions">
+      <button class="btn-primary">Pause Buying</button>
+      <button class="btn-outline">Save</button>
+    </div>
+
+  </div><!-- /settings -->
+
+
+  <!-- ═══ DASHBOARD SCREEN ═══ -->
+  <div class="screen" id="screen-dashboard">
+
+    <div class="period-pills">
+      <div class="period-pill active">This month</div>
+      <div class="period-pill">Last 7 days</div>
+      <div class="period-pill">Feb 1–15</div>
+      <div class="period-pill">Custom</div>
+    </div>
+
+    <!-- KPI grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Calls</div>
+        <div class="kpi-val">12</div>
+        <div class="kpi-sub">↑ from 8 last month</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Jobs</div>
+        <div class="kpi-val green">5</div>
+        <div class="kpi-sub">completed this month</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Calls → Jobs</div>
+        <div class="kpi-val primary">42%</div>
+        <div class="kpi-sub">5 of 12 calls completed</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Cost per Job</div>
+        <div class="kpi-val">$125</div>
+        <div class="kpi-sub">vs $210 shared leads</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Spend</div>
+        <div class="kpi-val">$625</div>
+        <div class="kpi-sub">$1,375 remaining cap</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Revenue Earned</div>
+        <div class="kpi-val green">$2,470</div>
+        <div class="kpi-sub">from 5 completed jobs</div>
+      </div>
+    </div>
+
+    <!-- Compact ROI -->
+    <div class="roi-card">
+      <div class="roi-left">
+        <div class="roi-label">Return on Ad Spend</div>
+        <div class="roi-val">4×</div>
+        <div class="roi-sub">Spent $625 · Earned $2,470</div>
+      </div>
+      <div class="roi-vs">$494 avg<br>job value<br><strong>4× return</strong></div>
+    </div>
+
+    <!-- Weekly chart -->
+    <div class="chart-card">
+      <div class="chart-title">Spend vs. Revenue — This Month</div>
+      <div class="chart-bars">
+        <div class="chart-col">
+          <div class="bar-pair">
+            <div class="bar spend" style="height:28px"></div>
+            <div class="bar revenue" style="height:0px"></div>
+          </div>
+          <div class="chart-label">Feb 1</div>
+        </div>
+        <div class="chart-col">
+          <div class="bar-pair">
+            <div class="bar spend" style="height:42px"></div>
+            <div class="bar revenue" style="height:55px"></div>
+          </div>
+          <div class="chart-label">Feb 8</div>
+        </div>
+        <div class="chart-col">
+          <div class="bar-pair">
+            <div class="bar spend" style="height:60px"></div>
+            <div class="bar revenue" style="height:70px"></div>
+          </div>
+          <div class="chart-label">Feb 15</div>
+        </div>
+        <div class="chart-col">
+          <div class="bar-pair">
+            <div class="bar spend" style="height:55px"></div>
+            <div class="bar revenue" style="height:80px"></div>
+          </div>
+          <div class="chart-label">Feb 22</div>
+        </div>
+        <div class="chart-col">
+          <div class="bar-pair">
+            <div class="bar spend" style="height:30px"></div>
+            <div class="bar revenue" style="height:0px"></div>
+          </div>
+          <div class="chart-label">Feb 24</div>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--primary-mid)"></div>Spend</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Revenue</div>
+      </div>
+    </div>
+
+    <!-- Insights -->
+    <div class="insight-card card">
+      <div class="insight-icon">📈</div>
+      <div class="insight-text">Your ROI is <strong>4×</strong> — raise your <strong>AC Repair bid</strong> from $52 → $75 to win more calls before competitors in your zips do.</div>
+    </div>
+    <div class="insight-card card">
+      <div class="insight-icon">💡</div>
+      <div class="insight-text"><strong>Emergency Service</strong> calls convert at 78% in your area — highest of any job type. Consider a higher bid to capture more of this volume.</div>
+    </div>
+
+  </div><!-- /dashboard -->
+
+
+  <!-- ═══ CALL LOG SCREEN ═══ -->
+  <div class="screen" id="screen-calls">
+
+    <div class="filter-scroll">
+      <div class="filter-chip active" onclick="filterCalls('all', this)">All (12)</div>
+      <div class="filter-chip" onclick="filterCalls('booked', this)">Booked (7)</div>
+      <div class="filter-chip" onclick="filterCalls('pending', this)">Pending (2)</div>
+      <div class="filter-chip" onclick="filterCalls('sms_converted', this)">⭐ Saved (3)</div>
+      <div class="filter-chip" onclick="filterCalls('disputed', this)">Disputed (1)</div>
+    </div>
+
+    <div id="call-list">
+      <!-- rendered by JS -->
+    </div>
+
+  </div><!-- /calls -->
+
+  <!-- ── Bottom nav ── -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-settings" onclick="showTab('settings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+      Setup
+    </button>
+    <button class="nav-btn" id="nav-dashboard" onclick="showTab('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Dashboard
+    </button>
+    <button class="nav-btn" id="nav-calls" onclick="showTab('calls')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+      </svg>
+      Calls
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- ═══ SMS PANEL OVERLAY ═══ -->
+<div class="panel-overlay" id="panel-overlay" onclick="closePanelOnBg(event)">
+  <div class="sms-panel" id="sms-panel">
+    <div class="panel-handle"></div>
+    <div class="panel-header">
+      <div>
+        <div class="panel-call-cat" id="panel-cat">HVAC · 85014</div>
+        <div class="panel-call-meta" id="panel-meta">Today · 12:34 PM · 4:23 duration · $45.00</div>
+        <div class="panel-call-badges" id="panel-badges"></div>
+      </div>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div class="panel-status-bar" id="panel-status"></div>
+    <div class="messages-scroll" id="messages-scroll"></div>
+    <div class="panel-actions">
+      <button class="dispute-btn">Dispute Call</button>
+      <button class="close-btn" onclick="closePanel()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Data ── */
+  const calls = [
+    { id:1,  date:'Today',    time:'12:34 PM', cat:'HVAC',       zip:'85014', dur:'4:23', cost:45,   outcome:'booked',     conv:'c1' },
+    { id:2,  date:'Today',    time:'10:15 AM', cat:'Plumbing',   zip:'85003', dur:'3:51', cost:28,   outcome:'booked',     conv:'c2' },
+    { id:3,  date:'Yesterday',time:'4:02 PM',  cat:'HVAC',       zip:'85007', dur:'0:48', cost:35,   outcome:'sms_converted', conv:'c3' },
+    { id:4,  date:'Yesterday',time:'2:22 PM',  cat:'Electrical', zip:'85012', dur:'3:15', cost:32,   outcome:'pending',    conv:'c4' },
+    { id:5,  date:'Yesterday',time:'9:44 AM',  cat:'Plumbing',   zip:'85015', dur:'5:02', cost:31,   outcome:'booked',     conv:'c5' },
+    { id:6,  date:'Feb 21',   time:'3:30 PM',  cat:'HVAC',       zip:'85001', dur:'1:12', cost:42,   outcome:'sms_converted', conv:'c3' },
+    { id:7,  date:'Feb 21',   time:'11:08 AM', cat:'Electrical', zip:'85004', dur:'6:14', cost:38,   outcome:'booked',     conv:'c6' },
+    { id:8,  date:'Feb 20',   time:'2:15 PM',  cat:'HVAC',       zip:'85008', dur:'0:18', cost:0,    outcome:'disputed',   conv:'c7' },
+    { id:9,  date:'Feb 20',   time:'10:30 AM', cat:'Plumbing',   zip:'85013', dur:'4:45', cost:29,   outcome:'booked',     conv:'c8' },
+    { id:10, date:'Feb 19',   time:'1:45 PM',  cat:'HVAC',       zip:'85006', dur:'2:55', cost:41,   outcome:'pending',    conv:'c4' },
+    { id:11, date:'Feb 19',   time:'9:22 AM',  cat:'Plumbing',   zip:'85014', dur:'4:08', cost:27,   outcome:'sms_converted', conv:'c9' },
+    { id:12, date:'Feb 18',   time:'3:44 PM',  cat:'HVAC',       zip:'85003', dur:'7:32', cost:48,   outcome:'booked',     conv:'c10'},
+  ];
+
+  const outcomeLabels = {
+    booked:        'Booked',
+    pending:       'Awaiting reply',
+    not_booked:    'Not booked',
+    disputed:      'Disputed',
+    sms_converted: '⭐ Saved via SMS',
+  };
+
+  const conversations = {
+    c1: {
+      outcome: 'booked',
+      appt: '📅 Confirmed: Thu Feb 20 · 2:00 PM',
+      msgs: [
+        { role:'ai',  time:'12:35 PM', text:"Hi, this is Sarah at Mike's HVAC & Plumbing — thanks for calling about your AC! Are mornings or afternoons better for you to have a tech come out?" },
+        { role:'ho',  time:'12:36 PM', text:"Afternoons are better" },
+        { role:'ai',  time:'12:36 PM', text:"Perfect! I have Thursday Feb 20 at 2pm or Friday Feb 21 at 3pm available — which works?" },
+        { role:'ho',  time:'12:37 PM', text:"Thursday at 2 works!" },
+        { role:'ai',  time:'12:37 PM', text:"You're all set! ✅ Confirmed for Thursday Feb 20 at 2:00 PM. Mike will text you when he's 30 min away. See you then!"},
+      ]
+    },
+    c2: {
+      outcome: 'booked',
+      appt: '📅 Confirmed: Fri Feb 21 · 9:00 AM',
+      msgs: [
+        { role:'ai',  time:'10:16 AM', text:"Hi, this is Sarah at Mike's HVAC & Plumbing — thanks for calling about your water heater. How long has it been acting up?" },
+        { role:'ho',  time:'10:18 AM', text:"About two days, not getting any hot water" },
+        { role:'ai',  time:'10:18 AM', text:"Got it — that sounds urgent! I can get someone out to you tomorrow morning. Does 9am work?" },
+        { role:'ho',  time:'10:19 AM', text:"Yes that works" },
+        { role:'ai',  time:'10:19 AM', text:"Booked! ✅ Mike's team will be there Friday Feb 21 at 9:00 AM. You'll get a reminder text tonight."},
+      ]
+    },
+    c3: {
+      outcome: 'sms_converted',
+      appt: '📅 Confirmed: Fri Feb 24 · 10:00 AM',
+      callNote: 'Call ended without booking — customer said she needed to speak with her husband first before committing to a repair visit.',
+      msgs: [
+        { role:'ai',  time:'4:08 PM',  text:"Hey! Totally understand — makes sense to loop in your husband first. Whenever you're both ready, just text back and we'll get something on the calendar." },
+        { role:'ai',  time:'Next day 8:45 AM', text:"Quick heads up — we only have 2 open slots left this week for heating. We've been slammed with calls in 85007 this month, filling fast." },
+        { role:'ho',  time:'9:12 AM',  text:"We talked about it and we do want to get it checked. What do you have?" },
+        { role:'ai',  time:'9:13 AM',  text:"Great timing! Our tech is going to be in your neighborhood tomorrow morning anyway. I can do $89 for the house call instead of the usual $129 — since we're already heading that way." },
+        { role:'ho',  time:'9:15 AM',  text:"$89 works, let's do tomorrow!" },
+        { role:'ai',  time:'9:15 AM',  text:"Done! ✅ Confirmed for Fri Feb 24 at 10:00 AM. Mike's team will text you 30 min before they head over. See you then!"},
+      ]
+    },
+    c4: {
+      outcome: 'pending',
+      appt: null,
+      msgs: [
+        { role:'ai',  time:'2:23 PM',  text:"Hi! Sarah from Mike's HVAC & Plumbing here. Thanks for calling about your electrical panel! Can I get you scheduled with a licensed tech?" },
+        { role:'ho',  time:'2:45 PM',  text:"Sure, what's availability look like this week?" },
+        { role:'ai',  time:'2:45 PM',  text:"We have Wednesday Feb 26 at 10am or Friday Feb 28 at 2pm. Either work?" },
+        { role:'ho',  time:'2:47 PM',  text:"Maybe Friday — can I confirm tomorrow?" },
+        { role:'ai',  time:'2:47 PM',  text:"Of course! I'll hold Friday Feb 28 at 2:00 PM for you. Just reply CONFIRM anytime before Thursday night and you're set."},
+      ]
+    },
+    c5: {
+      outcome: 'booked',
+      appt: '📅 Confirmed: Thu Feb 20 · 11:00 AM',
+      msgs: [
+        { role:'ai',  time:'9:45 AM',  text:"Hi, this is Sarah at Mike's Plumbing — thanks for calling about your clogged drain! How bad is it right now?" },
+        { role:'ho',  time:'9:47 AM',  text:"Kitchen sink is totally backed up, been like this since last night" },
+        { role:'ai',  time:'9:47 AM',  text:"Yikes, let's get that fixed today! I have 11am this morning open. Want to grab it?" },
+        { role:'ho',  time:'9:48 AM',  text:"Yes please" },
+        { role:'ai',  time:'9:48 AM',  text:"Done! ✅ Mike's Plumbing will be there at 11:00 AM today. They'll call 15 min before arrival."},
+      ]
+    },
+    c6: {
+      outcome: 'booked',
+      appt: '📅 Confirmed: Wed Feb 26 · 3:00 PM',
+      msgs: [
+        { role:'ai',  time:'11:09 AM', text:"Hi! Sarah from Mike's HVAC & Plumbing. Thanks for calling — sounds like you need an electrical inspection?" },
+        { role:'ho',  time:'11:12 AM', text:"Yeah, we're buying a house and need a pre-purchase inspection" },
+        { role:'ai',  time:'11:12 AM', text:"Perfect timing — we do those all the time. I can book you for Wednesday Feb 26 at 3pm. Does that work?" },
+        { role:'ho',  time:'11:14 AM', text:"That works great" },
+        { role:'ai',  time:'11:14 AM', text:"Booked! ✅ Electrical inspection confirmed for Wed Feb 26 at 3:00 PM. You'll receive a confirmation email shortly."},
+      ]
+    },
+    c7: {
+      outcome: 'disputed',
+      appt: null,
+      msgs: [
+        { role:'ai',  time:'2:16 PM',  text:"Hi! Sarah from Mike's HVAC & Plumbing. How can I help you today?" },
+        { role:'ho',  time:'2:16 PM',  text:"Is this the plumbing company on 5th?" },
+        { role:'ai',  time:'2:17 PM',  text:"This is Mike's HVAC & Plumbing — we cover the Phoenix area. Are you looking for plumbing service?" },
+        { role:'ho',  time:'2:17 PM',  text:"No sorry wrong number" },
+      ]
+    },
+    c8: {
+      outcome: 'booked',
+      appt: '📅 Confirmed: Tue Feb 25 · 8:00 AM',
+      msgs: [
+        { role:'ai',  time:'10:31 AM', text:"Hi, this is Sarah at Mike's Plumbing — you called about a leak, where is it coming from?" },
+        { role:'ho',  time:'10:33 AM', text:"Under the bathroom sink, pretty slow drip but it's been going a few days" },
+        { role:'ai',  time:'10:33 AM', text:"Good catch — slow drips can do a lot of damage over time. I can have Mike's team out first thing tomorrow morning at 8am. Sound good?" },
+        { role:'ho',  time:'10:35 AM', text:"8am works for me" },
+        { role:'ai',  time:'10:35 AM', text:"Set! ✅ Mike's Plumbing Tuesday Feb 25 at 8:00 AM. They'll text you when heading over."},
+      ]
+    },
+    c9: {
+      outcome: 'sms_converted',
+      appt: '📅 Confirmed: Thu Feb 20 · 2:00 PM',
+      callNote: "Call ended without booking — customer was price shopping, said 'I'll think about it' before hanging up.",
+      msgs: [
+        { role:'ai',  time:'9:23 AM',  text:"Hey! Sarah from Mike's Plumbing — thanks for the call about your water heater." },
+        { role:'ho',  time:'9:26 AM',  text:"Yeah just pricing it out. What are you running for a full replacement?" },
+        { role:'ai',  time:'9:27 AM',  text:"Depends on the unit but usually $950–$1,350. Happy to send someone for a free in-home quote so you get an exact number before committing." },
+        { role:'ho',  time:'9:29 AM',  text:"I'll think about it, thanks" },
+        { role:'ai',  time:'9:31 AM',  text:"Of course! Worth knowing — unit pricing has been creeping up and our schedule books out fast. This week's a good time if you want to lock in current rates." },
+        { role:'ai',  time:'Next day 9:45 AM', text:"Hey! We had a last-minute opening tomorrow at 2pm — and I can knock $50 off the install if you use that slot. We're already going to be in your area." },
+        { role:'ho',  time:'10:22 AM', text:"Yeah okay let's do it, $50 off sounds good" },
+        { role:'ai',  time:'10:23 AM', text:"Locked in! ✅ Thu Feb 20 at 2:00 PM — free quote + $50 off if you move forward. Mike's team will confirm the night before. See you then!"},
+      ]
+    },
+    c10: {
+      outcome: 'booked',
+      appt: '📅 Confirmed: Mon Feb 24 · 1:00 PM',
+      msgs: [
+        { role:'ai',  time:'3:45 PM',  text:"Hi! Sarah from Mike's HVAC here — thanks for calling about your AC. How long has it been running warm?" },
+        { role:'ho',  time:'3:47 PM',  text:"Past two weeks. It runs but barely cools the house. We're in Phoenix so it's been brutal" },
+        { role:'ai',  time:'3:47 PM',  text:"Yeah that's rough in the Phoenix heat. Sounds like it might need a refrigerant check or a look at the compressor. Can I get a tech out Monday?" },
+        { role:'ho',  time:'3:50 PM',  text:"Monday works, what time?" },
+        { role:'ai',  time:'3:50 PM',  text:"How about 1pm?" },
+        { role:'ho',  time:'3:51 PM',  text:"Perfect" },
+        { role:'ai',  time:'3:51 PM',  text:"✅ Confirmed! Mike's HVAC — Monday Feb 24 at 1:00 PM. Text us if anything changes. See you then!"},
+      ]
+    },
+  };
+
+  /* ── Sub-category data ── */
+  const catPriceRanges = {
+    hvac:       '$15–$365 per call · Phoenix avg ~$48',
+    electrical: '$4–$225 per call · Phoenix avg ~$36',
+    plumbing:   '$10–$390 per call · Phoenix avg ~$31',
+    pest:       '$20–$155 per call · Phoenix avg ~$28',
+    roofing:    '$15–$425 per call · Phoenix avg ~$52',
+  };
+
+  const subCategories = {
+    hvac: [
+      { label: 'AC Repair',                     price: '$28–$95',  on: true,  bid: 52  },
+      { label: 'AC Installation / Replacement',  price: '$65–$185', on: true,  bid: 95  },
+      { label: 'Furnace / Heater Repair',        price: '$25–$90',  on: true,  bid: 48  },
+      { label: 'Heat Pump',                      price: '$40–$150', on: true,  bid: 68  },
+      { label: 'Emergency Service',              price: '$55–$220', on: true,  bid: 110 },
+    ],
+    electrical: [
+      { label: 'Panel Upgrade / Replacement',    price: '$45–$225', on: true,  bid: 95  },
+      { label: 'Outlet & Switch Repair',         price: '$4–$45',   on: true,  bid: 18  },
+      { label: 'Ceiling Fan & Lighting',         price: '$8–$60',   on: true,  bid: 28  },
+      { label: 'Wiring & Rewiring',              price: '$25–$145', on: true,  bid: 65  },
+      { label: 'EV Charger Installation',        price: '$35–$120', on: false, bid: 58  },
+    ],
+    plumbing: [
+      { label: 'Drain Cleaning',                 price: '$10–$65',  on: true,  bid: 32  },
+      { label: 'Water Heater Repair',            price: '$20–$80',  on: true,  bid: 42  },
+      { label: 'Water Heater Replacement',       price: '$45–$185', on: true,  bid: 88  },
+      { label: 'Pipe Repair / Leak',             price: '$18–$95',  on: true,  bid: 48  },
+      { label: 'Emergency Plumbing',             price: '$50–$390', on: true,  bid: 165 },
+    ],
+    pest: [
+      { label: 'General Pest Control',           price: '$20–$70',  on: true,  bid: 38  },
+      { label: 'Termite Control',                price: '$45–$155', on: true,  bid: 72  },
+      { label: 'Rodent Control',                 price: '$30–$95',  on: false, bid: 52  },
+      { label: 'Bed Bug Treatment',              price: '$55–$140', on: false, bid: 82  },
+      { label: 'Mosquito / Outdoor',             price: '$20–$75',  on: false, bid: 38  },
+    ],
+    roofing: [
+      { label: 'Roof Repair',                    price: '$15–$180', on: true,  bid: 72  },
+      { label: 'Roof Replacement',               price: '$45–$425', on: true,  bid: 185 },
+      { label: 'Roof Inspection',                price: '$15–$60',  on: false, bid: 32  },
+      { label: 'Gutter Install / Repair',        price: '$18–$85',  on: false, bid: 42  },
+      { label: 'Skylight',                       price: '$25–$110', on: false, bid: 55  },
+    ],
+  };
+
+  function renderSubcats() {
+    const cat = document.getElementById('cat-select').value;
+    document.getElementById('cat-price-range').textContent = catPriceRanges[cat];
+    const items = subCategories[cat];
+    document.getElementById('subcat-list').innerHTML = items.map((item, i) => `
+      <div class="category-row">
+        <div class="cat-info">
+          <div class="category-name">${item.label}</div>
+          <div class="category-price">${item.price}</div>
+        </div>
+        <div class="bid-wrap bid-smart ${item.on ? '' : 'bid-off'}">
+          <div class="bid-label">bid / call</div>
+          <div class="bid-field">
+            <span class="bid-sym">$</span>
+            <input type="number" class="bid-input" value="${item.bid}" min="1"
+              oninput="subCategories['${cat}'][${i}].bid = +this.value; this.closest('.bid-wrap').classList.remove('bid-smart')"
+              onclick="event.stopPropagation()"
+              ${item.on ? '' : 'disabled'}>
+          </div>
+          <div class="bid-auto-tag">smart bid</div>
+        </div>
+        <button class="toggle ${item.on ? 'on' : ''}"
+          onclick="
+            subCategories['${cat}'][${i}].on = !subCategories['${cat}'][${i}].on;
+            this.classList.toggle('on');
+            var bw = this.previousElementSibling;
+            bw.classList.toggle('bid-off', !subCategories['${cat}'][${i}].on);
+            bw.querySelector('.bid-input').disabled = !subCategories['${cat}'][${i}].on;
+          ">
+        </button>
+      </div>
+    `).join('');
+  }
+
+  /* ── Tab switching ── */
+  function showTab(tab) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('screen-' + tab).classList.add('active');
+    document.getElementById('nav-' + tab).classList.add('active');
+  }
+
+  /* ── Render call list ── */
+  function renderCalls(filter) {
+    const list = document.getElementById('call-list');
+    const filtered = filter === 'all' ? calls : calls.filter(c => c.outcome === filter);
+    list.innerHTML = filtered.map(c => `
+      <div class="call-card" data-outcome="${c.outcome}" onclick="openPanel(${c.id})">
+        <div class="call-card-main">
+          <div class="call-dot dot-${c.outcome}"></div>
+          <div class="call-info">
+            <div class="call-cat">${c.cat}</div>
+            <div class="call-meta">${c.date} · ${c.time} · ZIP ${c.zip}</div>
+          </div>
+          <div class="call-right">
+            <div class="call-cost">${c.cost > 0 ? '$' + c.cost : '—'}</div>
+            <div class="call-dur">${c.dur}</div>
+          </div>
+        </div>
+        <div class="call-card-footer">
+          <span class="outcome-badge badge-${c.outcome}">${outcomeLabels[c.outcome]}</span>
+          <span class="conv-link">View conversation →</span>
+        </div>
+        ${c.outcome === 'sms_converted' ? '<div class="sms-save-note">Wasn\'t booked on the call — we closed it for you via SMS</div>' : ''}
+      </div>
+    `).join('');
+  }
+
+  function filterCalls(filter, el) {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderCalls(filter);
+  }
+
+  /* ── SMS Panel ── */
+  function openPanel(callId) {
+    const call = calls.find(c => c.id === callId);
+    const conv = conversations[call.conv];
+
+    // Header
+    document.getElementById('panel-cat').textContent = `${call.cat} · ZIP ${call.zip}`;
+    document.getElementById('panel-meta').textContent = `${call.date} · ${call.time} · ${call.dur} duration${call.cost > 0 ? ' · $' + call.cost : ' · Disputed'}`;
+
+    // Status bar
+    const statusBar = document.getElementById('panel-status');
+    const statusConfig = {
+      booked:        { cls: 'status-booked',         icon: '✅', label: 'Appointment booked — ' + (conv.appt || '') },
+      pending:       { cls: 'status-pending',         icon: '⏳', label: 'Awaiting homeowner confirmation' },
+      not_booked:    { cls: 'status-not_booked',      icon: '○',  label: 'No appointment scheduled' },
+      disputed:      { cls: 'status-disputed',        icon: '⚠️', label: 'Dispute submitted — under review' },
+      sms_converted: { cls: 'status-sms_converted',   icon: '⭐', label: 'Booked after the call via SMS — ' + (conv.appt || '') },
+    };
+    const s = statusConfig[call.outcome];
+    statusBar.className = 'panel-status-bar ' + s.cls;
+    statusBar.innerHTML = `<span>${s.icon}</span> ${s.label}`;
+
+    // Messages
+    const scroll = document.getElementById('messages-scroll');
+    const callNoteHTML = conv.callNote
+      ? `<div class="call-context-note"><strong>📞 From the call:</strong> ${conv.callNote}</div><div class="call-context-divider">SMS follow-up</div>`
+      : '';
+    scroll.innerHTML = callNoteHTML + conv.msgs.map(m => `
+      <div class="msg ${m.role}">
+        <div class="msg-sender">${m.role === 'ai' ? 'Sarah' : 'Customer'}</div>
+        <div class="msg-bubble">${m.text}</div>
+        <div class="msg-time">${m.time}</div>
+      </div>
+    `).join('') + (conv.appt ? `<div class="appt-confirmed">${conv.appt}</div>` : '');
+
+    // Open
+    document.getElementById('panel-overlay').classList.add('open');
+    setTimeout(() => scroll.scrollTop = scroll.scrollHeight, 50);
+  }
+
+  function closePanel() {
+    document.getElementById('panel-overlay').classList.remove('open');
+  }
+
+  function closePanelOnBg(e) {
+    if (e.target === document.getElementById('panel-overlay')) closePanel();
+  }
+
+  /* ── Init ── */
+  renderSubcats();
+  renderCalls('all');
+</script>
+</body>
+</html>
