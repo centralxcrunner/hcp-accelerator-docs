@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Execution Spec: Inbound Call Marketplace — HCP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --surface-2: #1e2332;
+      --border: #2a2f42;
+      --accent: #4f8ef7;
+      --accent-dim: rgba(79,142,247,0.08);
+      --accent-border: rgba(79,142,247,0.25);
+      --green: #3ecf8e;
+      --green-dim: rgba(62,207,142,0.08);
+      --gold: #f5c84c;
+      --gold-dim: rgba(245,200,76,0.08);
+      --red: #f87171;
+      --red-dim: rgba(248,113,113,0.08);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251,191,36,0.08);
+      --muted: #8b92a5;
+      --text: #e8eaf0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 48px 24px 80px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Back link ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 32px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--text); text-decoration: none; }
+
+    /* ── Page header ── */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    /* ── Header metadata box ── */
+    .header-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0;
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+    .header-box table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .header-box td {
+      padding: 11px 20px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .header-box tr:last-child td { border-bottom: none; }
+    .header-box .field-label {
+      font-weight: 600;
+      color: var(--muted);
+      width: 180px;
+      white-space: nowrap;
+    }
+    .header-box .field-val { color: var(--text); }
+
+    /* ── Status chips ── */
+    .chip {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .chip-draft { background: rgba(139,146,165,0.15); color: var(--muted); }
+    .chip-selected { background: rgba(62,207,142,0.12); color: var(--green); }
+    .chip-high { background: var(--red-dim); color: var(--red); }
+    .chip-medium { background: var(--amber-dim); color: var(--amber); }
+    .chip-low { background: var(--green-dim); color: var(--green); }
+    .chip-external { background: rgba(79,142,247,0.1); color: var(--accent); }
+    .chip-internal { background: rgba(139,146,165,0.1); color: var(--muted); }
+
+    /* ── Section heading ── */
+    .section-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      margin-top: 48px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Tables ── */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+    .spec-table th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .spec-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .spec-table tbody tr:last-child td { border-bottom: none; }
+    .spec-table tbody tr:hover td { background: var(--surface-2); }
+    .spec-table-wrap {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .spec-table td.id-col {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+      width: 44px;
+    }
+
+    /* ── Scope lists ── */
+    .scope-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 600px) { .scope-grid { grid-template-columns: 1fr; } }
+    .scope-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .scope-box-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .scope-box-label.in { color: var(--green); }
+    .scope-box-label.out { color: var(--red); }
+    .scope-list {
+      list-style: none;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .scope-list li {
+      padding: 5px 0;
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .scope-list li::before {
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+    }
+    .scope-box.in .scope-list li::before { content: '✓'; color: var(--green); }
+    .scope-box.out .scope-list li::before { content: '✕'; color: var(--red); }
+
+    /* ── User flows ── */
+    .flow-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .flow-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .flow-step {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      line-height: 1.55;
+      margin-bottom: 8px;
+    }
+    .flow-step:last-child { margin-bottom: 0; }
+    .flow-keyword {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      width: 46px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+    .kw-given { color: var(--muted); }
+    .kw-when  { color: var(--accent); }
+    .kw-then  { color: var(--green); }
+    .kw-and   { color: var(--muted); }
+    .flow-step-text { color: var(--text); }
+
+    /* ── UI spec ── */
+    .ui-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .ui-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .ui-list {
+      list-style: none;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .ui-list li {
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.55;
+    }
+    .ui-list li::before {
+      content: '·';
+      position: absolute;
+      left: 4px;
+      color: var(--muted);
+    }
+    .ui-list li strong { color: var(--text); font-weight: 600; }
+    .ui-list li code {
+      font-family: 'Menlo', 'Monaco', monospace;
+      font-size: 11px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: var(--accent);
+    }
+
+    /* ── Data model ── */
+    .data-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .data-block-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .data-field-row {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: baseline;
+    }
+    .data-field-row:last-child { border-bottom: none; }
+    .data-field-name {
+      font-family: 'Menlo', 'Monaco', monospace;
+      color: var(--accent);
+      width: 200px;
+      flex-shrink: 0;
+    }
+    .data-field-type {
+      color: var(--gold);
+      width: 100px;
+      flex-shrink: 0;
+    }
+    .data-field-note { color: var(--muted); flex: 1; }
+
+    /* ── Acceptance criteria ── */
+    .ac-list {
+      list-style: none;
+      font-size: 13px;
+    }
+    .ac-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.55;
+    }
+    .ac-list li:last-child { border-bottom: none; }
+    .ac-check {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .ac-wrap {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--surface);
+      margin-bottom: 28px;
+    }
+    .ac-group-header {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px 16px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── TL;DR / callout ── */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .callout.blue {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--text);
+    }
+    .callout.gold {
+      background: var(--gold-dim);
+      border: 1px solid rgba(245,200,76,0.2);
+      color: var(--text);
+    }
+    .callout-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .callout.blue .callout-label { color: var(--accent); }
+    .callout.gold .callout-label { color: var(--gold); }
+
+    /* ── Self-critique readiness ── */
+    .readiness-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+    .readiness-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .readiness-decision {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+    .readiness-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      margin-top: 64px;
+    }
+
+    /* ── Open items ── */
+    .open-items-note {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-link" href="index.html">← Back to hub</a>
+
+  <div class="page-eyebrow">HCP · AI Accelerator · Day 5 → Spec</div>
+  <h1 class="page-title">Execution Spec: Inbound Call Marketplace</h1>
+
+  <!-- Header metadata box -->
+  <div class="header-box">
+    <table>
+      <tr>
+        <td class="field-label">Feature</td>
+        <td class="field-val">Inbound Call Marketplace — Call Buying for Home Service Pros</td>
+      </tr>
+      <tr>
+        <td class="field-label">Team</td>
+        <td class="field-val">Marketplace / Pro Growth · HCP</td>
+      </tr>
+      <tr>
+        <td class="field-label">Author</td>
+        <td class="field-val">Chris Kosednar, PM</td>
+      </tr>
+      <tr>
+        <td class="field-label">Date</td>
+        <td class="field-val">Feb 24, 2026</td>
+      </tr>
+      <tr>
+        <td class="field-label">Status</td>
+        <td class="field-val"><span class="chip chip-draft">Draft — for review</span></td>
+      </tr>
+      <tr>
+        <td class="field-label">Selected Solution</td>
+        <td class="field-val"><span class="chip chip-selected">Option 2 — Full Native Marketplace</span> &nbsp; eLocal integration, native HCP UI, single-provider pilot</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Source Materials -->
+  <div class="section-eyebrow">Source Materials</div>
+  <div class="section-title">Source Materials</div>
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Document</th>
+          <th>Link / Location</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Options Doc</td>
+          <td><a href="options-doc.html">options-doc.html</a></td>
+          <td>3 implementation options analyzed; Option 2 selected</td>
+        </tr>
+        <tr>
+          <td>Insights Brief</td>
+          <td><a href="insights-brief.html">insights-brief.html</a></td>
+          <td>VOC data, industry benchmarks, persona analysis, business value model</td>
+        </tr>
+        <tr>
+          <td>Executive One-Pager</td>
+          <td><a href="one-pager.html">one-pager.html</a></td>
+          <td>Revenue model, ARR projections, leadership summary</td>
+        </tr>
+        <tr>
+          <td>Interactive Prototype</td>
+          <td><a href="../call-marketplace/index.html">call-marketplace/index.html</a></td>
+          <td>Full-fidelity mobile prototype — primary UI reference for this spec</td>
+        </tr>
+        <tr>
+          <td>Reforge AI Accelerator — Day 5 Presentation</td>
+          <td>Reforge cohort portal</td>
+          <td>Program context; submission date Feb 23, 2026</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Assumptions -->
+  <div class="section-eyebrow">Pre-conditions</div>
+  <div class="section-title">Assumptions</div>
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th style="width:40px"></th>
+          <th>Statement</th>
+          <th style="width:90px">Confidence</th>
+          <th>Risk If Wrong</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id-col">A1</td>
+          <td>eLocal supports a ping/post API where HCP responds to a call ping with a real-time bid and forwarding phone number</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Entire Option 2 architecture requires redesign; fall back to Option 1 pass-through</td>
+        </tr>
+        <tr>
+          <td class="id-col">A2</td>
+          <td>CSR AI can answer 100% of purchased calls without queue overflow during the pilot</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Missed calls = Pro credits lost + trust broken; need overflow routing to voicemail</td>
+        </tr>
+        <tr>
+          <td class="id-col">A3</td>
+          <td>Pros in the warm cohort (CSR AI + active lead spend) will accept a ~$125 avg cost per job for exclusive inbound calls</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Attach rate below 25%; product may need repricing or narrower initial segment</td>
+        </tr>
+        <tr>
+          <td class="id-col">A4</td>
+          <td>HCP billing infrastructure can support a pre-funded credit balance model (not post-pay invoicing)</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Requires a new credit ledger service; engineering scope significantly larger than estimated</td>
+        </tr>
+        <tr>
+          <td class="id-col">A5</td>
+          <td>eLocal's call category taxonomy maps cleanly to HCP's existing job categories</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Manual mapping table required; some call types may be unroutable in v1</td>
+        </tr>
+        <tr>
+          <td class="id-col">A6</td>
+          <td>eLocal's webhook payload includes call category, ZIP code, and duration — sufficient for bidding and analytics</td>
+          <td><span class="chip chip-low">High</span></td>
+          <td>Bid optimization and ROI dashboard are degraded without category + ZIP data</td>
+        </tr>
+        <tr>
+          <td class="id-col">A7</td>
+          <td>Pros in the pilot are already on CSR AI and will accept AI-only answering (no live transfer option)</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Some Pros will decline to participate; "CSR AI required" gate needed with clear messaging</td>
+        </tr>
+        <tr>
+          <td class="id-col">A8</td>
+          <td>Call transcripts are available to the AI SMS follow-up system within 5 minutes of call completion</td>
+          <td><span class="chip chip-low">High</span></td>
+          <td>AI SMS follow-up can't be contextually aware; falls back to generic messaging</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scope -->
+  <div class="section-eyebrow">Section 1</div>
+  <div class="section-title">Scope</div>
+  <div class="scope-grid">
+    <div class="scope-box in">
+      <div class="scope-box-label in">In Scope — v1 Pilot</div>
+      <ul class="scope-list">
+        <li>Setup: daily max + monthly cap budget controls</li>
+        <li>Per-sub-category bid inputs with smart bid defaults</li>
+        <li>Trade and sub-category on/off toggles</li>
+        <li>Ping/post bid API integration with eLocal</li>
+        <li>Call forwarding to CSR AI for all purchased calls</li>
+        <li>Call log with outcome tracking (booked / not booked / sms_converted)</li>
+        <li>Dashboard: 6 KPI tiles, compact ROAS tile, spend vs revenue chart</li>
+        <li>AI SMS follow-up using call transcript context</li>
+        <li>⭐ Saved via SMS — post-call conversion tracking</li>
+        <li>Pre-funded credit balance (add funds, card management)</li>
+        <li>Onboarding explainer card on dashboard (dismissable)</li>
+        <li>Budget threshold alerts (80% monthly cap consumed)</li>
+        <li>Call detail slide-up panel with SMS thread</li>
+        <li>Bid nudge insight ("Your ROI is 4×, consider raising bids")</li>
+      </ul>
+    </div>
+    <div class="scope-box out">
+      <div class="scope-box-label out">Out of Scope — Deferred</div>
+      <ul class="scope-list">
+        <li>Multi-provider marketplace (Option 3) — Phase 2</li>
+        <li>Live transfer / non-AI answering option</li>
+        <li>Automated ML bid optimization</li>
+        <li>Google LSA, ResultCalls, or other provider integrations</li>
+        <li>Pro-facing call recording playback</li>
+        <li>Real-time call monitoring / live dashboard</li>
+        <li>Dispute resolution / call quality refund flow</li>
+        <li>Bid win-rate visibility per sub-category</li>
+        <li>Post-pay billing model</li>
+        <li>SMS opt-in consent UI (TCPA — see self-critique)</li>
+        <li>Non-English SMS follow-up</li>
+        <li>Weekend / after-hours budget rules (separate from daily cap)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- User Flows -->
+  <div class="section-eyebrow">Section 2</div>
+  <div class="section-title">User Flows</div>
+
+  <div class="flow-block">
+    <div class="flow-title">Flow 1 — Pro activates call buying</div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-given">Given</span>
+      <span class="flow-step-text">A Pro has CSR AI enabled and has active lead spend (warm cohort qualification)</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The Pro navigates to Marketing &gt; Call Marketplace and opens the Setup tab</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">The Pro sees budget inputs (Daily Max, Monthly Cap) with current spend context below each field</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The Pro sets Daily Max ($150) and Monthly Cap ($2,000), enables desired categories (e.g., HVAC, Plumbing), and adjusts per-sub-category bids</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-and">And</span>
+      <span class="flow-step-text">The Pro taps "Go Live"</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">The account status is set to active; eLocal bidder is enabled with the Pro's configured category bids and budget caps</span>
+    </div>
+  </div>
+
+  <div class="flow-block">
+    <div class="flow-title">Flow 2 — Inbound call received and routed</div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-given">Given</span>
+      <span class="flow-step-text">A Pro account is live with HVAC bids enabled and sufficient credit balance</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">eLocal sends a ping with <code>{category: "AC Repair", zip: "85007"}</code></span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">HCP responds within 500ms with <code>{bid: 52, forward_to: "+16025551234"}</code></span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">eLocal awards the call to HCP's bid</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">The call is forwarded to the CSR AI virtual agent at the provisioned forwarding number</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The CSR AI completes the call</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">A call record is created (category, ZIP, duration, outcome: booked|not_booked); the Pro's credit balance is debited by the bid amount</span>
+    </div>
+  </div>
+
+  <div class="flow-block">
+    <div class="flow-title">Flow 3 — Post-call SMS conversion</div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-given">Given</span>
+      <span class="flow-step-text">A call ended with outcome = not_booked AND call duration &gt; 30 seconds (engaged, not dropped)</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The call transcript is processed (within 5 min of call end)</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">The AI sends a context-aware SMS to the homeowner within 15 minutes, referencing the call reason (e.g., "I know you wanted to check with your husband first…")</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The homeowner replies and the AI closes the booking via SMS</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">The call record outcome updates to <code>sms_converted</code>; the call log entry shows a ⭐ badge and "Wasn't booked on the call — we closed it for you via SMS" helper text</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-and">And</span>
+      <span class="flow-step-text">The Dashboard "Jobs" count and revenue figures update to reflect the SMS-converted booking</span>
+    </div>
+  </div>
+
+  <div class="flow-block">
+    <div class="flow-title">Flow 4 — Pro reviews dashboard and call detail</div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-given">Given</span>
+      <span class="flow-step-text">A Pro has received calls (app loads on Dashboard by default)</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The Pro opens the Call Marketplace app</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">The Dashboard tab is active, showing: explainer card (first session), KPI grid (Calls, Jobs, Calls→Jobs %, Cost per Job, Total Spend, Revenue Earned), ROAS tile, and call log</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The Pro taps a call row in the log</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">A slide-up detail panel opens showing: call metadata (category, ZIP, time, duration, bid), outcome status bar, and — if sms_converted — the call transcript context note followed by the full SMS thread</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">The Pro taps a filter chip (All / Booked / Not Booked / ⭐ Saved)</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">The call log filters to show only calls matching that outcome</span>
+    </div>
+  </div>
+
+  <div class="flow-block">
+    <div class="flow-title">Flow 5 — Budget cap reached, account auto-paused</div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-given">Given</span>
+      <span class="flow-step-text">A Pro's monthly spend reaches 80% of their monthly cap</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">HCP sends an in-app notification: "You've used 80% of your February call budget ($1,600 of $2,000)"</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-when">When</span>
+      <span class="flow-step-text">Monthly spend reaches 100% of the monthly cap</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-then">Then</span>
+      <span class="flow-step-text">HCP stops responding to eLocal pings for that Pro; account status set to "Paused — monthly cap reached"</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-keyword kw-and">And</span>
+      <span class="flow-step-text">Pro is notified via push and in-app prompt to raise the cap or wait for next billing cycle</span>
+    </div>
+  </div>
+
+  <!-- UI Specifications -->
+  <div class="section-eyebrow">Section 3</div>
+  <div class="section-title">UI Specifications</div>
+
+  <div class="callout blue">
+    <div class="callout-label">Reference</div>
+    The interactive prototype at <a href="../call-marketplace/index.html">call-marketplace/index.html</a> is the primary visual reference. All specs below describe that prototype's behavior. Design tokens are mapped to HCP's Figma design system (node 128:116198, file yDipxk8KeTUDaBsta4cez7).
+  </div>
+
+  <div class="ui-section">
+    <div class="ui-section-title">Global Shell</div>
+    <ul class="ui-list">
+      <li><strong>Layout:</strong> Mobile-first, max-width 430px, centered</li>
+      <li><strong>Bottom nav:</strong> 4 tabs — Dashboard, Setup, Calls, Account</li>
+      <li><strong>Default landing:</strong> Dashboard tab (not Setup) on every app load</li>
+      <li><strong>Design tokens:</strong> HCP light theme — <code>--primary: #0e6fbe</code>, <code>--bg: #f2f4f7</code>, <code>--surface: #ffffff</code>, <code>--radius-card: 8px</code></li>
+      <li><strong>Font:</strong> Inter via Google Fonts</li>
+    </ul>
+  </div>
+
+  <div class="ui-section">
+    <div class="ui-section-title">Dashboard Tab</div>
+    <ul class="ui-list">
+      <li><strong>Explainer card</strong> (first session / until dismissed): "How it works" header, 3-step flow (Buy the call → We answer it → Job confirmed), dismiss × button. Does not reappear after dismissed in session.</li>
+      <li><strong>KPI grid (2×3):</strong> Total Calls | Jobs (green); Calls→Jobs % | Cost per Job; Total Spend | Revenue Earned</li>
+      <li><strong>Compact ROAS tile:</strong> Left side = label + large value (e.g., 4×) + sub-line "Spent $625 · Earned $2,470"; right side = avg job value + return label</li>
+      <li><strong>Spend vs Revenue chart:</strong> Bar chart, 7-day view; spend (blue) vs revenue (green) per day</li>
+      <li><strong>Call log:</strong> Filter chips (All / Booked / Not Booked / ⭐ Saved); each row shows time, category, outcome dot, badge, duration, bid amount</li>
+      <li><strong>SMS save indicator:</strong> Rows with <code>sms_converted</code> outcome show amber dot, ⭐ badge, and helper text "Wasn't booked on the call — we closed it for you via SMS" below the row</li>
+      <li><strong>Tapping a call row</strong> opens slide-up detail panel (see Flow 4)</li>
+    </ul>
+  </div>
+
+  <div class="ui-section">
+    <div class="ui-section-title">Setup Tab</div>
+    <ul class="ui-list">
+      <li><strong>Budget card:</strong> Two editable <code>&lt;input type="number"&gt;</code> fields side-by-side — Daily Max and Monthly Cap</li>
+      <li>Each field shows live context below it: e.g., <em>"$28 spent today · 2 calls"</em> (daily) and <em>"$625 spent · $1,375 left · 12 calls"</em> (monthly)</li>
+      <li><strong>Billing line:</strong> Single small line at bottom of budget card: "Charged to <code>Visa ····4242</code> [Edit]" — de-emphasized, not a primary focus</li>
+      <li><strong>Categories card:</strong> Trade selector tabs (HVAC / Electrical / Plumbing / Pest / Roofing) + sub-category list (5 sub-categories per trade in pilot)</li>
+      <li><strong>Sub-category row:</strong> Category name + price range (muted) + bid input + on/off toggle</li>
+      <li><strong>Bid input:</strong> Shows smart bid default (midpoint of price range) with "smart bid" tag below. Tag hides when Pro manually edits the field. Input is disabled when sub-category is toggled off.</li>
+      <li><strong>Bid nudge insight:</strong> Blue info card: <em>"Your ROI is 4×. Raising bids could capture more call volume."</em> — shown above sub-category list</li>
+      <li><strong>No "When to Receive Calls" section</strong> — all calls answered by CSR AI in pilot; this control is omitted</li>
+      <li><strong>Go Live / Pause buttons:</strong> Primary "Go Live" button + outline "Pause" button</li>
+    </ul>
+  </div>
+
+  <div class="ui-section">
+    <div class="ui-section-title">Call Detail Panel (Slide-up)</div>
+    <ul class="ui-list">
+      <li>Triggered by tapping any call row</li>
+      <li>Header: category name, ZIP, date/time, duration, bid amount debited</li>
+      <li><strong>Outcome status bar:</strong> Color-coded — green (Booked), grey (Not Booked), amber with ⭐ (Booked after the call via SMS)</li>
+      <li>If <code>sms_converted</code>: shows appointment confirmation line (<em>"📅 Confirmed: Fri Feb 24 · 10:00 AM"</em>)</li>
+      <li><strong>Call context note</strong> (if SMS follow-up exists): blue-tinted box "📞 From the call: [transcript summary]" rendered before the SMS thread</li>
+      <li><strong>Divider:</strong> "SMS Follow-up" label between context note and messages</li>
+      <li><strong>SMS thread:</strong> AI messages (left, grey bubble) + homeowner replies (right, blue bubble) + timestamps</li>
+    </ul>
+  </div>
+
+  <!-- Data Model -->
+  <div class="section-eyebrow">Section 4</div>
+  <div class="section-title">Data Model & Business Rules</div>
+
+  <div class="data-block">
+    <div class="data-block-title">call_record</div>
+    <div class="data-field-row"><span class="data-field-name">id</span><span class="data-field-type">uuid</span><span class="data-field-note">Primary key</span></div>
+    <div class="data-field-row"><span class="data-field-name">pro_id</span><span class="data-field-type">uuid</span><span class="data-field-note">FK → pro account</span></div>
+    <div class="data-field-row"><span class="data-field-name">elocal_call_id</span><span class="data-field-type">string</span><span class="data-field-note">eLocal's call identifier; used for idempotency</span></div>
+    <div class="data-field-row"><span class="data-field-name">call_time</span><span class="data-field-type">timestamp</span><span class="data-field-note">UTC; when the call was received</span></div>
+    <div class="data-field-row"><span class="data-field-name">category</span><span class="data-field-type">string</span><span class="data-field-note">e.g., "hvac", "plumbing" — mapped from eLocal taxonomy</span></div>
+    <div class="data-field-row"><span class="data-field-name">sub_category</span><span class="data-field-type">string</span><span class="data-field-note">e.g., "AC Repair"; from ping payload</span></div>
+    <div class="data-field-row"><span class="data-field-name">zip</span><span class="data-field-type">string(5)</span><span class="data-field-note">Homeowner ZIP; from ping payload</span></div>
+    <div class="data-field-row"><span class="data-field-name">duration_sec</span><span class="data-field-type">integer</span><span class="data-field-note">Total call duration in seconds</span></div>
+    <div class="data-field-row"><span class="data-field-name">bid_amount</span><span class="data-field-type">decimal(8,2)</span><span class="data-field-note">Bid submitted and charged; in USD</span></div>
+    <div class="data-field-row"><span class="data-field-name">outcome</span><span class="data-field-type">enum</span><span class="data-field-note">booked | not_booked | sms_converted | not_answered</span></div>
+    <div class="data-field-row"><span class="data-field-name">job_value</span><span class="data-field-type">decimal(8,2)</span><span class="data-field-note">Estimated or confirmed job revenue; null if not booked</span></div>
+    <div class="data-field-row"><span class="data-field-name">transcript_summary</span><span class="data-field-type">text</span><span class="data-field-note">AI-generated call summary; used for SMS context</span></div>
+    <div class="data-field-row"><span class="data-field-name">created_at</span><span class="data-field-type">timestamp</span><span class="data-field-note">Record creation time</span></div>
+  </div>
+
+  <div class="data-block">
+    <div class="data-block-title">pro_call_config (per pro, per sub-category)</div>
+    <div class="data-field-row"><span class="data-field-name">pro_id</span><span class="data-field-type">uuid</span><span class="data-field-note"></span></div>
+    <div class="data-field-row"><span class="data-field-name">sub_category_key</span><span class="data-field-type">string</span><span class="data-field-note">e.g., "hvac_ac_repair"</span></div>
+    <div class="data-field-row"><span class="data-field-name">bid_amount</span><span class="data-field-type">decimal(8,2)</span><span class="data-field-note">Pro's current bid for this sub-category</span></div>
+    <div class="data-field-row"><span class="data-field-name">is_smart_bid</span><span class="data-field-type">boolean</span><span class="data-field-note">True = system-set default; False = Pro manually edited</span></div>
+    <div class="data-field-row"><span class="data-field-name">enabled</span><span class="data-field-type">boolean</span><span class="data-field-note">Whether to respond to pings for this sub-category</span></div>
+  </div>
+
+  <div class="data-block">
+    <div class="data-block-title">pro_budget</div>
+    <div class="data-field-row"><span class="data-field-name">pro_id</span><span class="data-field-type">uuid</span><span class="data-field-note"></span></div>
+    <div class="data-field-row"><span class="data-field-name">daily_max</span><span class="data-field-type">decimal(8,2)</span><span class="data-field-note">Hard daily spend cap in USD</span></div>
+    <div class="data-field-row"><span class="data-field-name">monthly_cap</span><span class="data-field-type">decimal(8,2)</span><span class="data-field-note">Hard monthly spend cap in USD</span></div>
+    <div class="data-field-row"><span class="data-field-name">credit_balance</span><span class="data-field-type">decimal(8,2)</span><span class="data-field-note">Pre-funded balance; debited on call award</span></div>
+    <div class="data-field-row"><span class="data-field-name">account_status</span><span class="data-field-type">enum</span><span class="data-field-note">active | paused | monthly_cap_reached | insufficient_balance</span></div>
+  </div>
+
+  <div class="data-block">
+    <div class="data-block-title">sms_conversation (per call)</div>
+    <div class="data-field-row"><span class="data-field-name">id</span><span class="data-field-type">uuid</span><span class="data-field-note"></span></div>
+    <div class="data-field-row"><span class="data-field-name">call_id</span><span class="data-field-type">uuid</span><span class="data-field-note">FK → call_record</span></div>
+    <div class="data-field-row"><span class="data-field-name">homeowner_phone</span><span class="data-field-type">string</span><span class="data-field-note">Encrypted at rest; not surfaced in Pro UI</span></div>
+    <div class="data-field-row"><span class="data-field-name">messages</span><span class="data-field-type">jsonb</span><span class="data-field-note">Array of {role, text, timestamp}</span></div>
+    <div class="data-field-row"><span class="data-field-name">opted_out</span><span class="data-field-type">boolean</span><span class="data-field-note">True if homeowner replied STOP</span></div>
+    <div class="data-field-row"><span class="data-field-name">converted_at</span><span class="data-field-type">timestamp</span><span class="data-field-note">When booking was confirmed via SMS; null if not converted</span></div>
+  </div>
+
+  <div class="section-eyebrow" style="margin-top:24px">Business Rules</div>
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Rule</th>
+          <th>Logic</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Daily cap enforcement</strong></td>
+          <td>If today's total debits ≥ <code>daily_max</code>, do not respond to pings for the remainder of the calendar day (UTC)</td>
+        </tr>
+        <tr>
+          <td><strong>Monthly cap enforcement</strong></td>
+          <td>If this month's total debits ≥ <code>monthly_cap</code>, set <code>account_status = monthly_cap_reached</code> and stop responding to all pings</td>
+        </tr>
+        <tr>
+          <td><strong>Insufficient balance</strong></td>
+          <td>If <code>credit_balance</code> &lt; the lowest active bid, set <code>account_status = insufficient_balance</code>; send push: "Add funds to resume call buying"</td>
+        </tr>
+        <tr>
+          <td><strong>Debit timing</strong></td>
+          <td>Credit balance is debited on call award (when eLocal confirms call forwarded), not on ping or call completion</td>
+        </tr>
+        <tr>
+          <td><strong>Idempotent ping response</strong></td>
+          <td>If the same <code>elocal_call_id</code> ping is received more than once, respond with the same bid; do not create duplicate records</td>
+        </tr>
+        <tr>
+          <td><strong>Smart bid default</strong></td>
+          <td>Default bid = floor of (price_range_min + price_range_max) / 2; <code>is_smart_bid = true</code>. Cleared to false when Pro manually edits the field.</td>
+        </tr>
+        <tr>
+          <td><strong>SMS follow-up trigger</strong></td>
+          <td>Trigger only when: <code>outcome = not_booked</code> AND <code>duration_sec &gt; 30</code> AND <code>opted_out = false</code></td>
+        </tr>
+        <tr>
+          <td><strong>SMS follow-up limit</strong></td>
+          <td>Max 5 AI messages per call thread; no further messages if homeowner doesn't reply after message 3</td>
+        </tr>
+        <tr>
+          <td><strong>Budget 80% alert</strong></td>
+          <td>Send in-app notification when monthly spend crosses 80% of <code>monthly_cap</code>; send once per billing cycle</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Acceptance Criteria -->
+  <div class="section-eyebrow">Section 5</div>
+  <div class="section-title">Acceptance Criteria</div>
+
+  <div class="ac-wrap">
+    <div class="ac-group-header">Setup & Configuration</div>
+    <ul class="ac-list">
+      <li><span class="ac-check"></span>Pro can set daily max and monthly cap; values persist across sessions and app reloads</li>
+      <li><span class="ac-check"></span>Current spend context (spent today, calls today) updates below daily max field in real time after new calls</li>
+      <li><span class="ac-check"></span>Pro can enable/disable individual sub-categories; disabled sub-categories grey out their bid input</li>
+      <li><span class="ac-check"></span>Smart bid defaults populate automatically (midpoint of price range) when sub-category is first enabled</li>
+      <li><span class="ac-check"></span>"Smart bid" tag disappears when Pro manually edits the bid field; does not reappear unless reset</li>
+      <li><span class="ac-check"></span>"Go Live" button saves configuration and activates the bidder; "Pause" stops all pings without deleting config</li>
+    </ul>
+  </div>
+
+  <div class="ac-wrap">
+    <div class="ac-group-header">Call Routing & Bidding</div>
+    <ul class="ac-list">
+      <li><span class="ac-check"></span>eLocal ping received → HCP responds with bid + forwarding number within 500ms (p95)</li>
+      <li><span class="ac-check"></span>HCP does not respond to pings when: account paused, daily cap reached, monthly cap reached, or insufficient balance</li>
+      <li><span class="ac-check"></span>HCP does not respond to pings for sub-categories the Pro has disabled</li>
+      <li><span class="ac-check"></span>Awarded call is forwarded to the CSR AI virtual agent at the provisioned number</li>
+      <li><span class="ac-check"></span>Call record is created on call completion; credit balance debited by bid amount</li>
+      <li><span class="ac-check"></span>Duplicate pings (same elocal_call_id) return same response; no duplicate debit</li>
+    </ul>
+  </div>
+
+  <div class="ac-wrap">
+    <div class="ac-group-header">Dashboard & Call Log</div>
+    <ul class="ac-list">
+      <li><span class="ac-check"></span>Dashboard KPI tiles update within 5 minutes of call completion</li>
+      <li><span class="ac-check"></span>Jobs tile counts only calls with outcome = booked OR sms_converted</li>
+      <li><span class="ac-check"></span>Calls→Jobs % = (booked + sms_converted) / total calls × 100</li>
+      <li><span class="ac-check"></span>Cost per Job = total spend / (booked + sms_converted) count</li>
+      <li><span class="ac-check"></span>Filter chips correctly show only calls matching the selected outcome type</li>
+      <li><span class="ac-check"></span>App loads with Dashboard tab active by default</li>
+      <li><span class="ac-check"></span>Explainer card is visible on first load; dismissal hides it for the session; does not re-render on tab switch</li>
+    </ul>
+  </div>
+
+  <div class="ac-wrap">
+    <div class="ac-group-header">SMS Follow-up & Conversion</div>
+    <ul class="ac-list">
+      <li><span class="ac-check"></span>Not-booked calls with duration &gt; 30 sec trigger AI SMS within 15 minutes of call end</li>
+      <li><span class="ac-check"></span>AI SMS references call transcript context (e.g., references reason for not booking)</li>
+      <li><span class="ac-check"></span>SMS-converted calls show ⭐ badge and amber dot in call log</li>
+      <li><span class="ac-check"></span>"Wasn't booked on the call — we closed it for you via SMS" helper text appears below sms_converted rows</li>
+      <li><span class="ac-check"></span>Call detail panel for sms_converted shows call context note above SMS thread</li>
+      <li><span class="ac-check"></span>Homeowner STOP reply halts all further AI messages for that conversation</li>
+    </ul>
+  </div>
+
+  <div class="ac-wrap">
+    <div class="ac-group-header">Budget Controls</div>
+    <ul class="ac-list">
+      <li><span class="ac-check"></span>When daily spend ≥ daily_max, system stops responding to pings for the remainder of the calendar day</li>
+      <li><span class="ac-check"></span>When monthly spend ≥ monthly_cap, account status updates to monthly_cap_reached and pings stop</li>
+      <li><span class="ac-check"></span>Pro receives in-app notification at 80% of monthly cap (sent once per billing cycle)</li>
+      <li><span class="ac-check"></span>When credit balance is insufficient, account status updates and Pro sees prompt to add funds</li>
+    </ul>
+  </div>
+
+  <!-- Error States -->
+  <div class="section-eyebrow">Section 6</div>
+  <div class="section-title">Error States & Edge Cases</div>
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>System Behavior</th>
+          <th>User-Facing Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Insufficient credit balance</strong></td>
+          <td>Stop responding to pings; set status = insufficient_balance</td>
+          <td>"Add funds to resume call buying" — push + in-app banner</td>
+        </tr>
+        <tr>
+          <td><strong>eLocal ping response timeout</strong> (&gt;500ms)</td>
+          <td>Call not awarded; log ping attempt as timed_out; no charge</td>
+          <td>None (background; metric surfaced in analytics)</td>
+        </tr>
+        <tr>
+          <td><strong>CSR AI unavailable / queue full</strong></td>
+          <td>Route to voicemail; log outcome as not_answered; do not debit credit balance</td>
+          <td>Pro sees call in log as "Not Answered" — no charge shown</td>
+        </tr>
+        <tr>
+          <td><strong>Unknown / unmapped category</strong></td>
+          <td>Do not respond to ping; log as unmatched_category</td>
+          <td>None (operational alert to HCP team)</td>
+        </tr>
+        <tr>
+          <td><strong>Duplicate ping</strong> (same elocal_call_id)</td>
+          <td>Respond with same bid (cached); create no new call record; no double debit</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Call duration &lt; 30 sec</strong> (dropped/hangup)</td>
+          <td>Outcome = not_booked; no SMS follow-up triggered</td>
+          <td>Call shows in log as "Not Booked"; no SMS follow-up initiated</td>
+        </tr>
+        <tr>
+          <td><strong>Homeowner replies STOP</strong></td>
+          <td>Set opted_out = true; cease all further AI messages for that conversation</td>
+          <td>No further messages sent; STOP confirmation sent to homeowner</td>
+        </tr>
+        <tr>
+          <td><strong>Monthly cap reached mid-call</strong></td>
+          <td>If call was already awarded (debit in flight), complete the call; cap applies to new pings only</td>
+          <td>Post-call: "Monthly budget reached — call buying paused"</td>
+        </tr>
+        <tr>
+          <td><strong>Call transcript unavailable</strong></td>
+          <td>AI SMS sent without call context (falls back to generic opening message); callNote field null</td>
+          <td>SMS thread shown without the "📞 From the call:" context note</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Dependencies -->
+  <div class="section-eyebrow">Section 7</div>
+  <div class="section-title">Dependencies & Integration Points</div>
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Dependency</th>
+          <th>Owner</th>
+          <th>Type</th>
+          <th>Notes / Risks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>eLocal Ping/Post API</strong></td>
+          <td>eLocal (external partner)</td>
+          <td><span class="chip chip-external">External</span></td>
+          <td>Requires partnership agreement + API credentials; SLA: 500ms ping response. <strong>Not yet confirmed.</strong></td>
+        </tr>
+        <tr>
+          <td><strong>CSR AI Virtual Agent</strong></td>
+          <td>HCP AI team</td>
+          <td><span class="chip chip-internal">Internal</span></td>
+          <td>Must support provisioning of a dedicated forwarding number per Pro; capacity planning required for pilot volume</td>
+        </tr>
+        <tr>
+          <td><strong>Call Transcription Service</strong></td>
+          <td>HCP AI / Telephony</td>
+          <td><span class="chip chip-internal">Internal</span></td>
+          <td>Transcript must be available within 5 min of call end; used as context for SMS follow-up AI</td>
+        </tr>
+        <tr>
+          <td><strong>HCP Marketing Hub</strong></td>
+          <td>Platform / Web team</td>
+          <td><span class="chip chip-internal">Internal</span></td>
+          <td>Navigation host for "Call Marketplace" menu item; requires nav update in Marketing section</td>
+        </tr>
+        <tr>
+          <td><strong>HCP Credit / Billing Ledger</strong></td>
+          <td>Billing team</td>
+          <td><span class="chip chip-internal">Internal</span></td>
+          <td>New pre-funded credit model; does not exist today. Likely requires a sprint spike. <strong>High engineering risk.</strong></td>
+        </tr>
+        <tr>
+          <td><strong>SMS Sending (Twilio / HCP Messaging)</strong></td>
+          <td>HCP Messaging team</td>
+          <td><span class="chip chip-internal">Internal</span></td>
+          <td>Used for AI post-call follow-up; must support programmatic send with homeowner number from call record</td>
+        </tr>
+        <tr>
+          <td><strong>Push / In-App Notification Service</strong></td>
+          <td>HCP Platform</td>
+          <td><span class="chip chip-internal">Internal</span></td>
+          <td>Budget threshold alerts; insufficient balance warnings</td>
+        </tr>
+        <tr>
+          <td><strong>eLocal Category Taxonomy Map</strong></td>
+          <td>PM (Chris) + Data</td>
+          <td><span class="chip chip-internal">Internal</span></td>
+          <td>Manual mapping of eLocal categories to HCP job types; must be maintained; gaps = unmatched pings</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Non-Functional Requirements -->
+  <div class="section-eyebrow">Section 8</div>
+  <div class="section-title">Non-Functional & Operational Requirements</div>
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Requirement</th>
+          <th>Target</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ping response latency</strong></td>
+          <td>&lt; 500ms p95</td>
+          <td>eLocal SLA; calls not awarded above this threshold</td>
+        </tr>
+        <tr>
+          <td><strong>Dashboard KPI freshness</strong></td>
+          <td>&lt; 5 min after call completion</td>
+          <td>Near-real-time; event-driven preferred over polling</td>
+        </tr>
+        <tr>
+          <td><strong>SMS send latency</strong></td>
+          <td>&lt; 15 min after call end</td>
+          <td>Trigger is transcript ready event; critical for conversion rate</td>
+        </tr>
+        <tr>
+          <td><strong>Call forwarding uptime</strong></td>
+          <td>99.9% SLA</td>
+          <td>Revenue-critical path; missed calls = lost credits + Pro churn</td>
+        </tr>
+        <tr>
+          <td><strong>Credit deduction idempotency</strong></td>
+          <td>Zero double-charges</td>
+          <td>Debit keyed on elocal_call_id; retry-safe</td>
+        </tr>
+        <tr>
+          <td><strong>Data retention</strong></td>
+          <td>24 months</td>
+          <td>Call records, SMS threads; then archive or delete per retention policy</td>
+        </tr>
+        <tr>
+          <td><strong>PII handling</strong></td>
+          <td>Encrypted at rest</td>
+          <td>Homeowner phone numbers encrypted; not surfaced in Pro-facing UI</td>
+        </tr>
+        <tr>
+          <td><strong>Pilot scale</strong></td>
+          <td>≤ 500 active Pros</td>
+          <td>Warm cohort = 7K eligible; pilot gate before broad rollout</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Open Items -->
+  <div class="section-eyebrow">Open Items</div>
+  <div class="section-title">Open Items</div>
+  <p class="open-items-note">Items requiring a decision or investigation before engineering handoff.</p>
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th style="width:40px"></th>
+          <th>Question</th>
+          <th>Owner</th>
+          <th>Due</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id-col">OI-1</td>
+          <td>Does eLocal support a ping/post API with real-time bid response? What is the exact payload schema?</td>
+          <td>Chris K + BD</td>
+          <td>Before kickoff</td>
+        </tr>
+        <tr>
+          <td class="id-col">OI-2</td>
+          <td>Can HCP Billing build a pre-funded credit ledger? What is the estimated engineering effort?</td>
+          <td>Billing team</td>
+          <td>Before kickoff</td>
+        </tr>
+        <tr>
+          <td class="id-col">OI-3</td>
+          <td>Does the AI SMS follow-up require explicit homeowner opt-in consent at call time (TCPA)? If so, how is consent captured?</td>
+          <td>Legal + PM</td>
+          <td>Before pilot launch</td>
+        </tr>
+        <tr>
+          <td class="id-col">OI-4</td>
+          <td>What is CSR AI's current capacity? Can it absorb pilot call volume without queue overflow?</td>
+          <td>AI team</td>
+          <td>Before pilot launch</td>
+        </tr>
+        <tr>
+          <td class="id-col">OI-5</td>
+          <td>What is the refund / dispute policy for short calls (&lt; 30 sec) or clearly misdirected calls? Define for V1, don't defer.</td>
+          <td>Chris K + Finance</td>
+          <td>Before pilot launch</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Self-Critique Pass -->
+  <div class="section-eyebrow">Self-Critique Pass</div>
+  <div class="section-title">Self-Critique Pass</div>
+
+  <div class="callout gold">
+    <div class="callout-label">Methodology</div>
+    Each finding is a gap, risk, or ambiguity in the spec above. Severity: High = blocks launch or violates a hard constraint; Medium = degrades outcome significantly if unresolved; Low = polish or future state.
+  </div>
+
+  <div class="spec-table-wrap">
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>Finding</th>
+          <th style="width:80px">Severity</th>
+          <th>Resolution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id-col">F1</td>
+          <td>The entire Option 2 architecture is predicated on eLocal offering a real-time ping/post bid API. This is an assumption, not a confirmed capability. If eLocal only supports post-pay pass-through, the architecture collapses to Option 1.</td>
+          <td><span class="chip chip-high">High</span></td>
+          <td>Run a 1-week BD/technical discovery sprint with eLocal before engineering kickoff. Do not estimate or plan engineering work until API is confirmed.</td>
+        </tr>
+        <tr>
+          <td class="id-col">F2</td>
+          <td>The pre-funded credit ledger model is a new billing primitive for HCP. This is not a small engineering lift — it likely requires a new microservice, ledger reconciliation, and finance system integration.</td>
+          <td><span class="chip chip-high">High</span></td>
+          <td>Engage HCP Billing team for a spike in the next sprint. Add to roadmap as a dependency with its own estimate before any commitments are made.</td>
+        </tr>
+        <tr>
+          <td class="id-col">F3</td>
+          <td>TCPA compliance for AI-initiated SMS to homeowners is not addressed. The spec mentions opt-out (STOP) but does not define how consent is obtained. SMS to non-consenting consumers is a legal and reputational risk.</td>
+          <td><span class="chip chip-high">High</span></td>
+          <td>Legal review required before any SMS follow-up feature ships. Likely requires explicit consent at the time of the call (e.g., CSR AI says "Can I text you a follow-up?") or a consent capture on the inbound call form.</td>
+        </tr>
+        <tr>
+          <td class="id-col">F4</td>
+          <td>Smart bid defaults use price range midpoints, but there is no data on what actually wins calls in eLocal's auction. Bids may be systematically too low (losing all auctions) or too high (poor ROAS).</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Run a 2-week bid experiment during the pilot with 3 bid levels; surface win-rate data in V2 dashboard. Don't over-optimize smart bids before there's empirical data.</td>
+        </tr>
+        <tr>
+          <td class="id-col">F5</td>
+          <td>The refund/dispute policy for low-quality calls (short duration, misdirected category) is fully deferred to V2. Pros who pay $125 for a 15-second call that was a wrong number will churn — and tell others.</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Define a minimal V1 refund rule before launch: calls &lt; 30 seconds are automatically credited back. Full dispute flow can be V2.</td>
+        </tr>
+        <tr>
+          <td class="id-col">F6</td>
+          <td>CSR AI overflow behavior is described in error states but the capacity model is unvalidated. If a Pro has 10 calls in an hour and CSR AI queues them, some Pros will get "not_answered" calls they were charged for.</td>
+          <td><span class="chip chip-medium">Medium</span></td>
+          <td>Confirm CSR AI's concurrent call capacity with the AI team before pilot launch. Define a hard queue limit per Pro and routing fallback (voicemail with transcript capture).</td>
+        </tr>
+        <tr>
+          <td class="id-col">F7</td>
+          <td>The spec defines the UI for dismissing the explainer card as session-only (disappears on tab switch, re-appears on next app load). This creates a repetitive experience for returning Pros.</td>
+          <td><span class="chip chip-low">Low</span></td>
+          <td>Persist dismissal to local storage or Pro profile; show explainer only for first 3 sessions or until first call received.</td>
+        </tr>
+        <tr>
+          <td class="id-col">F8</td>
+          <td>Bid nudge insight ("Your ROI is 4×, consider raising bids") is static in the prototype. In production, the threshold and message need clear rules to avoid showing the nudge to Pros who are already at monthly cap.</td>
+          <td><span class="chip chip-low">Low</span></td>
+          <td>Define nudge conditions: show only when ROI &gt; 3× AND monthly spend &lt; 60% of cap AND at least 5 booked calls. Suppress otherwise.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="readiness-box">
+    <div class="readiness-label">Readiness Decision</div>
+    <div class="readiness-decision">Not ready for engineering handoff</div>
+    <div class="readiness-body">
+      Three High severity findings (F1, F2, F3) must be resolved before this spec can be handed to engineering for estimation. Recommend a focused 1-week discovery sprint: <strong>(1)</strong> confirm eLocal ping/post API capability with BD, <strong>(2)</strong> run a billing spike with the Billing team, <strong>(3)</strong> get legal sign-off on TCPA consent model for AI SMS. Once those are resolved, the spec is ready for engineering review and story pointing. Medium findings (F4–F6) should be resolved before pilot launch, not before kickoff.
+    </div>
+  </div>
+
+  <div class="page-footer" style="margin-top:48px">
+    HCP · Inbound Call Marketplace · Execution Spec · AI Accelerator Day 5 · Chris Kosednar · Feb 2026
+  </div>
+
+</div>
+</body>
+</html>
