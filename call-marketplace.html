@@ -288,6 +288,54 @@
       padding: 14px 20px; cursor: pointer;
     }
 
+    /* ── Explainer card ── */
+    .explainer-card {
+      background: linear-gradient(140deg, #0e6fbe 0%, #0a4d8c 100%);
+      border-radius: var(--radius); padding: 20px 18px 16px;
+      margin-bottom: 16px; color: white;
+      position: relative;
+    }
+    .explainer-dismiss {
+      position: absolute; top: 12px; right: 14px;
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      border-radius: 50%; width: 24px; height: 24px; font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter', sans-serif; line-height: 1;
+    }
+    .explainer-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; opacity: 0.65; margin-bottom: 6px;
+    }
+    .explainer-headline {
+      font-size: 19px; font-weight: 800; line-height: 1.2; margin-bottom: 4px;
+    }
+    .explainer-sub {
+      font-size: 13px; opacity: 0.78; margin-bottom: 18px; line-height: 1.5;
+    }
+    .explainer-steps {
+      display: flex; align-items: flex-start; gap: 4px; margin-bottom: 16px;
+    }
+    .explainer-step {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 7px;
+    }
+    .step-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .step-title { font-size: 12px; font-weight: 700; line-height: 1.2; }
+    .step-desc { font-size: 10px; opacity: 0.72; line-height: 1.4; }
+    .step-arrow {
+      font-size: 14px; opacity: 0.35; flex-shrink: 0; margin-top: 10px; padding: 0 1px;
+    }
+    .explainer-stat {
+      font-size: 12px; line-height: 1.55; opacity: 0.85;
+      border-top: 1px solid rgba(255,255,255,0.18); padding-top: 12px;
+    }
+    .explainer-stat strong { opacity: 1; font-weight: 700; }
+
     /* ── Dashboard screen ── */
     .period-pills {
       display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 2px;
@@ -544,7 +592,7 @@
   </header>
 
   <!-- ═══ SETTINGS SCREEN ═══ -->
-  <div class="screen active" id="screen-settings">
+  <div class="screen" id="screen-settings">
 
     <!-- Budget & Billing -->
     <div class="card">
@@ -631,7 +679,35 @@
 
 
   <!-- ═══ DASHBOARD SCREEN ═══ -->
-  <div class="screen" id="screen-dashboard">
+  <div class="screen active" id="screen-dashboard">
+
+    <!-- Why buy calls explainer -->
+    <div class="explainer-card" id="explainer">
+      <button class="explainer-dismiss" onclick="document.getElementById('explainer').style.display='none'">×</button>
+      <div class="explainer-eyebrow">How it works</div>
+      <div class="explainer-headline">Stop losing jobs to a missed call</div>
+      <div class="explainer-sub">Shared leads go to 5 Pros at once — it's a race. An exclusive inbound call is yours the moment it rings.</div>
+      <div class="explainer-steps">
+        <div class="explainer-step">
+          <div class="step-icon">🎯</div>
+          <div class="step-title">You buy the call</div>
+          <div class="step-desc">Set your categories, zips & bid. Pay only when a real call comes in.</div>
+        </div>
+        <div class="step-arrow">›</div>
+        <div class="explainer-step">
+          <div class="step-icon">💬</div>
+          <div class="step-title">We answer it</div>
+          <div class="step-desc">Your Virtual Agent picks up instantly — 24/7, books the appt, sends SMS confirmation.</div>
+        </div>
+        <div class="step-arrow">›</div>
+        <div class="explainer-step">
+          <div class="step-icon">📅</div>
+          <div class="step-title">Job confirmed</div>
+          <div class="step-desc">Booked job on your calendar. Show up, do the work, get paid.</div>
+        </div>
+      </div>
+      <div class="explainer-stat">Calls convert at <strong>3× the rate of shared leads</strong>. No speed-to-lead race. No competition. Just your phone ringing with a customer who's ready to book.</div>
+    </div>
 
     <div class="period-pills">
       <div class="period-pill active">This month</div>
@@ -762,14 +838,14 @@
 
   <!-- ── Bottom nav ── -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" id="nav-settings" onclick="showTab('settings')">
+    <button class="nav-btn" id="nav-settings" onclick="showTab('settings')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
         <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
       </svg>
       Setup
     </button>
-    <button class="nav-btn" id="nav-dashboard" onclick="showTab('dashboard')">
+    <button class="nav-btn active" id="nav-dashboard" onclick="showTab('dashboard')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
         <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
