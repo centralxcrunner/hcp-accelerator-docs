@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCP Quick Setup Wizard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:    #0e6fbe;
+    --blue-dk: #0d47a1;
+    --page:    #fafafa;
+    --card:    #ffffff;
+    --text:    #212121;
+    --muted:   #616161;
+    --border:  #e0e0e0;
+    --green:   #00a344;
+    --red:     #d81b60;
+    --r8: 8px;
+    --shadow: 0 0 12px 2px rgba(0,0,0,.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, sans-serif; background: var(--page); color: var(--text); min-height: 100vh; }
+
+  /* header */
+  .hdr {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 56px; display: flex; align-items: center; gap: 16px;
+  }
+  .hdr-logo { font-size: 20px; font-weight: 700; color: var(--blue); }
+  .hdr-sub  { font-size: 14px; color: var(--muted); }
+  .demo-badge {
+    margin-left: auto; padding: 4px 12px; border-radius: 200px;
+    background: #fff8e1; border: 1px solid #ffe082;
+    font-size: 12px; font-weight: 600; color: #b45309;
+  }
+
+  /* stepper */
+  .stepper {
+    display: flex; align-items: center; padding: 28px 48px;
+    max-width: 760px; margin: 0 auto;
+  }
+  .step { display: flex; align-items: center; gap: 8px; flex: 1; }
+  .step:last-child { flex: 0; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--muted); background: var(--card);
+    transition: all .25s; flex-shrink: 0;
+  }
+  .step.active .step-num  { border-color: var(--blue); color: var(--blue); background: #e3f0fb; }
+  .step.done  .step-num   { border-color: var(--green); background: var(--green); color: #fff; }
+  .step-label { font-size: 12px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+  .step.active .step-label { color: var(--blue); font-weight: 600; }
+  .step.done   .step-label { color: var(--green); }
+  .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; transition: background .4s; }
+  .step-line.done { background: var(--green); }
+
+  /* main */
+  .main { max-width: 680px; margin: 0 auto 64px; padding: 0 24px; }
+
+  /* panel */
+  .panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--r8);
+    box-shadow: var(--shadow); padding: 32px; margin-bottom: 16px;
+    animation: fadeUp .2s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .panel-title { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+  .panel-sub   { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+
+  /* form fields */
+  .field-row { margin-bottom: 16px; }
+  .field-label { font-size: 13px; font-weight: 500; margin-bottom: 6px; display: block; }
+  .field-input {
+    width: 100%; height: 40px; padding: 0 12px; border: 1px solid var(--border);
+    border-radius: var(--r8); font-size: 14px; font-family: Inter, sans-serif; outline: none;
+    transition: border-color .15s;
+  }
+  .field-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #e3f0fb; }
+  .field-hint { font-size: 12px; color: var(--muted); margin-top: 5px; }
+
+  /* alert boxes */
+  .alert {
+    padding: 12px 16px; border-radius: 6px; font-size: 14px; margin-top: 12px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .alert-green { background: #e6f7ee; border: 1px solid #a5d6a7; color: #1b5e20; }
+  .alert-red   { background: #fce4ec; border: 1px solid #f48fb1; color: #880e4f; }
+  .alert-blue  { background: #e3f0fb; border: 1px solid #90caf9; color: #0d47a1; }
+
+  /* hours grid */
+  .hours-grid { display: grid; grid-template-columns: 96px 1fr 1fr 72px; gap: 8px 10px; align-items: center; }
+  .hg-head { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding-bottom: 6px; }
+  .day-label { font-size: 14px; font-weight: 500; }
+  .time-input {
+    height: 36px; padding: 0 10px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 13px; font-family: Inter, sans-serif;
+    outline: none; width: 100%; transition: border-color .15s; background: var(--card);
+  }
+  .time-input:focus { border-color: var(--blue); }
+  .time-input:disabled { background: #f5f5f5; color: #bdbdbd; }
+  .closed-toggle {
+    height: 36px; border-radius: 6px; border: 1px solid var(--border);
+    font-size: 12px; font-weight: 500; cursor: pointer; user-select: none;
+    transition: all .15s; color: var(--muted); background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .closed-toggle.closed { background: #fafafa; color: #bdbdbd; border-style: dashed; }
+  .closed-toggle:hover  { border-color: var(--blue); color: var(--blue); }
+  .buffer-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);
+  }
+  .buffer-row label { font-size: 13px; font-weight: 500; white-space: nowrap; }
+  .sel {
+    height: 36px; padding: 0 10px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 13px; font-family: Inter, sans-serif; outline: none; background: var(--card);
+  }
+  .sel:focus { border-color: var(--blue); }
+
+  /* service cards */
+  .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .svc-card {
+    border: 1.5px solid var(--border); border-radius: var(--r8); padding: 14px 14px 12px;
+    cursor: pointer; user-select: none; transition: all .15s; position: relative;
+  }
+  .svc-card:hover { border-color: var(--blue); }
+  .svc-card.selected { border-color: var(--blue); background: #f0f7ff; }
+  .svc-card.svc-free { border-color: var(--green); grid-column: 1 / -1; background: #f7fdf9; }
+  .svc-card.svc-free:hover { border-color: #007a33; }
+  .svc-card.svc-free.selected { background: #e6f7ee; }
+  .svc-tag {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    margin-bottom: 5px;
+  }
+  .tag-green { color: var(--green); }
+  .tag-blue  { color: var(--blue); }
+  .svc-name  { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .svc-price { font-size: 12px; color: var(--muted); }
+  .svc-price .free-label { color: var(--green); font-weight: 600; }
+  .svc-check {
+    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px;
+    border-radius: 50%; border: 2px solid var(--border); display: flex;
+    align-items: center; justify-content: center; font-size: 11px;
+    background: var(--card); transition: all .15s;
+  }
+  .svc-card.selected .svc-check,
+  .svc-card.svc-free.selected .svc-check { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .svc-card.svc-free .svc-check { border-color: var(--green); }
+  .svc-card.svc-free.selected .svc-check { background: var(--green); border-color: var(--green); }
+
+  /* lead source chips */
+  .ls-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ls-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 200px; border: 1.5px solid var(--border);
+    font-size: 13px; cursor: pointer; user-select: none;
+    transition: all .15s; background: var(--card);
+  }
+  .ls-chip:hover    { border-color: var(--blue); }
+  .ls-chip.selected { border-color: var(--blue); background: #e3f0fb; color: var(--blue); font-weight: 500; }
+  .ls-chip.exists   { border-color: var(--green); background: #e6f7ee; color: var(--green); font-weight: 500; cursor: default; }
+
+  /* progress log */
+  .log-box {
+    margin-top: 16px; background: #f8f9fa; border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px; font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace; max-height: 160px;
+    overflow-y: auto; display: none;
+  }
+  .log-line { padding: 2px 0; }
+  .log-ok   { color: var(--green); }
+  .log-err  { color: var(--red); }
+  .log-info { color: var(--muted); }
+  .log-wait { color: #f59e0b; }
+
+  /* buttons */
+  .btn-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+  .btn {
+    height: 40px; padding: 0 24px; border-radius: 200px; font-size: 14px; font-weight: 600;
+    font-family: Inter, sans-serif; cursor: pointer; transition: all .15s;
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  }
+  .btn-primary { border: none; background: var(--blue); color: #fff; }
+  .btn-primary:hover:not(:disabled) { background: var(--blue-dk); }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-outline { border: 1.5px solid var(--blue); background: transparent; color: var(--blue); }
+  .btn-outline:hover { background: #e3f0fb; }
+  .btn-green  { border: none; background: var(--green); color: #fff; }
+  .btn-green:hover { background: #007a33; }
+
+  /* summary */
+  .sum-section { margin-bottom: 24px; }
+  .sum-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 10px; }
+  .sum-row { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .sum-row:last-child { border-bottom: none; }
+  .sum-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .sum-name { font-weight: 500; }
+  .sum-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 200px; font-size: 11px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
+  .badge-green { background: #e6f7ee; color: var(--green); }
+  .badge-blue  { background: #e3f0fb; color: var(--blue); }
+
+  /* spinner */
+  .spin {
+    width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin .6s linear infinite; display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* step visibility */
+  [data-step] { display: none; }
+  [data-step].active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="flex-shrink:0">
+    <rect width="28" height="28" rx="6" fill="#0e6fbe"/>
+    <path d="M7 14.5L11.5 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span class="hdr-logo">Housecall Pro</span>
+  <span class="hdr-sub">/ Quick Setup Wizard</span>
+  <span class="demo-badge">Demo</span>
+</div>
+
+<!-- Stepper -->
+<div class="stepper">
+  <div class="step active" id="stp-0"><div class="step-num">1</div><span class="step-label">Connect</span></div>
+  <div class="step-line" id="ln-0"></div>
+  <div class="step" id="stp-1"><div class="step-num">2</div><span class="step-label">Hours</span></div>
+  <div class="step-line" id="ln-1"></div>
+  <div class="step" id="stp-2"><div class="step-num">3</div><span class="step-label">Price Book</span></div>
+  <div class="step-line" id="ln-2"></div>
+  <div class="step" id="stp-3"><div class="step-num">4</div><span class="step-label">Lead Sources</span></div>
+  <div class="step-line" id="ln-3"></div>
+  <div class="step" id="stp-4"><div class="step-num">5</div><span class="step-label">Done</span></div>
+</div>
+
+<div class="main">
+
+  <!-- ── Step 0: Connect ── -->
+  <div data-step="0" class="active">
+    <div class="panel">
+      <div class="panel-title">Connect your HCP account</div>
+      <div class="panel-sub">Enter your API token to get started. This wizard configures your Online Booking hours, Price Book, and Lead Sources in about 60 seconds — no manual UI navigation required.</div>
+
+      <div class="field-row">
+        <label class="field-label" for="api-token">API Token</label>
+        <input class="field-input" type="password" id="api-token" placeholder="e.g. 46b16358bb5c43b3b8cf85f4ebbbd44f" autocomplete="off" />
+        <div class="field-hint">Settings → Integrations → API &nbsp;·&nbsp; Max plan required</div>
+      </div>
+
+      <div id="connect-msg"></div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-connect" onclick="doConnect()">Verify &amp; Continue →</button>
+      </div>
+    </div>
+
+    <div class="panel" style="background:#f0f7ff; border-color:#b3d4f0; box-shadow:none;">
+      <div style="font-size:13px; font-weight:600; color:var(--blue); margin-bottom:10px;">What this wizard configures</div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--text);">
+        <div>📅 <strong>Online Booking hours</strong> — set the windows customers can book online</div>
+        <div>💰 <strong>Price Book</strong> — load common services with Good / Better / Best pricing tiers</div>
+        <div>📣 <strong>Lead Sources</strong> — pre-populate your source dropdown so jobs are always tagged</div>
+        <div style="padding-top:4px; color:var(--muted); font-size:12px;">All changes are applied live via the HCP API. You can edit anything in HCP afterwards.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 1: Hours ── -->
+  <div data-step="1">
+    <div class="panel">
+      <div class="panel-title">Online Booking hours</div>
+      <div class="panel-sub">Set the windows when customers can request appointments. Toggle any day closed to hide it from your booking page.</div>
+
+      <div class="hours-grid">
+        <div class="hg-head">Day</div>
+        <div class="hg-head">Opens</div>
+        <div class="hg-head">Closes</div>
+        <div class="hg-head">Status</div>
+      </div>
+
+      <div class="buffer-row">
+        <label for="buf">Booking buffer</label>
+        <select class="sel" id="buf">
+          <option value="0">Same day</option>
+          <option value="1" selected>1 day ahead</option>
+          <option value="2">2 days ahead</option>
+          <option value="3">3 days ahead</option>
+          <option value="7">1 week ahead</option>
+        </select>
+        <span style="font-size:12px; color:var(--muted);">Minimum lead time before a booking</span>
+      </div>
+
+      <div id="hours-log" class="log-box"></div>
+
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="goStep(0)">← Back</button>
+        <button class="btn btn-primary" id="btn-hours" onclick="doHours()">Save Hours →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 2: Price Book ── -->
+  <div data-step="2">
+    <div class="panel">
+      <div class="panel-title">Price Book — quick load</div>
+      <div class="panel-sub">Select the services you offer. Each one gets added with three pricing tiers you can customize in HCP later.</div>
+      <div class="svc-grid" id="svc-grid"></div>
+      <div id="svc-log" class="log-box"></div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="goStep(1)">← Back</button>
+        <button class="btn btn-primary" id="btn-svc" onclick="doServices()">Add to Price Book →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 3: Lead Sources ── -->
+  <div data-step="3">
+    <div class="panel">
+      <div class="panel-title">Lead Sources</div>
+      <div class="panel-sub">Pick the channels where you get jobs. These populate the source dropdown when your team books a job — so you can always track what's working.</div>
+      <div class="ls-wrap" id="ls-wrap"></div>
+      <div id="ls-log" class="log-box"></div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="goStep(2)">← Back</button>
+        <button class="btn btn-primary" id="btn-ls" onclick="doLeadSources()">Save &amp; Finish →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 4: Done ── -->
+  <div data-step="4">
+    <div class="panel" style="text-align:center; padding:48px 32px 36px;">
+      <div style="font-size:52px; margin-bottom:16px;">🎉</div>
+      <div class="panel-title" style="font-size:26px; margin-bottom:8px;">Account configured!</div>
+      <div style="font-size:14px; color:var(--muted); max-width:360px; margin:0 auto; line-height:1.6;">
+        Your Online Booking hours, Price Book, and Lead Sources are live. Customers can start booking immediately.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:20px;">What was configured</div>
+      <div id="summary"></div>
+    </div>
+
+    <div style="text-align:center; margin-top:24px;">
+      <a class="btn btn-green" href="https://app.housecallpro.com" target="_blank">Open Housecall Pro ↗</a>
+    </div>
+  </div>
+
+</div><!-- /.main -->
+
+<script>
+// ── Demo mode: fake API responses ─────────────────────────────────────────
+const DEMO = true; // set false + run server.py for live API
+let companyName = "";
+const results = { hours: null, services: [], leadSources: [] };
+
+async function fakeApi(method, path) {
+  await sleep(400 + Math.random() * 300);
+  if (path === "/company") return { ok: true, data: { name: "Acme Home Services" } };
+  return { ok: true, data: { id: "demo_" + Math.random().toString(36).slice(2) } };
+}
+
+async function api(method, path, body) {
+  if (DEMO) return fakeApi(method, path);
+  const opts = { method, headers: { "Authorization": `Token ${TOKEN}`, "Content-Type": "application/json", "Accept": "application/json" } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const r = await fetch(`/hcp${path}`, opts);
+    const text = await r.text();
+    return { ok: r.ok, status: r.status, data: text ? JSON.parse(text) : {} };
+  } catch(e) {
+    return { ok: false, status: 0, data: { error: e.message } };
+  }
+}
+
+// ── Stepper ───────────────────────────────────────────────────────────────
+function goStep(n) {
+  document.querySelectorAll("[data-step]").forEach(el => el.classList.remove("active"));
+  document.querySelector(`[data-step="${n}"]`).classList.add("active");
+  for (let i = 0; i < 5; i++) {
+    const s = document.getElementById(`stp-${i}`);
+    s.classList.remove("active","done");
+    if (i < n) s.classList.add("done");
+    else if (i === n) s.classList.add("active");
+  }
+  for (let i = 0; i < 4; i++)
+    document.getElementById(`ln-${i}`).classList.toggle("done", i < n);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ── Step 0: Connect ───────────────────────────────────────────────────────
+async function doConnect() {
+  const btn = document.getElementById("btn-connect");
+  const msg = document.getElementById("connect-msg");
+  const token = document.getElementById("api-token").value.trim();
+
+  if (!token && !DEMO) {
+    showMsg(msg, "error", "Please enter your API token.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin"></span> Connecting…`;
+
+  const r = await api("GET", "/company");
+
+  if (r.ok) {
+    companyName = r.data.name || "Your Company";
+    showMsg(msg, "success", `✅ Connected to <strong>${companyName}</strong>`);
+    btn.innerHTML = "Verify & Continue →";
+    btn.disabled = false;
+    setTimeout(() => { buildHoursGrid(); goStep(1); }, 700);
+  } else {
+    showMsg(msg, "error", "❌ Could not connect — check your token and try again.");
+    btn.innerHTML = "Verify & Continue →";
+    btn.disabled = false;
+  }
+}
+
+// ── Step 1: Hours ─────────────────────────────────────────────────────────
+const DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const DAY_LABEL = { monday:"Monday", tuesday:"Tuesday", wednesday:"Wednesday",
+                    thursday:"Thursday", friday:"Friday", saturday:"Saturday", sunday:"Sunday" };
+let dayState = {
+  monday:    { open:"08:00", close:"17:00", closed:false },
+  tuesday:   { open:"08:00", close:"17:00", closed:false },
+  wednesday: { open:"08:00", close:"17:00", closed:false },
+  thursday:  { open:"08:00", close:"17:00", closed:false },
+  friday:    { open:"08:00", close:"17:00", closed:false },
+  saturday:  { open:"09:00", close:"14:00", closed:false },
+  sunday:    { open:"08:00", close:"17:00", closed:true  },
+};
+
+function buildHoursGrid() {
+  const grid = document.querySelector(".hours-grid");
+  grid.querySelectorAll(".day-row-el").forEach(e => e.remove());
+
+  DAYS.forEach(day => {
+    const s = dayState[day];
+
+    const lbl = mk("div", "day-label day-row-el", DAY_LABEL[day]);
+
+    const opn = mk("input"); opn.type = "time"; opn.className = "time-input day-row-el";
+    opn.value = s.open; opn.disabled = s.closed;
+    opn.addEventListener("change", e => dayState[day].open = e.target.value);
+
+    const cls = mk("input"); cls.type = "time"; cls.className = "time-input day-row-el";
+    cls.value = s.close; cls.disabled = s.closed;
+    cls.addEventListener("change", e => dayState[day].close = e.target.value);
+
+    const tog = mk("div", "closed-toggle day-row-el" + (s.closed ? " closed" : ""), s.closed ? "Closed" : "Open");
+    tog.addEventListener("click", () => {
+      dayState[day].closed = !dayState[day].closed;
+      const c = dayState[day].closed;
+      opn.disabled = c; cls.disabled = c;
+      tog.textContent = c ? "Closed" : "Open";
+      tog.classList.toggle("closed", c);
+    });
+
+    grid.append(lbl, opn, cls, tog);
+  });
+}
+
+async function doHours() {
+  const btn = document.getElementById("btn-hours");
+  btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Saving…`;
+
+  const buffer = parseInt(document.getElementById("buf").value);
+  const windows = DAYS.map(day => ({
+    day_name: day,
+    schedule_windows: dayState[day].closed ? [] :
+      [{ start_time: dayState[day].open, end_time: dayState[day].close }]
+  }));
+
+  const r = await api("PUT", "/company/schedule_availability", {
+    availability_buffer_in_days: buffer,
+    daily_schedule_windows: windows,
+  });
+
+  if (r.ok) {
+    results.hours = { buffer, windows };
+    addLog("hours-log", "✅ Schedule updated", "ok");
+    addLog("hours-log", `   Mon–Fri ${dayState.monday.open}–${dayState.monday.close}`, "info");
+    addLog("hours-log", `   Sat ${dayState.saturday.closed ? "Closed" : dayState.saturday.open + "–" + dayState.saturday.close}   ·   Sun ${dayState.sunday.closed ? "Closed" : "Open"}`, "info");
+    addLog("hours-log", `   Booking buffer: ${buffer === 0 ? "Same day" : buffer + " day(s) ahead"}`, "info");
+    btn.innerHTML = "Save Hours →"; btn.disabled = false;
+    buildServiceGrid();
+    setTimeout(() => goStep(2), 600);
+  } else {
+    addLog("hours-log", `❌ Error: ${JSON.stringify(r.data).slice(0,100)}`, "err");
+    btn.innerHTML = "Save Hours →"; btn.disabled = false;
+  }
+}
+
+// ── Step 2: Services ──────────────────────────────────────────────────────
+const SERVICES = [
+  { id:"free", free:true,
+    name:"Free Home Assessment",
+    desc:"No-obligation in-home consultation. Tech reviews your systems, identifies issues, and provides a written estimate — no charge unless you approve the work.",
+    duration:45, taxable:false,
+    options:[
+      { name:"Free Assessment (no work performed)",  price:0 },
+      { name:"Assessment + Minor Same-Day Repair",   price:9900 },
+      { name:"Assessment + Full Diagnostic Report",  price:4900 },
+    ]},
+  { id:"ac-repair",    name:"AC Repair",            trade:"HVAC",
+    duration:90,  taxable:false, options:[{name:"Diagnostic Only",price:8900},{name:"Standard Repair",price:22500},{name:"Major Repair",price:45000}]},
+  { id:"ac-tune",      name:"AC Tune-Up",            trade:"HVAC",
+    duration:60,  taxable:false, options:[{name:"Basic Tune-Up",price:8900},{name:"Standard + Filter",price:12900},{name:"Premium + Coil Clean",price:18900}]},
+  { id:"ac-install",   name:"AC Installation",       trade:"HVAC",
+    duration:240, taxable:false, options:[{name:"14-SEER Standard",price:325000},{name:"16-SEER Mid",price:395000},{name:"18-SEER High-Eff",price:485000}]},
+  { id:"furnace",      name:"Furnace Repair",         trade:"HVAC",
+    duration:90,  taxable:false, options:[{name:"Diagnostic Only",price:8900},{name:"Minor Repair",price:22500},{name:"Major Repair",price:55000}]},
+  { id:"drain",        name:"Drain Cleaning",         trade:"Plumbing",
+    duration:60,  taxable:false, options:[{name:"Snaking",price:14900},{name:"Hydro-Jet",price:39500},{name:"Hydro-Jet + Camera",price:54500}]},
+  { id:"water-heater", name:"Water Heater Service",   trade:"Plumbing",
+    duration:120, taxable:false, options:[{name:"Minor Repair",price:24500},{name:"Replace 40gal",price:95000},{name:"Replace 50gal High-Eff",price:119500}]},
+  { id:"leak",         name:"Leak Detection & Repair",trade:"Plumbing",
+    duration:90,  taxable:false, options:[{name:"Detection Only",price:12500},{name:"Detection + Minor",price:34500},{name:"Detection + Major",price:65000}]},
+  { id:"electric-diag",name:"Electrical Diagnostic",  trade:"Electrical",
+    duration:60,  taxable:false, options:[{name:"Single Circuit",price:8900},{name:"Full Panel",price:14900},{name:"Whole-Home Audit",price:24900}]},
+  { id:"panel",        name:"Panel Upgrade",           trade:"Electrical",
+    duration:360, taxable:false, options:[{name:"100A Upgrade",price:185000},{name:"200A Upgrade",price:240000},{name:"200A + Surge Protection",price:280000}]},
+  { id:"ev",           name:"EV Charger Install",      trade:"Electrical",
+    duration:180, taxable:false, options:[{name:"Basic 32A",price:65000},{name:"40A + Dedicated Circuit",price:89000},{name:"50A Smart + Permit",price:119500}]},
+  { id:"pest",         name:"Pest Control",            trade:"Pest",
+    duration:60,  taxable:true,  options:[{name:"Perimeter Only",price:7900},{name:"Perimeter + Interior",price:11900},{name:"Full Treatment",price:18900}]},
+  { id:"roof-inspect", name:"Roof Inspection",         trade:"Roofing",
+    duration:60,  taxable:false, options:[{name:"Standard Visual",price:15000},{name:"Detailed + Report",price:22500},{name:"Insurance-Ready",price:30000}]},
+  { id:"roof-repair",  name:"Roof Repair",             trade:"Roofing",
+    duration:180, taxable:false, options:[{name:"Minor Patch",price:45000},{name:"Medium Repair",price:95000},{name:"Major Repair",price:185000}]},
+];
+const selectedSvc = new Set();
+
+function buildServiceGrid() {
+  const grid = document.getElementById("svc-grid");
+  grid.innerHTML = "";
+  SERVICES.forEach((svc, i) => {
+    const low  = Math.min(...svc.options.map(o => o.price)) / 100;
+    const high = Math.max(...svc.options.map(o => o.price)) / 100;
+    const card = mk("div", "svc-card" + (svc.free ? " svc-free" : ""));
+
+    if (svc.free) {
+      card.innerHTML = `
+        <div class="svc-check">✓</div>
+        <div class="svc-tag tag-green">Recommended · Lead generation</div>
+        <div class="svc-name">${svc.name}</div>
+        <div class="svc-price"><span class="free-label">Free</span> &nbsp;·&nbsp; optional upsell tiers at $49 / $99</div>`;
+    } else {
+      card.innerHTML = `
+        <div class="svc-check">✓</div>
+        <div class="svc-tag tag-blue">${svc.trade}</div>
+        <div class="svc-name">${svc.name}</div>
+        <div class="svc-price">$${low.toLocaleString()} – $${high.toLocaleString()}</div>`;
+    }
+
+    card.addEventListener("click", () => {
+      card.classList.toggle("selected");
+      selectedSvc[card.classList.contains("selected") ? "add" : "delete"](i);
+    });
+    grid.appendChild(card);
+  });
+}
+
+async function doServices() {
+  if (selectedSvc.size === 0) {
+    alert("Select at least one service, or click Back to skip this step.");
+    return;
+  }
+  const btn = document.getElementById("btn-svc");
+  btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Adding to Price Book…`;
+
+  for (const i of selectedSvc) {
+    const svc = SERVICES[i];
+    await api("POST", "/api/price_book/price_forms", {
+      name: svc.name, description: svc.desc || "", duration_in_minutes: svc.duration,
+      taxable: svc.taxable, olb_enabled: true,
+      fields_attributes: [{ name:"Service Level", kind:"single_select", order_index:0, options_attributes: svc.options }],
+    });
+    addLog("svc-log", `✅ Added: ${svc.name}`, "ok");
+    results.services.push(svc);
+    await sleep(180);
+  }
+
+  btn.innerHTML = "Add to Price Book →"; btn.disabled = false;
+  buildLsGrid();
+  setTimeout(() => goStep(3), 400);
+}
+
+// ── Step 3: Lead Sources ──────────────────────────────────────────────────
+const LS_PRESETS = [
+  { name:"Phone Call",              exists:true  },
+  { name:"Website",                 exists:true  },
+  { name:"Google",                  exists:false },
+  { name:"Yelp",                    exists:false },
+  { name:"Nextdoor",                exists:false },
+  { name:"Referral",                exists:true  },
+  { name:"Repeat Customer",         exists:false },
+  { name:"Door Hanger",             exists:false },
+  { name:"Truck Wrap / Vehicle",    exists:false },
+  { name:"Instagram / Facebook",    exists:false },
+  { name:"CSR AI / Virtual Agent",  exists:false },
+  { name:"Call Marketplace",        exists:false },
+];
+const selectedLS = new Set();
+
+function buildLsGrid() {
+  const wrap = document.getElementById("ls-wrap");
+  wrap.innerHTML = "";
+  LS_PRESETS.forEach(ls => {
+    const chip = mk("div", "ls-chip" + (ls.exists ? " exists" : ""),
+      (ls.exists ? "✓ " : "+ ") + ls.name + (ls.exists ? " (already exists)" : ""));
+    if (!ls.exists) {
+      chip.addEventListener("click", () => {
+        chip.classList.toggle("selected");
+        chip.firstChild.textContent = chip.classList.contains("selected") ? "✓ " : "+ ";
+        selectedLS[chip.classList.contains("selected") ? "add" : "delete"](ls.name);
+      });
+    }
+    wrap.appendChild(chip);
+  });
+}
+
+async function doLeadSources() {
+  const btn = document.getElementById("btn-ls");
+  btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Saving…`;
+
+  if (selectedLS.size === 0) {
+    addLog("ls-log", "ℹ No new sources selected — skipping.", "info");
+  } else {
+    for (const name of selectedLS) {
+      await api("POST", "/lead_sources", { name });
+      addLog("ls-log", `✅ Added: ${name}`, "ok");
+      results.leadSources.push(name);
+      await sleep(150);
+    }
+  }
+
+  btn.innerHTML = "Save & Finish →"; btn.disabled = false;
+  buildSummary();
+  setTimeout(() => goStep(4), 400);
+}
+
+// ── Summary ───────────────────────────────────────────────────────────────
+function buildSummary() {
+  let html = "";
+
+  // Hours
+  const buf = document.getElementById("buf");
+  const bufLabel = buf.options[buf.selectedIndex].text;
+  html += `<div class="sum-section">
+    <div class="sum-label">Online Booking Hours</div>
+    <div class="sum-row">
+      <div class="sum-icon">📅</div>
+      <div>
+        <div class="sum-name">Business Hours</div>
+        <div class="sum-detail">
+          Mon–Fri ${dayState.monday.open}–${dayState.monday.close}
+          &nbsp;·&nbsp; Sat ${dayState.saturday.closed ? "Closed" : dayState.saturday.open + "–" + dayState.saturday.close}
+          &nbsp;·&nbsp; Sun ${dayState.sunday.closed ? "Closed" : "Open"}
+          &nbsp;·&nbsp; Buffer: ${bufLabel}
+        </div>
+      </div>
+      <span class="badge badge-green">Saved</span>
+    </div>
+  </div>`;
+
+  // Services
+  if (results.services.length > 0) {
+    html += `<div class="sum-section"><div class="sum-label">Price Book — ${results.services.length} service${results.services.length > 1 ? "s" : ""} added</div>`;
+    results.services.forEach(s => {
+      html += `<div class="sum-row">
+        <div class="sum-icon">${s.free ? "🎁" : "💰"}</div>
+        <div>
+          <div class="sum-name">${s.name}</div>
+          <div class="sum-detail">${s.free ? "Free entry + 2 upsell tiers" : "3 pricing tiers · OLB enabled"}</div>
+        </div>
+        <span class="badge badge-green">Added</span>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Lead sources
+  const allLS = LS_PRESETS.filter(l => l.exists || selectedLS.has(l.name));
+  if (allLS.length > 0) {
+    html += `<div class="sum-section"><div class="sum-label">Lead Sources — ${allLS.length} total</div>`;
+    allLS.forEach(ls => {
+      html += `<div class="sum-row">
+        <div class="sum-icon">📣</div>
+        <div><div class="sum-name">${ls.name}</div></div>
+        <span class="badge ${ls.exists ? "badge-blue" : "badge-green"}">${ls.exists ? "Existing" : "Added"}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  document.getElementById("summary").innerHTML = html;
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────
+function mk(tag, cls = "", text = "") {
+  const el = document.createElement(tag);
+  if (cls)  el.className = cls;
+  if (text) el.textContent = text;
+  return el;
+}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function showMsg(el, type, html) {
+  el.className = "alert " + (type === "success" ? "alert-green" : "alert-red");
+  el.innerHTML = html;
+}
+function addLog(id, msg, type = "info") {
+  const box = document.getElementById(id);
+  box.style.display = "block";
+  const line = mk("div", `log-line log-${type}`, msg);
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+</script>
+</body>
+</html>
