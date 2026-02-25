@@ -6,231 +6,177 @@
 <title>HCP Quick Setup Wizard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blue:    #0e6fbe;
-    --blue-dk: #0d47a1;
-    --page:    #fafafa;
-    --card:    #ffffff;
-    --text:    #212121;
-    --muted:   #616161;
-    --border:  #e0e0e0;
-    --green:   #00a344;
-    --red:     #d81b60;
-    --r8: 8px;
-    --shadow: 0 0 12px 2px rgba(0,0,0,.08);
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Inter, sans-serif; background: var(--page); color: var(--text); min-height: 100vh; }
+:root {
+  --blue:#0e6fbe; --blue-dk:#0d47a1; --page:#fafafa; --card:#fff;
+  --text:#212121; --muted:#616161; --border:#e0e0e0;
+  --green:#00a344; --red:#d81b60; --amber:#b45309;
+  --r8:8px; --shadow:0 0 12px 2px rgba(0,0,0,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:var(--page);color:var(--text);min-height:100vh}
 
-  /* header */
-  .hdr {
-    background: var(--card); border-bottom: 1px solid var(--border);
-    padding: 0 32px; height: 56px; display: flex; align-items: center; gap: 16px;
-  }
-  .hdr-logo { font-size: 20px; font-weight: 700; color: var(--blue); }
-  .hdr-sub  { font-size: 14px; color: var(--muted); }
-  .demo-badge {
-    margin-left: auto; padding: 4px 12px; border-radius: 200px;
-    background: #fff8e1; border: 1px solid #ffe082;
-    font-size: 12px; font-weight: 600; color: #b45309;
-  }
+/* ── header ── */
+.hdr{background:var(--card);border-bottom:1px solid var(--border);padding:0 32px;height:56px;display:flex;align-items:center;gap:14px}
+.hdr-logo{font-size:19px;font-weight:700;color:var(--blue)}
+.hdr-sub{font-size:14px;color:var(--muted)}
+.demo-pill{margin-left:auto;padding:3px 11px;border-radius:200px;background:#fff8e1;border:1px solid #ffe082;font-size:11px;font-weight:700;color:var(--amber);letter-spacing:.03em}
 
-  /* stepper */
-  .stepper {
-    display: flex; align-items: center; padding: 28px 48px;
-    max-width: 760px; margin: 0 auto;
-  }
-  .step { display: flex; align-items: center; gap: 8px; flex: 1; }
-  .step:last-child { flex: 0; }
-  .step-num {
-    width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600; color: var(--muted); background: var(--card);
-    transition: all .25s; flex-shrink: 0;
-  }
-  .step.active .step-num  { border-color: var(--blue); color: var(--blue); background: #e3f0fb; }
-  .step.done  .step-num   { border-color: var(--green); background: var(--green); color: #fff; }
-  .step-label { font-size: 12px; font-weight: 500; color: var(--muted); white-space: nowrap; }
-  .step.active .step-label { color: var(--blue); font-weight: 600; }
-  .step.done   .step-label { color: var(--green); }
-  .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; transition: background .4s; }
-  .step-line.done { background: var(--green); }
+/* ── stepper ── */
+.stepper{display:flex;align-items:center;padding:24px 48px;max-width:760px;margin:0 auto}
+.step{display:flex;align-items:center;gap:8px;flex:1}.step:last-child{flex:0}
+.step-num{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);transition:all .25s;flex-shrink:0}
+.step.active .step-num{border-color:var(--blue);color:var(--blue);background:#e3f0fb}
+.step.done .step-num{border-color:var(--green);background:var(--green);color:#fff}
+.step-label{font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap}
+.step.active .step-label{color:var(--blue);font-weight:600}
+.step.done .step-label{color:var(--green)}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 8px;transition:background .4s}
+.step-line.done{background:var(--green)}
 
-  /* main */
-  .main { max-width: 680px; margin: 0 auto 64px; padding: 0 24px; }
+/* ── main ── */
+.main{max-width:700px;margin:0 auto 64px;padding:0 24px}
 
-  /* panel */
-  .panel {
-    background: var(--card); border: 1px solid var(--border); border-radius: var(--r8);
-    box-shadow: var(--shadow); padding: 32px; margin-bottom: 16px;
-    animation: fadeUp .2s ease;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .panel-title { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
-  .panel-sub   { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+/* ── panel ── */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r8);box-shadow:var(--shadow);padding:32px;margin-bottom:16px;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.panel-title{font-size:20px;font-weight:600;margin-bottom:6px}
+.panel-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6}
 
-  /* form fields */
-  .field-row { margin-bottom: 16px; }
-  .field-label { font-size: 13px; font-weight: 500; margin-bottom: 6px; display: block; }
-  .field-input {
-    width: 100%; height: 40px; padding: 0 12px; border: 1px solid var(--border);
-    border-radius: var(--r8); font-size: 14px; font-family: Inter, sans-serif; outline: none;
-    transition: border-color .15s;
-  }
-  .field-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #e3f0fb; }
-  .field-hint { font-size: 12px; color: var(--muted); margin-top: 5px; }
+/* ── generic inputs ── */
+.fi{height:40px;padding:0 12px;border:1px solid var(--border);border-radius:var(--r8);font-size:14px;font-family:Inter,sans-serif;outline:none;transition:border-color .15s;background:var(--card);width:100%}
+.fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px #e3f0fb}
+.fi:disabled{background:#f5f5f5;color:#bdbdbd}
+.fi-sm{height:34px;padding:0 10px;font-size:13px;border:1px solid var(--border);border-radius:6px;font-family:Inter,sans-serif;outline:none;transition:border-color .15s;background:var(--card)}
+.fi-sm:focus{border-color:var(--blue)}
+label.fl{font-size:13px;font-weight:500;display:block;margin-bottom:5px}
+.fhint{font-size:12px;color:var(--muted);margin-top:4px}
 
-  /* alert boxes */
-  .alert {
-    padding: 12px 16px; border-radius: 6px; font-size: 14px; margin-top: 12px;
-    display: flex; align-items: flex-start; gap: 10px;
-  }
-  .alert-green { background: #e6f7ee; border: 1px solid #a5d6a7; color: #1b5e20; }
-  .alert-red   { background: #fce4ec; border: 1px solid #f48fb1; color: #880e4f; }
-  .alert-blue  { background: #e3f0fb; border: 1px solid #90caf9; color: #0d47a1; }
+/* ── alert boxes ── */
+.alert{padding:12px 16px;border-radius:6px;font-size:14px;margin-top:12px;display:flex;align-items:flex-start;gap:10px}
+.al-green{background:#e6f7ee;border:1px solid #a5d6a7;color:#1b5e20}
+.al-red{background:#fce4ec;border:1px solid #f48fb1;color:#880e4f}
 
-  /* hours grid */
-  .hours-grid { display: grid; grid-template-columns: 96px 1fr 1fr 72px; gap: 8px 10px; align-items: center; }
-  .hg-head { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding-bottom: 6px; }
-  .day-label { font-size: 14px; font-weight: 500; }
-  .time-input {
-    height: 36px; padding: 0 10px; border: 1px solid var(--border);
-    border-radius: 6px; font-size: 13px; font-family: Inter, sans-serif;
-    outline: none; width: 100%; transition: border-color .15s; background: var(--card);
-  }
-  .time-input:focus { border-color: var(--blue); }
-  .time-input:disabled { background: #f5f5f5; color: #bdbdbd; }
-  .closed-toggle {
-    height: 36px; border-radius: 6px; border: 1px solid var(--border);
-    font-size: 12px; font-weight: 500; cursor: pointer; user-select: none;
-    transition: all .15s; color: var(--muted); background: var(--card);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .closed-toggle.closed { background: #fafafa; color: #bdbdbd; border-style: dashed; }
-  .closed-toggle:hover  { border-color: var(--blue); color: var(--blue); }
-  .buffer-row {
-    display: flex; align-items: center; gap: 12px;
-    margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);
-  }
-  .buffer-row label { font-size: 13px; font-weight: 500; white-space: nowrap; }
-  .sel {
-    height: 36px; padding: 0 10px; border: 1px solid var(--border); border-radius: 6px;
-    font-size: 13px; font-family: Inter, sans-serif; outline: none; background: var(--card);
-  }
-  .sel:focus { border-color: var(--blue); }
+/* ── hours grid ── */
+.hours-grid{display:grid;grid-template-columns:96px 1fr 1fr 72px;gap:8px 10px;align-items:center}
+.hg-head{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-bottom:4px}
+.day-label{font-size:14px;font-weight:500}
+.time-in{height:36px;padding:0 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:Inter,sans-serif;outline:none;width:100%;transition:border-color .15s;background:var(--card)}
+.time-in:focus{border-color:var(--blue)}.time-in:disabled{background:#f5f5f5;color:#bdbdbd}
+.tog{height:36px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;user-select:none;transition:all .15s;color:var(--muted);background:var(--card);display:flex;align-items:center;justify-content:center}
+.tog.closed{background:#fafafa;color:#bdbdbd;border-style:dashed}
+.tog:hover{border-color:var(--blue);color:var(--blue)}
+.sub-row{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);flex-wrap:wrap}
+.sub-row label{font-size:13px;font-weight:500;white-space:nowrap}
+.sel{height:36px;padding:0 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:Inter,sans-serif;outline:none;background:var(--card)}
+.sel:focus{border-color:var(--blue)}
+.sub-hint{font-size:12px;color:var(--muted)}
 
-  /* service cards */
-  .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .svc-card {
-    border: 1.5px solid var(--border); border-radius: var(--r8); padding: 14px 14px 12px;
-    cursor: pointer; user-select: none; transition: all .15s; position: relative;
-  }
-  .svc-card:hover { border-color: var(--blue); }
-  .svc-card.selected { border-color: var(--blue); background: #f0f7ff; }
-  .svc-card.svc-free { border-color: var(--green); grid-column: 1 / -1; background: #f7fdf9; }
-  .svc-card.svc-free:hover { border-color: #007a33; }
-  .svc-card.svc-free.selected { background: #e6f7ee; }
-  .svc-tag {
-    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
-    margin-bottom: 5px;
-  }
-  .tag-green { color: var(--green); }
-  .tag-blue  { color: var(--blue); }
-  .svc-name  { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
-  .svc-price { font-size: 12px; color: var(--muted); }
-  .svc-price .free-label { color: var(--green); font-weight: 600; }
-  .svc-check {
-    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px;
-    border-radius: 50%; border: 2px solid var(--border); display: flex;
-    align-items: center; justify-content: center; font-size: 11px;
-    background: var(--card); transition: all .15s;
-  }
-  .svc-card.selected .svc-check,
-  .svc-card.svc-free.selected .svc-check { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .svc-card.svc-free .svc-check { border-color: var(--green); }
-  .svc-card.svc-free.selected .svc-check { background: var(--green); border-color: var(--green); }
+/* ── service cards ── */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.svc-card{border:1.5px solid var(--border);border-radius:var(--r8);cursor:pointer;user-select:none;transition:border-color .15s;position:relative;overflow:hidden}
+.svc-card:hover{border-color:#90caf9}
+.svc-card.selected{border-color:var(--blue)}
+.svc-card.svc-free{border-color:var(--green);grid-column:1/-1}
+.svc-card.svc-free:hover{border-color:#007a33}
+.svc-card.svc-free.selected{background:#f7fdf9}
+.svc-card.selected{background:#f0f7ff}
 
-  /* lead source chips */
-  .ls-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
-  .ls-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 14px; border-radius: 200px; border: 1.5px solid var(--border);
-    font-size: 13px; cursor: pointer; user-select: none;
-    transition: all .15s; background: var(--card);
-  }
-  .ls-chip:hover    { border-color: var(--blue); }
-  .ls-chip.selected { border-color: var(--blue); background: #e3f0fb; color: var(--blue); font-weight: 500; }
-  .ls-chip.exists   { border-color: var(--green); background: #e6f7ee; color: var(--green); font-weight: 500; cursor: default; }
+/* card top row */
+.card-top{padding:14px 14px 12px;display:flex;flex-direction:column;gap:3px}
+.svc-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.tag-hvac{color:#0e6fbe}.tag-plumb{color:#0284c7}.tag-free{color:var(--green)}
+.svc-name{font-size:14px;font-weight:600}
+.svc-price{font-size:12px;color:var(--muted)}
+.free-lbl{color:var(--green);font-weight:600}
 
-  /* progress log */
-  .log-box {
-    margin-top: 16px; background: #f8f9fa; border: 1px solid var(--border);
-    border-radius: 6px; padding: 12px 14px; font-size: 12px;
-    font-family: 'SF Mono', 'Fira Code', monospace; max-height: 160px;
-    overflow-y: auto; display: none;
-  }
-  .log-line { padding: 2px 0; }
-  .log-ok   { color: var(--green); }
-  .log-err  { color: var(--red); }
-  .log-info { color: var(--muted); }
-  .log-wait { color: #f59e0b; }
+/* checkmark */
+.svc-check{position:absolute;top:10px;right:38px;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;background:var(--card);transition:all .15s;pointer-events:none}
+.svc-card.selected .svc-check{background:var(--blue);border-color:var(--blue);color:#fff}
+.svc-card.svc-free .svc-check{border-color:var(--green)}
+.svc-card.svc-free.selected .svc-check{background:var(--green);border-color:var(--green)}
 
-  /* buttons */
-  .btn-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
-  .btn {
-    height: 40px; padding: 0 24px; border-radius: 200px; font-size: 14px; font-weight: 600;
-    font-family: Inter, sans-serif; cursor: pointer; transition: all .15s;
-    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-  }
-  .btn-primary { border: none; background: var(--blue); color: #fff; }
-  .btn-primary:hover:not(:disabled) { background: var(--blue-dk); }
-  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
-  .btn-outline { border: 1.5px solid var(--blue); background: transparent; color: var(--blue); }
-  .btn-outline:hover { background: #e3f0fb; }
-  .btn-green  { border: none; background: var(--green); color: #fff; }
-  .btn-green:hover { background: #007a33; }
+/* edit pencil */
+.edit-btn{position:absolute;top:9px;right:10px;width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;z-index:2}
+.edit-btn:hover{border-color:var(--blue);background:#e3f0fb}
+.edit-btn svg{pointer-events:none}
 
-  /* summary */
-  .sum-section { margin-bottom: 24px; }
-  .sum-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 10px; }
-  .sum-row { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-  .sum-row:last-child { border-bottom: none; }
-  .sum-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-  .sum-name { font-weight: 500; }
-  .sum-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 200px; font-size: 11px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
-  .badge-green { background: #e6f7ee; color: var(--green); }
-  .badge-blue  { background: #e3f0fb; color: var(--blue); }
+/* inline editor */
+.card-editor{display:none;border-top:1px solid var(--border);background:#fafafa;padding:14px 14px 16px;flex-direction:column;gap:12px}
+.card-editor.open{display:flex}
+.ed-row{display:flex;gap:10px;align-items:flex-end}
+.ed-field{display:flex;flex-direction:column;gap:4px;flex:1}
+.ed-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.ed-input{height:32px;padding:0 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:Inter,sans-serif;outline:none;background:var(--card);width:100%}
+.ed-input:focus{border-color:var(--blue)}
+.ed-textarea{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:Inter,sans-serif;outline:none;background:var(--card);width:100%;resize:vertical;min-height:54px;line-height:1.5}
+.ed-textarea:focus{border-color:var(--blue)}
+.ed-divider{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding-top:4px;border-top:1px solid var(--border)}
+.tier-row{display:grid;grid-template-columns:1fr 100px 80px;gap:8px;align-items:center}
+.tier-head{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.tier-del{height:28px;width:28px;border:1px solid #fca5a5;border-radius:4px;background:#fff;color:#ef4444;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.tier-del:hover{background:#fef2f2}
+.add-tier{font-size:12px;color:var(--blue);font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:2px}
+.add-tier:hover{color:var(--blue-dk)}
+.toggle-row{display:flex;align-items:center;gap:10px}
+.sw-wrap{position:relative;display:inline-flex;align-items:center;cursor:pointer}
+.sw-inp{opacity:0;width:0;height:0;position:absolute}
+.sw-track{width:36px;height:20px;background:#e0e0e0;border-radius:200px;transition:background .2s;flex-shrink:0}
+.sw-inp:checked~.sw-track{background:var(--blue)}
+.sw-thumb{position:absolute;left:3px;top:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:left .2s;pointer-events:none;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw-inp:checked~.sw-thumb{left:19px}
+.sw-lbl{font-size:13px;color:var(--text)}
 
-  /* spinner */
-  .spin {
-    width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4);
-    border-top-color: #fff; border-radius: 50%;
-    animation: spin .6s linear infinite; display: inline-block;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* log */
+.log-box{margin-top:16px;background:#f8f9fa;border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:12px;font-family:'SF Mono','Fira Code',monospace;max-height:160px;overflow-y:auto;display:none}
+.log-line{padding:2px 0}
+.log-ok{color:var(--green)}.log-err{color:var(--red)}.log-info{color:var(--muted)}
 
-  /* step visibility */
-  [data-step] { display: none; }
-  [data-step].active { display: block; }
+/* lead source chips */
+.ls-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.ls-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:200px;border:1.5px solid var(--border);font-size:13px;cursor:pointer;user-select:none;transition:all .15s;background:var(--card)}
+.ls-chip:hover{border-color:var(--blue)}
+.ls-chip.selected{border-color:var(--blue);background:#e3f0fb;color:var(--blue);font-weight:500}
+.ls-chip.exists{border-color:var(--green);background:#e6f7ee;color:var(--green);font-weight:500;cursor:default}
+
+/* buttons */
+.btn-row{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
+.btn{height:40px;padding:0 22px;border-radius:200px;font-size:14px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn-primary{border:none;background:var(--blue);color:#fff}
+.btn-primary:hover:not(:disabled){background:var(--blue-dk)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-outline{border:1.5px solid var(--blue);background:transparent;color:var(--blue)}
+.btn-outline:hover{background:#e3f0fb}
+.btn-green{border:none;background:var(--green);color:#fff}
+.btn-green:hover{background:#007a33}
+
+/* summary */
+.sum-section{margin-bottom:22px}
+.sum-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.sum-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px}
+.sum-row:last-child{border-bottom:none}
+.sum-icon{font-size:16px;flex-shrink:0;margin-top:2px}
+.sum-name{font-weight:500}
+.sum-detail{font-size:12px;color:var(--muted);margin-top:2px}
+.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:200px;font-size:11px;font-weight:600;margin-left:auto;flex-shrink:0}
+.badge-green{background:#e6f7ee;color:var(--green)}
+.badge-blue{background:#e3f0fb;color:var(--blue)}
+
+/* spinner */
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+[data-step]{display:none}[data-step].active{display:block}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="flex-shrink:0">
-    <rect width="28" height="28" rx="6" fill="#0e6fbe"/>
-    <path d="M7 14.5L11.5 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
+  <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#0e6fbe"/><path d="M7 14.5L11.5 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <span class="hdr-logo">Housecall Pro</span>
   <span class="hdr-sub">/ Quick Setup Wizard</span>
-  <span class="demo-badge">Demo</span>
+  <span class="demo-pill">DEMO</span>
 </div>
 
-<!-- Stepper -->
 <div class="stepper">
   <div class="step active" id="stp-0"><div class="step-num">1</div><span class="step-label">Connect</span></div>
   <div class="step-line" id="ln-0"></div>
@@ -245,489 +191,582 @@
 
 <div class="main">
 
-  <!-- ── Step 0: Connect ── -->
-  <div data-step="0" class="active">
-    <div class="panel">
-      <div class="panel-title">Connect your HCP account</div>
-      <div class="panel-sub">Enter your API token to get started. This wizard configures your Online Booking hours, Price Book, and Lead Sources in about 60 seconds — no manual UI navigation required.</div>
-
-      <div class="field-row">
-        <label class="field-label" for="api-token">API Token</label>
-        <input class="field-input" type="password" id="api-token" placeholder="e.g. 46b16358bb5c43b3b8cf85f4ebbbd44f" autocomplete="off" />
-        <div class="field-hint">Settings → Integrations → API &nbsp;·&nbsp; Max plan required</div>
-      </div>
-
-      <div id="connect-msg"></div>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" id="btn-connect" onclick="doConnect()">Verify &amp; Continue →</button>
-      </div>
+<!-- ── Step 0 ── -->
+<div data-step="0" class="active">
+  <div class="panel">
+    <div class="panel-title">Connect your HCP account</div>
+    <div class="panel-sub">Enter your API token to get started. This wizard configures your Online Booking hours, Price Book, and Lead Sources in about 60 seconds — no manual UI navigation required.</div>
+    <div style="margin-bottom:16px">
+      <label class="fl">API Token</label>
+      <input class="fi" type="password" id="api-token" placeholder="e.g. 46b16358bb5c43b3b8cf85f4…" autocomplete="off">
+      <div class="fhint">Settings → Integrations → API &nbsp;·&nbsp; Max plan required</div>
     </div>
-
-    <div class="panel" style="background:#f0f7ff; border-color:#b3d4f0; box-shadow:none;">
-      <div style="font-size:13px; font-weight:600; color:var(--blue); margin-bottom:10px;">What this wizard configures</div>
-      <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--text);">
-        <div>📅 <strong>Online Booking hours</strong> — set the windows customers can book online</div>
-        <div>💰 <strong>Price Book</strong> — load common services with Good / Better / Best pricing tiers</div>
-        <div>📣 <strong>Lead Sources</strong> — pre-populate your source dropdown so jobs are always tagged</div>
-        <div style="padding-top:4px; color:var(--muted); font-size:12px;">All changes are applied live via the HCP API. You can edit anything in HCP afterwards.</div>
-      </div>
+    <div id="connect-msg"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="btn-connect" onclick="doConnect()">Verify &amp; Continue →</button></div>
+  </div>
+  <div class="panel" style="background:#f0f7ff;border-color:#b3d4f0;box-shadow:none">
+    <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px">What this wizard configures</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+      <div>📅 <strong>Online Booking hours</strong> — set the windows customers can book online</div>
+      <div>⏱ <strong>Standard appointment time</strong> — default job duration shown on the booking page</div>
+      <div>💰 <strong>Price Book</strong> — HVAC &amp; Plumbing services with editable Good / Better / Best tiers</div>
+      <div>📣 <strong>Lead Sources</strong> — pre-populate the source dropdown so every job is tagged</div>
+      <div style="margin-top:4px;color:var(--muted);font-size:12px">All changes are applied live via the HCP API. Everything is editable in HCP afterwards.</div>
     </div>
   </div>
+</div>
 
-  <!-- ── Step 1: Hours ── -->
-  <div data-step="1">
-    <div class="panel">
-      <div class="panel-title">Online Booking hours</div>
-      <div class="panel-sub">Set the windows when customers can request appointments. Toggle any day closed to hide it from your booking page.</div>
-
-      <div class="hours-grid">
-        <div class="hg-head">Day</div>
-        <div class="hg-head">Opens</div>
-        <div class="hg-head">Closes</div>
-        <div class="hg-head">Status</div>
-      </div>
-
-      <div class="buffer-row">
-        <label for="buf">Booking buffer</label>
-        <select class="sel" id="buf">
-          <option value="0">Same day</option>
-          <option value="1" selected>1 day ahead</option>
-          <option value="2">2 days ahead</option>
-          <option value="3">3 days ahead</option>
-          <option value="7">1 week ahead</option>
-        </select>
-        <span style="font-size:12px; color:var(--muted);">Minimum lead time before a booking</span>
-      </div>
-
-      <div id="hours-log" class="log-box"></div>
-
-      <div class="btn-row">
-        <button class="btn btn-outline" onclick="goStep(0)">← Back</button>
-        <button class="btn btn-primary" id="btn-hours" onclick="doHours()">Save Hours →</button>
-      </div>
+<!-- ── Step 1 ── -->
+<div data-step="1">
+  <div class="panel">
+    <div class="panel-title">Online Booking hours</div>
+    <div class="panel-sub">Set the windows when customers can request appointments. Toggle any day closed to hide it from your booking page.</div>
+    <div class="hours-grid">
+      <div class="hg-head">Day</div><div class="hg-head">Opens</div><div class="hg-head">Closes</div><div class="hg-head">Status</div>
+    </div>
+    <div class="sub-row">
+      <label for="buf">Booking buffer</label>
+      <select class="sel" id="buf">
+        <option value="0">Same day</option>
+        <option value="1" selected>1 day ahead</option>
+        <option value="2">2 days ahead</option>
+        <option value="3">3 days ahead</option>
+        <option value="7">1 week ahead</option>
+      </select>
+      <label for="appt-dur" style="margin-left:8px">Standard appt length</label>
+      <select class="sel" id="appt-dur">
+        <option value="30">30 min</option>
+        <option value="45">45 min</option>
+        <option value="60" selected>1 hour</option>
+        <option value="90">1.5 hours</option>
+        <option value="120">2 hours</option>
+        <option value="180">3 hours</option>
+        <option value="240">4 hours</option>
+        <option value="480">All day (8 hrs)</option>
+      </select>
+      <span class="sub-hint">Default shown on booking page when no service is selected</span>
+    </div>
+    <div id="hours-log" class="log-box"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(0)">← Back</button>
+      <button class="btn btn-primary" id="btn-hours" onclick="doHours()">Save Hours →</button>
     </div>
   </div>
+</div>
 
-  <!-- ── Step 2: Price Book ── -->
-  <div data-step="2">
-    <div class="panel">
-      <div class="panel-title">Price Book — quick load</div>
-      <div class="panel-sub">Select the services you offer. Each one gets added with three pricing tiers you can customize in HCP later.</div>
-      <div class="svc-grid" id="svc-grid"></div>
-      <div id="svc-log" class="log-box"></div>
-      <div class="btn-row">
-        <button class="btn btn-outline" onclick="goStep(1)">← Back</button>
-        <button class="btn btn-primary" id="btn-svc" onclick="doServices()">Add to Price Book →</button>
-      </div>
+<!-- ── Step 2 ── -->
+<div data-step="2">
+  <div class="panel">
+    <div class="panel-title">Price Book — HVAC &amp; Plumbing</div>
+    <div class="panel-sub">Select the services you offer. Each gets three editable pricing tiers. Click the <strong>✏ pencil</strong> on any card to customize name, duration, description, and pricing before saving.</div>
+    <div class="svc-grid" id="svc-grid"></div>
+    <div id="svc-log" class="log-box"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-primary" id="btn-svc" onclick="doServices()">Add to Price Book →</button>
     </div>
   </div>
+</div>
 
-  <!-- ── Step 3: Lead Sources ── -->
-  <div data-step="3">
-    <div class="panel">
-      <div class="panel-title">Lead Sources</div>
-      <div class="panel-sub">Pick the channels where you get jobs. These populate the source dropdown when your team books a job — so you can always track what's working.</div>
-      <div class="ls-wrap" id="ls-wrap"></div>
-      <div id="ls-log" class="log-box"></div>
-      <div class="btn-row">
-        <button class="btn btn-outline" onclick="goStep(2)">← Back</button>
-        <button class="btn btn-primary" id="btn-ls" onclick="doLeadSources()">Save &amp; Finish →</button>
-      </div>
+<!-- ── Step 3 ── -->
+<div data-step="3">
+  <div class="panel">
+    <div class="panel-title">Lead Sources</div>
+    <div class="panel-sub">Pick the channels where you get jobs. These populate the source dropdown when your team books a job — so you always know what's driving revenue.</div>
+    <div class="ls-wrap" id="ls-wrap"></div>
+    <div id="ls-log" class="log-box"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-primary" id="btn-ls" onclick="doLeadSources()">Save &amp; Finish →</button>
     </div>
   </div>
+</div>
 
-  <!-- ── Step 4: Done ── -->
-  <div data-step="4">
-    <div class="panel" style="text-align:center; padding:48px 32px 36px;">
-      <div style="font-size:52px; margin-bottom:16px;">🎉</div>
-      <div class="panel-title" style="font-size:26px; margin-bottom:8px;">Account configured!</div>
-      <div style="font-size:14px; color:var(--muted); max-width:360px; margin:0 auto; line-height:1.6;">
-        Your Online Booking hours, Price Book, and Lead Sources are live. Customers can start booking immediately.
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-title" style="margin-bottom:20px;">What was configured</div>
-      <div id="summary"></div>
-    </div>
-
-    <div style="text-align:center; margin-top:24px;">
-      <a class="btn btn-green" href="https://app.housecallpro.com" target="_blank">Open Housecall Pro ↗</a>
-    </div>
+<!-- ── Step 4 ── -->
+<div data-step="4">
+  <div class="panel" style="text-align:center;padding:48px 32px 36px">
+    <div style="font-size:52px;margin-bottom:16px">🎉</div>
+    <div class="panel-title" style="font-size:26px;margin-bottom:8px">Account configured!</div>
+    <div style="font-size:14px;color:var(--muted);max-width:360px;margin:0 auto;line-height:1.6">Your Online Booking hours, Price Book, and Lead Sources are live. Customers can start booking immediately.</div>
   </div>
+  <div class="panel">
+    <div class="panel-title" style="margin-bottom:20px">What was configured</div>
+    <div id="summary"></div>
+  </div>
+  <div style="text-align:center;margin-top:24px">
+    <a class="btn btn-green" href="https://app.housecallpro.com" target="_blank">Open Housecall Pro ↗</a>
+  </div>
+</div>
 
 </div><!-- /.main -->
 
 <script>
-// ── Demo mode: fake API responses ─────────────────────────────────────────
-const DEMO = true; // set false + run server.py for live API
+// ─────────────────────────────────────────────────────────────────────────────
+// Demo helpers
+// ─────────────────────────────────────────────────────────────────────────────
+const DEMO = true;
 let companyName = "";
-const results = { hours: null, services: [], leadSources: [] };
+const results = { hours:null, services:[], leadSources:[] };
 
 async function fakeApi(method, path) {
-  await sleep(400 + Math.random() * 300);
-  if (path === "/company") return { ok: true, data: { name: "Acme Home Services" } };
-  return { ok: true, data: { id: "demo_" + Math.random().toString(36).slice(2) } };
+  await sleep(350 + Math.random()*250);
+  if (path === "/company") return { ok:true, data:{ name:"Acme Home Services" } };
+  return { ok:true, data:{ id:"demo_"+Math.random().toString(36).slice(2) } };
 }
-
 async function api(method, path, body) {
   if (DEMO) return fakeApi(method, path);
-  const opts = { method, headers: { "Authorization": `Token ${TOKEN}`, "Content-Type": "application/json", "Accept": "application/json" } };
+  const opts = { method, headers:{ "Authorization":`Token ${TOKEN}`, "Content-Type":"application/json","Accept":"application/json" } };
   if (body) opts.body = JSON.stringify(body);
   try {
     const r = await fetch(`/hcp${path}`, opts);
-    const text = await r.text();
-    return { ok: r.ok, status: r.status, data: text ? JSON.parse(text) : {} };
-  } catch(e) {
-    return { ok: false, status: 0, data: { error: e.message } };
-  }
+    const t = await r.text();
+    return { ok:r.ok, status:r.status, data: t ? JSON.parse(t) : {} };
+  } catch(e) { return { ok:false, status:0, data:{ error:e.message } }; }
 }
 
-// ── Stepper ───────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Stepper
+// ─────────────────────────────────────────────────────────────────────────────
 function goStep(n) {
-  document.querySelectorAll("[data-step]").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll("[data-step]").forEach(e=>e.classList.remove("active"));
   document.querySelector(`[data-step="${n}"]`).classList.add("active");
-  for (let i = 0; i < 5; i++) {
-    const s = document.getElementById(`stp-${i}`);
+  for (let i=0;i<5;i++) {
+    const s=document.getElementById(`stp-${i}`);
     s.classList.remove("active","done");
-    if (i < n) s.classList.add("done");
-    else if (i === n) s.classList.add("active");
+    if (i<n) s.classList.add("done"); else if (i===n) s.classList.add("active");
   }
-  for (let i = 0; i < 4; i++)
-    document.getElementById(`ln-${i}`).classList.toggle("done", i < n);
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  for (let i=0;i<4;i++) document.getElementById(`ln-${i}`).classList.toggle("done",i<n);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-// ── Step 0: Connect ───────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 0 — Connect
+// ─────────────────────────────────────────────────────────────────────────────
 async function doConnect() {
-  const btn = document.getElementById("btn-connect");
-  const msg = document.getElementById("connect-msg");
-  const token = document.getElementById("api-token").value.trim();
-
-  if (!token && !DEMO) {
-    showMsg(msg, "error", "Please enter your API token.");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.innerHTML = `<span class="spin"></span> Connecting…`;
-
-  const r = await api("GET", "/company");
-
+  const btn=document.getElementById("btn-connect");
+  const msg=document.getElementById("connect-msg");
+  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Connecting…`;
+  const r = await api("GET","/company");
+  btn.disabled=false; btn.innerHTML="Verify &amp; Continue →";
   if (r.ok) {
     companyName = r.data.name || "Your Company";
-    showMsg(msg, "success", `✅ Connected to <strong>${companyName}</strong>`);
-    btn.innerHTML = "Verify & Continue →";
-    btn.disabled = false;
-    setTimeout(() => { buildHoursGrid(); goStep(1); }, 700);
+    showMsg(msg,"ok",`✅ Connected to <strong>${companyName}</strong>`);
+    setTimeout(()=>{ buildHoursGrid(); goStep(1); }, 700);
   } else {
-    showMsg(msg, "error", "❌ Could not connect — check your token and try again.");
-    btn.innerHTML = "Verify & Continue →";
-    btn.disabled = false;
+    showMsg(msg,"err","❌ Could not connect — check your token and try again.");
   }
 }
 
-// ── Step 1: Hours ─────────────────────────────────────────────────────────
-const DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
-const DAY_LABEL = { monday:"Monday", tuesday:"Tuesday", wednesday:"Wednesday",
-                    thursday:"Thursday", friday:"Friday", saturday:"Saturday", sunday:"Sunday" };
-let dayState = {
-  monday:    { open:"08:00", close:"17:00", closed:false },
-  tuesday:   { open:"08:00", close:"17:00", closed:false },
-  wednesday: { open:"08:00", close:"17:00", closed:false },
-  thursday:  { open:"08:00", close:"17:00", closed:false },
-  friday:    { open:"08:00", close:"17:00", closed:false },
-  saturday:  { open:"09:00", close:"14:00", closed:false },
-  sunday:    { open:"08:00", close:"17:00", closed:true  },
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 1 — Hours
+// ─────────────────────────────────────────────────────────────────────────────
+const DAYS=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const DLBL={monday:"Monday",tuesday:"Tuesday",wednesday:"Wednesday",thursday:"Thursday",friday:"Friday",saturday:"Saturday",sunday:"Sunday"};
+let dayState={
+  monday:   {open:"08:00",close:"17:00",closed:false},
+  tuesday:  {open:"08:00",close:"17:00",closed:false},
+  wednesday:{open:"08:00",close:"17:00",closed:false},
+  thursday: {open:"08:00",close:"17:00",closed:false},
+  friday:   {open:"08:00",close:"17:00",closed:false},
+  saturday: {open:"09:00",close:"14:00",closed:false},
+  sunday:   {open:"08:00",close:"17:00",closed:true},
 };
 
 function buildHoursGrid() {
-  const grid = document.querySelector(".hours-grid");
-  grid.querySelectorAll(".day-row-el").forEach(e => e.remove());
-
-  DAYS.forEach(day => {
-    const s = dayState[day];
-
-    const lbl = mk("div", "day-label day-row-el", DAY_LABEL[day]);
-
-    const opn = mk("input"); opn.type = "time"; opn.className = "time-input day-row-el";
-    opn.value = s.open; opn.disabled = s.closed;
-    opn.addEventListener("change", e => dayState[day].open = e.target.value);
-
-    const cls = mk("input"); cls.type = "time"; cls.className = "time-input day-row-el";
-    cls.value = s.close; cls.disabled = s.closed;
-    cls.addEventListener("change", e => dayState[day].close = e.target.value);
-
-    const tog = mk("div", "closed-toggle day-row-el" + (s.closed ? " closed" : ""), s.closed ? "Closed" : "Open");
-    tog.addEventListener("click", () => {
-      dayState[day].closed = !dayState[day].closed;
-      const c = dayState[day].closed;
-      opn.disabled = c; cls.disabled = c;
-      tog.textContent = c ? "Closed" : "Open";
-      tog.classList.toggle("closed", c);
+  const grid=document.querySelector(".hours-grid");
+  grid.querySelectorAll(".drow").forEach(e=>e.remove());
+  DAYS.forEach(day=>{
+    const s=dayState[day];
+    const lbl=mk("div","day-label drow",DLBL[day]);
+    const opn=mk("input"); opn.type="time"; opn.className="time-in drow"; opn.value=s.open; opn.disabled=s.closed;
+    opn.addEventListener("change",e=>dayState[day].open=e.target.value);
+    const cls=mk("input"); cls.type="time"; cls.className="time-in drow"; cls.value=s.close; cls.disabled=s.closed;
+    cls.addEventListener("change",e=>dayState[day].close=e.target.value);
+    const tog=mk("div","tog drow"+(s.closed?" closed":""),s.closed?"Closed":"Open");
+    tog.addEventListener("click",()=>{
+      dayState[day].closed=!dayState[day].closed;
+      const c=dayState[day].closed;
+      opn.disabled=c; cls.disabled=c;
+      tog.textContent=c?"Closed":"Open"; tog.classList.toggle("closed",c);
     });
-
-    grid.append(lbl, opn, cls, tog);
+    grid.append(lbl,opn,cls,tog);
   });
 }
 
 async function doHours() {
-  const btn = document.getElementById("btn-hours");
-  btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Saving…`;
-
-  const buffer = parseInt(document.getElementById("buf").value);
-  const windows = DAYS.map(day => ({
-    day_name: day,
-    schedule_windows: dayState[day].closed ? [] :
-      [{ start_time: dayState[day].open, end_time: dayState[day].close }]
+  const btn=document.getElementById("btn-hours");
+  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Saving…`;
+  const buffer=parseInt(document.getElementById("buf").value);
+  const dur=parseInt(document.getElementById("appt-dur").value);
+  const windows=DAYS.map(day=>({
+    day_name:day,
+    schedule_windows:dayState[day].closed?[]:[{start_time:dayState[day].open,end_time:dayState[day].close}]
   }));
-
-  const r = await api("PUT", "/company/schedule_availability", {
-    availability_buffer_in_days: buffer,
-    daily_schedule_windows: windows,
-  });
-
+  const r=await api("PUT","/company/schedule_availability",{availability_buffer_in_days:buffer,daily_schedule_windows:windows});
   if (r.ok) {
-    results.hours = { buffer, windows };
-    addLog("hours-log", "✅ Schedule updated", "ok");
-    addLog("hours-log", `   Mon–Fri ${dayState.monday.open}–${dayState.monday.close}`, "info");
-    addLog("hours-log", `   Sat ${dayState.saturday.closed ? "Closed" : dayState.saturday.open + "–" + dayState.saturday.close}   ·   Sun ${dayState.sunday.closed ? "Closed" : "Open"}`, "info");
-    addLog("hours-log", `   Booking buffer: ${buffer === 0 ? "Same day" : buffer + " day(s) ahead"}`, "info");
-    btn.innerHTML = "Save Hours →"; btn.disabled = false;
+    results.hours={buffer,windows,defaultDuration:dur};
+    const bufLbl=document.getElementById("buf").options[document.getElementById("buf").selectedIndex].text;
+    const durLbl=document.getElementById("appt-dur").options[document.getElementById("appt-dur").selectedIndex].text;
+    addLog("hours-log","✅ Schedule updated","ok");
+    addLog("hours-log",`   Mon–Fri ${dayState.monday.open}–${dayState.monday.close}   ·   Sat ${dayState.saturday.closed?"Closed":dayState.saturday.open+"–"+dayState.saturday.close}   ·   Sun ${dayState.sunday.closed?"Closed":"Open"}`,"info");
+    addLog("hours-log",`   Booking buffer: ${bufLbl}   ·   Default appt: ${durLbl}`,"info");
+    btn.innerHTML="Save Hours →"; btn.disabled=false;
     buildServiceGrid();
-    setTimeout(() => goStep(2), 600);
+    setTimeout(()=>goStep(2),600);
   } else {
-    addLog("hours-log", `❌ Error: ${JSON.stringify(r.data).slice(0,100)}`, "err");
-    btn.innerHTML = "Save Hours →"; btn.disabled = false;
+    addLog("hours-log","❌ Error: "+JSON.stringify(r.data).slice(0,100),"err");
+    btn.innerHTML="Save Hours →"; btn.disabled=false;
   }
 }
 
-// ── Step 2: Services ──────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 2 — Services
+// ─────────────────────────────────────────────────────────────────────────────
+// Mutable service data (edited per-card)
 const SERVICES = [
-  { id:"free", free:true,
-    name:"Free Home Assessment",
+  { free:true, trade:"", name:"Free Home Assessment",
     desc:"No-obligation in-home consultation. Tech reviews your systems, identifies issues, and provides a written estimate — no charge unless you approve the work.",
-    duration:45, taxable:false,
-    options:[
-      { name:"Free Assessment (no work performed)",  price:0 },
-      { name:"Assessment + Minor Same-Day Repair",   price:9900 },
-      { name:"Assessment + Full Diagnostic Report",  price:4900 },
+    duration:45, taxable:false, olb:true,
+    tiers:[
+      {name:"Free Assessment (no work performed)", price:0},
+      {name:"Assessment + Minor Same-Day Repair",  price:9900},
+      {name:"Assessment + Full Diagnostic Report", price:4900},
     ]},
-  { id:"ac-repair",    name:"AC Repair",            trade:"HVAC",
-    duration:90,  taxable:false, options:[{name:"Diagnostic Only",price:8900},{name:"Standard Repair",price:22500},{name:"Major Repair",price:45000}]},
-  { id:"ac-tune",      name:"AC Tune-Up",            trade:"HVAC",
-    duration:60,  taxable:false, options:[{name:"Basic Tune-Up",price:8900},{name:"Standard + Filter",price:12900},{name:"Premium + Coil Clean",price:18900}]},
-  { id:"ac-install",   name:"AC Installation",       trade:"HVAC",
-    duration:240, taxable:false, options:[{name:"14-SEER Standard",price:325000},{name:"16-SEER Mid",price:395000},{name:"18-SEER High-Eff",price:485000}]},
-  { id:"furnace",      name:"Furnace Repair",         trade:"HVAC",
-    duration:90,  taxable:false, options:[{name:"Diagnostic Only",price:8900},{name:"Minor Repair",price:22500},{name:"Major Repair",price:55000}]},
-  { id:"drain",        name:"Drain Cleaning",         trade:"Plumbing",
-    duration:60,  taxable:false, options:[{name:"Snaking",price:14900},{name:"Hydro-Jet",price:39500},{name:"Hydro-Jet + Camera",price:54500}]},
-  { id:"water-heater", name:"Water Heater Service",   trade:"Plumbing",
-    duration:120, taxable:false, options:[{name:"Minor Repair",price:24500},{name:"Replace 40gal",price:95000},{name:"Replace 50gal High-Eff",price:119500}]},
-  { id:"leak",         name:"Leak Detection & Repair",trade:"Plumbing",
-    duration:90,  taxable:false, options:[{name:"Detection Only",price:12500},{name:"Detection + Minor",price:34500},{name:"Detection + Major",price:65000}]},
-  { id:"electric-diag",name:"Electrical Diagnostic",  trade:"Electrical",
-    duration:60,  taxable:false, options:[{name:"Single Circuit",price:8900},{name:"Full Panel",price:14900},{name:"Whole-Home Audit",price:24900}]},
-  { id:"panel",        name:"Panel Upgrade",           trade:"Electrical",
-    duration:360, taxable:false, options:[{name:"100A Upgrade",price:185000},{name:"200A Upgrade",price:240000},{name:"200A + Surge Protection",price:280000}]},
-  { id:"ev",           name:"EV Charger Install",      trade:"Electrical",
-    duration:180, taxable:false, options:[{name:"Basic 32A",price:65000},{name:"40A + Dedicated Circuit",price:89000},{name:"50A Smart + Permit",price:119500}]},
-  { id:"pest",         name:"Pest Control",            trade:"Pest",
-    duration:60,  taxable:true,  options:[{name:"Perimeter Only",price:7900},{name:"Perimeter + Interior",price:11900},{name:"Full Treatment",price:18900}]},
-  { id:"roof-inspect", name:"Roof Inspection",         trade:"Roofing",
-    duration:60,  taxable:false, options:[{name:"Standard Visual",price:15000},{name:"Detailed + Report",price:22500},{name:"Insurance-Ready",price:30000}]},
-  { id:"roof-repair",  name:"Roof Repair",             trade:"Roofing",
-    duration:180, taxable:false, options:[{name:"Minor Patch",price:45000},{name:"Medium Repair",price:95000},{name:"Major Repair",price:185000}]},
+  { trade:"HVAC", name:"AC Repair",
+    desc:"Diagnosis and repair of air conditioning systems.",
+    duration:90, taxable:false, olb:true,
+    tiers:[{name:"Diagnostic Only",price:8900},{name:"Standard Repair",price:22500},{name:"Major Repair",price:45000}]},
+  { trade:"HVAC", name:"AC Maintenance Tune-Up",
+    desc:"Annual preventive maintenance for AC system.",
+    duration:60, taxable:false, olb:true,
+    tiers:[{name:"Basic Tune-Up",price:8900},{name:"Standard + Filter",price:12900},{name:"Premium + Coil Clean",price:18900}]},
+  { trade:"HVAC", name:"AC Installation / Replacement",
+    desc:"Full air conditioning system installation.",
+    duration:240, taxable:false, olb:false,
+    tiers:[{name:"14-SEER Standard (3 ton)",price:325000},{name:"16-SEER Mid-Efficiency (3 ton)",price:395000},{name:"18-SEER High-Efficiency (3 ton)",price:485000}]},
+  { trade:"HVAC", name:"Furnace / Heater Repair",
+    desc:"Diagnosis and repair of heating systems.",
+    duration:90, taxable:false, olb:true,
+    tiers:[{name:"Diagnostic Only",price:8900},{name:"Minor Repair (ignitor/sensor)",price:22500},{name:"Major Repair (heat exchanger)",price:55000}]},
+  { trade:"HVAC", name:"Emergency HVAC Service",
+    desc:"After-hours emergency HVAC response.",
+    duration:90, taxable:false, olb:false,
+    tiers:[{name:"Emergency Diagnostic",price:14900},{name:"Emergency Repair (minor)",price:28500},{name:"Emergency Repair (major)",price:55000}]},
+  { trade:"Plumbing", name:"Drain Cleaning",
+    desc:"Clearing of drain blockages and clogs.",
+    duration:60, taxable:false, olb:true,
+    tiers:[{name:"Snaking (standard clog)",price:14900},{name:"Hydro-Jet (heavy buildup)",price:39500},{name:"Hydro-Jet + Camera Inspection",price:54500}]},
+  { trade:"Plumbing", name:"Water Heater Service",
+    desc:"Water heater installation or repair.",
+    duration:120, taxable:false, olb:true,
+    tiers:[{name:"Repair (thermostat/element)",price:24500},{name:"Replace — 40gal Gas Standard",price:95000},{name:"Replace — 50gal Gas High-Eff",price:119500}]},
+  { trade:"Plumbing", name:"Leak Detection & Repair",
+    desc:"Locate and fix water leaks.",
+    duration:90, taxable:false, olb:true,
+    tiers:[{name:"Detection Only",price:12500},{name:"Detection + Minor Repair",price:34500},{name:"Detection + Major Repair",price:65000}]},
+  { trade:"Plumbing", name:"Pipe Repair / Replacement",
+    desc:"Repair or replace damaged supply lines.",
+    duration:120, taxable:false, olb:false,
+    tiers:[{name:"Section Repair (< 3 ft)",price:28500},{name:"Full Line Replacement (< 20 ft)",price:65000},{name:"Re-pipe (major section)",price:185000}]},
+  { trade:"Plumbing", name:"Emergency Plumbing",
+    desc:"After-hours emergency plumbing response.",
+    duration:90, taxable:false, olb:false,
+    tiers:[{name:"Emergency Service Call",price:14900},{name:"Emergency + Minor Repair",price:36500},{name:"Emergency + Major Repair",price:72000}]},
 ];
+
 const selectedSvc = new Set();
 
+function fmtPrice(cents) {
+  if (cents===0) return "Free";
+  return "$"+(cents/100).toLocaleString("en-US",{minimumFractionDigits:0});
+}
+function priceRange(svc) {
+  const lo=Math.min(...svc.tiers.map(t=>t.price));
+  const hi=Math.max(...svc.tiers.map(t=>t.price));
+  if (lo===0) return `<span class="free-lbl">Free</span> &nbsp;·&nbsp; upsell tiers at ${fmtPrice(svc.tiers[1]?.price??0)}/${fmtPrice(svc.tiers[2]?.price??0)}`;
+  if (lo===hi) return fmtPrice(lo);
+  return `${fmtPrice(lo)} – ${fmtPrice(hi)}`;
+}
+
 function buildServiceGrid() {
-  const grid = document.getElementById("svc-grid");
-  grid.innerHTML = "";
-  SERVICES.forEach((svc, i) => {
-    const low  = Math.min(...svc.options.map(o => o.price)) / 100;
-    const high = Math.max(...svc.options.map(o => o.price)) / 100;
-    const card = mk("div", "svc-card" + (svc.free ? " svc-free" : ""));
+  const grid=document.getElementById("svc-grid");
+  grid.innerHTML="";
+  SERVICES.forEach((svc,i)=>{
+    const card=mk("div","svc-card"+(svc.free?" svc-free":""));
 
-    if (svc.free) {
-      card.innerHTML = `
-        <div class="svc-check">✓</div>
-        <div class="svc-tag tag-green">Recommended · Lead generation</div>
-        <div class="svc-name">${svc.name}</div>
-        <div class="svc-price"><span class="free-label">Free</span> &nbsp;·&nbsp; optional upsell tiers at $49 / $99</div>`;
-    } else {
-      card.innerHTML = `
-        <div class="svc-check">✓</div>
-        <div class="svc-tag tag-blue">${svc.trade}</div>
-        <div class="svc-name">${svc.name}</div>
-        <div class="svc-price">$${low.toLocaleString()} – $${high.toLocaleString()}</div>`;
-    }
+    // top visible area
+    const top=mk("div","card-top");
+    const tagCls=svc.free?"svc-tag tag-free":svc.trade==="HVAC"?"svc-tag tag-hvac":"svc-tag tag-plumb";
+    top.innerHTML=`
+      <div class="${tagCls}">${svc.free?"Recommended · Lead Generation":svc.trade}</div>
+      <div class="svc-name" id="svc-name-${i}">${svc.name}</div>
+      <div class="svc-price" id="svc-price-${i}">${priceRange(svc)}</div>`;
 
-    card.addEventListener("click", () => {
+    // checkmark + edit btn
+    const chk=mk("div","svc-check","✓");
+    const editBtn=mk("div","edit-btn");
+    editBtn.title="Edit service details";
+    editBtn.innerHTML=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5l2 2-9 9H2.5v-2l9-9z" stroke="#616161" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+    editBtn.addEventListener("click",e=>{ e.stopPropagation(); toggleEditor(i); });
+
+    // inline editor
+    const editor=buildEditor(svc,i);
+    editor.classList.add("card-editor");
+    editor.id=`editor-${i}`;
+
+    card.append(top,chk,editBtn,editor);
+
+    // toggle selection on card click (not editor)
+    top.addEventListener("click",()=>{
       card.classList.toggle("selected");
-      selectedSvc[card.classList.contains("selected") ? "add" : "delete"](i);
+      selectedSvc[card.classList.contains("selected")?"add":"delete"](i);
     });
+    chk.addEventListener("click",()=>{
+      card.classList.toggle("selected");
+      selectedSvc[card.classList.contains("selected")?"add":"delete"](i);
+    });
+
     grid.appendChild(card);
   });
 }
 
-async function doServices() {
-  if (selectedSvc.size === 0) {
-    alert("Select at least one service, or click Back to skip this step.");
-    return;
-  }
-  const btn = document.getElementById("btn-svc");
-  btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Adding to Price Book…`;
-
-  for (const i of selectedSvc) {
-    const svc = SERVICES[i];
-    await api("POST", "/api/price_book/price_forms", {
-      name: svc.name, description: svc.desc || "", duration_in_minutes: svc.duration,
-      taxable: svc.taxable, olb_enabled: true,
-      fields_attributes: [{ name:"Service Level", kind:"single_select", order_index:0, options_attributes: svc.options }],
-    });
-    addLog("svc-log", `✅ Added: ${svc.name}`, "ok");
-    results.services.push(svc);
-    await sleep(180);
-  }
-
-  btn.innerHTML = "Add to Price Book →"; btn.disabled = false;
-  buildLsGrid();
-  setTimeout(() => goStep(3), 400);
+function toggleEditor(i) {
+  const ed=document.getElementById(`editor-${i}`);
+  ed.classList.toggle("open");
 }
 
-// ── Step 3: Lead Sources ──────────────────────────────────────────────────
-const LS_PRESETS = [
-  { name:"Phone Call",              exists:true  },
-  { name:"Website",                 exists:true  },
-  { name:"Google",                  exists:false },
-  { name:"Yelp",                    exists:false },
-  { name:"Nextdoor",                exists:false },
-  { name:"Referral",                exists:true  },
-  { name:"Repeat Customer",         exists:false },
-  { name:"Door Hanger",             exists:false },
-  { name:"Truck Wrap / Vehicle",    exists:false },
-  { name:"Instagram / Facebook",    exists:false },
-  { name:"CSR AI / Virtual Agent",  exists:false },
-  { name:"Call Marketplace",        exists:false },
+function buildEditor(svc, idx) {
+  const ed=document.createElement("div");
+
+  // name + duration row
+  const r1=mk("div","ed-row");
+  r1.innerHTML=`
+    <div class="ed-field" style="flex:2">
+      <div class="ed-label">Service name</div>
+      <input class="ed-input" id="ed-name-${idx}" value="${svc.name}">
+    </div>
+    <div class="ed-field">
+      <div class="ed-label">Duration</div>
+      <select class="ed-input" id="ed-dur-${idx}">
+        ${[30,45,60,90,120,180,240,360,480].map(m=>`<option value="${m}"${m===svc.duration?" selected":""}>${m<60?m+" min":m/60===1?"1 hour":m/60+" hours"}</option>`).join("")}
+      </select>
+    </div>`;
+
+  // description
+  const r2=mk("div","ed-row");
+  r2.innerHTML=`
+    <div class="ed-field" style="flex:1">
+      <div class="ed-label">Description</div>
+      <textarea class="ed-textarea" id="ed-desc-${idx}" rows="2">${svc.desc||""}</textarea>
+    </div>`;
+
+  // toggles
+  const r3=mk("div","ed-row");
+  r3.innerHTML=`
+    <div class="ed-field" style="flex:1">
+      <div class="ed-label">Settings</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:2px">
+        <label class="toggle-row">
+          <span class="sw-wrap">
+            <input class="sw-inp" type="checkbox" id="ed-olb-${idx}"${svc.olb?" checked":""}>
+            <span class="sw-track"></span><span class="sw-thumb"></span>
+          </span>
+          <span class="sw-lbl">Online Booking</span>
+        </label>
+        <label class="toggle-row">
+          <span class="sw-wrap">
+            <input class="sw-inp" type="checkbox" id="ed-tax-${idx}"${svc.taxable?" checked":""}>
+            <span class="sw-track"></span><span class="sw-thumb"></span>
+          </span>
+          <span class="sw-lbl">Taxable</span>
+        </label>
+      </div>
+    </div>`;
+
+  // tier pricing
+  const tiersDiv=mk("div","");
+  tiersDiv.id=`ed-tiers-${idx}`;
+  function renderTiers() {
+    tiersDiv.innerHTML=`<div class="ed-divider" style="margin-bottom:8px">Pricing Tiers</div>
+      <div class="tier-row" style="margin-bottom:6px">
+        <span class="tier-head">Option name</span>
+        <span class="tier-head">Price</span>
+        <span></span>
+      </div>`;
+    svc.tiers.forEach((tier,ti)=>{
+      const row=mk("div","tier-row");
+      row.innerHTML=`
+        <input class="ed-input" style="height:30px" value="${tier.name}" oninput="SERVICES[${idx}].tiers[${ti}].name=this.value;refreshPrice(${idx})">
+        <input class="ed-input" style="height:30px" type="number" value="${tier.price}" min="0" step="100"
+          oninput="SERVICES[${idx}].tiers[${ti}].price=parseInt(this.value)||0;refreshPrice(${idx})">
+        <button class="tier-del" onclick="deleteTier(${idx},${ti})" title="Remove tier">×</button>`;
+      tiersDiv.appendChild(row);
+    });
+    if (svc.tiers.length<4) {
+      const add=mk("div","add-tier","+ Add tier");
+      add.onclick=()=>{ svc.tiers.push({name:"New Option",price:0}); renderTiers(); refreshPrice(idx); };
+      tiersDiv.appendChild(add);
+    }
+  }
+  renderTiers();
+  svc._renderTiers=renderTiers; // expose for delete
+
+  // save button
+  const saveRow=mk("div","");
+  saveRow.style.cssText="display:flex;justify-content:flex-end;margin-top:4px";
+  const saveBtn=mk("button","btn btn-primary","Save changes");
+  saveBtn.style.cssText="height:32px;padding:0 16px;font-size:13px;border-radius:6px";
+  saveBtn.onclick=(e)=>{
+    e.stopPropagation();
+    svc.name     = document.getElementById(`ed-name-${idx}`).value;
+    svc.duration = parseInt(document.getElementById(`ed-dur-${idx}`).value);
+    svc.desc     = document.getElementById(`ed-desc-${idx}`).value;
+    svc.olb      = document.getElementById(`ed-olb-${idx}`).checked;
+    svc.taxable  = document.getElementById(`ed-tax-${idx}`).checked;
+    document.getElementById(`svc-name-${idx}`).textContent = svc.name;
+    document.getElementById(`svc-price-${idx}`).innerHTML  = priceRange(svc);
+    toggleEditor(idx);
+  };
+  saveRow.appendChild(saveBtn);
+
+  ed.append(r1,r2,r3,tiersDiv,saveRow);
+  return ed;
+}
+
+function deleteTier(idx,ti) {
+  if (SERVICES[idx].tiers.length<=1) return;
+  SERVICES[idx].tiers.splice(ti,1);
+  SERVICES[idx]._renderTiers();
+  refreshPrice(idx);
+}
+function refreshPrice(idx) {
+  const el=document.getElementById(`svc-price-${idx}`);
+  if (el) el.innerHTML=priceRange(SERVICES[idx]);
+}
+
+async function doServices() {
+  if (selectedSvc.size===0) { alert("Select at least one service to add."); return; }
+  const btn=document.getElementById("btn-svc");
+  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Adding to Price Book…`;
+  for (const i of selectedSvc) {
+    const svc=SERVICES[i];
+    await api("POST","/api/price_book/price_forms",{
+      name:svc.name, description:svc.desc||"",
+      duration_in_minutes:svc.duration, taxable:svc.taxable, olb_enabled:svc.olb,
+      fields_attributes:[{name:"Service Level",kind:"single_select",order_index:0,options_attributes:svc.tiers.map(t=>({name:t.name,price:t.price}))}]
+    });
+    addLog("svc-log",`✅ Added: ${svc.name}`,"ok");
+    results.services.push({...svc});
+    await sleep(180);
+  }
+  btn.innerHTML="Add to Price Book →"; btn.disabled=false;
+  buildLsGrid();
+  setTimeout(()=>goStep(3),400);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 3 — Lead Sources
+// ─────────────────────────────────────────────────────────────────────────────
+const LS=[
+  {name:"Phone Call",exists:true},{name:"Website",exists:true},
+  {name:"Google",exists:false},{name:"Yelp",exists:false},
+  {name:"Nextdoor",exists:false},{name:"Referral",exists:true},
+  {name:"Repeat Customer",exists:false},{name:"Door Hanger",exists:false},
+  {name:"Truck Wrap / Vehicle",exists:false},{name:"Instagram / Facebook",exists:false},
+  {name:"CSR AI / Virtual Agent",exists:false},{name:"Call Marketplace",exists:false},
 ];
-const selectedLS = new Set();
+const selLS=new Set();
 
 function buildLsGrid() {
-  const wrap = document.getElementById("ls-wrap");
-  wrap.innerHTML = "";
-  LS_PRESETS.forEach(ls => {
-    const chip = mk("div", "ls-chip" + (ls.exists ? " exists" : ""),
-      (ls.exists ? "✓ " : "+ ") + ls.name + (ls.exists ? " (already exists)" : ""));
-    if (!ls.exists) {
-      chip.addEventListener("click", () => {
-        chip.classList.toggle("selected");
-        chip.firstChild.textContent = chip.classList.contains("selected") ? "✓ " : "+ ";
-        selectedLS[chip.classList.contains("selected") ? "add" : "delete"](ls.name);
-      });
-    }
+  const wrap=document.getElementById("ls-wrap"); wrap.innerHTML="";
+  LS.forEach(ls=>{
+    const chip=mk("div","ls-chip"+(ls.exists?" exists":""),( ls.exists?"✓ ":"+ ")+ls.name+(ls.exists?" (exists)":""));
+    if (!ls.exists) chip.addEventListener("click",()=>{
+      chip.classList.toggle("selected");
+      chip.childNodes[0].textContent=chip.classList.contains("selected")?"✓ ":"+ ";
+      selLS[chip.classList.contains("selected")?"add":"delete"](ls.name);
+    });
     wrap.appendChild(chip);
   });
 }
 
 async function doLeadSources() {
-  const btn = document.getElementById("btn-ls");
-  btn.disabled = true; btn.innerHTML = `<span class="spin"></span> Saving…`;
-
-  if (selectedLS.size === 0) {
-    addLog("ls-log", "ℹ No new sources selected — skipping.", "info");
-  } else {
-    for (const name of selectedLS) {
-      await api("POST", "/lead_sources", { name });
-      addLog("ls-log", `✅ Added: ${name}`, "ok");
+  const btn=document.getElementById("btn-ls");
+  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Saving…`;
+  if (selLS.size===0) { addLog("ls-log","ℹ No new sources selected — skipping.","info"); }
+  else {
+    for (const name of selLS) {
+      await api("POST","/lead_sources",{name});
+      addLog("ls-log",`✅ Added: ${name}`,"ok");
       results.leadSources.push(name);
       await sleep(150);
     }
   }
-
-  btn.innerHTML = "Save & Finish →"; btn.disabled = false;
+  btn.innerHTML="Save & Finish →"; btn.disabled=false;
   buildSummary();
-  setTimeout(() => goStep(4), 400);
+  setTimeout(()=>goStep(4),400);
 }
 
-// ── Summary ───────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Summary
+// ─────────────────────────────────────────────────────────────────────────────
 function buildSummary() {
-  let html = "";
-
-  // Hours
-  const buf = document.getElementById("buf");
-  const bufLabel = buf.options[buf.selectedIndex].text;
-  html += `<div class="sum-section">
-    <div class="sum-label">Online Booking Hours</div>
+  const buf=document.getElementById("buf");
+  const dur=document.getElementById("appt-dur");
+  let html=`<div class="sum-section">
+    <div class="sum-lbl">Online Booking Hours</div>
     <div class="sum-row">
       <div class="sum-icon">📅</div>
       <div>
-        <div class="sum-name">Business Hours</div>
+        <div class="sum-name">Business Hours &amp; Booking Settings</div>
         <div class="sum-detail">
           Mon–Fri ${dayState.monday.open}–${dayState.monday.close}
-          &nbsp;·&nbsp; Sat ${dayState.saturday.closed ? "Closed" : dayState.saturday.open + "–" + dayState.saturday.close}
-          &nbsp;·&nbsp; Sun ${dayState.sunday.closed ? "Closed" : "Open"}
-          &nbsp;·&nbsp; Buffer: ${bufLabel}
+          &nbsp;·&nbsp; Sat ${dayState.saturday.closed?"Closed":dayState.saturday.open+"–"+dayState.saturday.close}
+          &nbsp;·&nbsp; Sun ${dayState.sunday.closed?"Closed":"Open"}
         </div>
+        <div class="sum-detail">Buffer: ${buf.options[buf.selectedIndex].text} &nbsp;·&nbsp; Default appt: ${dur.options[dur.selectedIndex].text}</div>
       </div>
       <span class="badge badge-green">Saved</span>
     </div>
   </div>`;
 
-  // Services
-  if (results.services.length > 0) {
-    html += `<div class="sum-section"><div class="sum-label">Price Book — ${results.services.length} service${results.services.length > 1 ? "s" : ""} added</div>`;
-    results.services.forEach(s => {
-      html += `<div class="sum-row">
-        <div class="sum-icon">${s.free ? "🎁" : "💰"}</div>
+  if (results.services.length>0) {
+    html+=`<div class="sum-section"><div class="sum-lbl">Price Book — ${results.services.length} service${results.services.length>1?"s":""} added</div>`;
+    results.services.forEach(s=>{
+      html+=`<div class="sum-row">
+        <div class="sum-icon">${s.free?"🎁":"💰"}</div>
         <div>
           <div class="sum-name">${s.name}</div>
-          <div class="sum-detail">${s.free ? "Free entry + 2 upsell tiers" : "3 pricing tiers · OLB enabled"}</div>
+          <div class="sum-detail">${s.tiers.length} tiers &nbsp;·&nbsp; ${s.duration} min &nbsp;·&nbsp; OLB: ${s.olb?"On":"Off"}</div>
         </div>
         <span class="badge badge-green">Added</span>
       </div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   }
 
-  // Lead sources
-  const allLS = LS_PRESETS.filter(l => l.exists || selectedLS.has(l.name));
-  if (allLS.length > 0) {
-    html += `<div class="sum-section"><div class="sum-label">Lead Sources — ${allLS.length} total</div>`;
-    allLS.forEach(ls => {
-      html += `<div class="sum-row">
+  const allLS=LS.filter(l=>l.exists||selLS.has(l.name));
+  if (allLS.length>0) {
+    html+=`<div class="sum-section"><div class="sum-lbl">Lead Sources — ${allLS.length} total</div>`;
+    allLS.forEach(ls=>{
+      html+=`<div class="sum-row">
         <div class="sum-icon">📣</div>
         <div><div class="sum-name">${ls.name}</div></div>
-        <span class="badge ${ls.exists ? "badge-blue" : "badge-green"}">${ls.exists ? "Existing" : "Added"}</span>
+        <span class="badge ${ls.exists?"badge-blue":"badge-green"}">${ls.exists?"Existing":"Added"}</span>
       </div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   }
-
-  document.getElementById("summary").innerHTML = html;
+  document.getElementById("summary").innerHTML=html;
 }
 
-// ── Utilities ─────────────────────────────────────────────────────────────
-function mk(tag, cls = "", text = "") {
-  const el = document.createElement(tag);
-  if (cls)  el.className = cls;
-  if (text) el.textContent = text;
-  return el;
-}
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-function showMsg(el, type, html) {
-  el.className = "alert " + (type === "success" ? "alert-green" : "alert-red");
-  el.innerHTML = html;
-}
-function addLog(id, msg, type = "info") {
-  const box = document.getElementById(id);
-  box.style.display = "block";
-  const line = mk("div", `log-line log-${type}`, msg);
-  box.appendChild(line);
-  box.scrollTop = box.scrollHeight;
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// Utils
+// ─────────────────────────────────────────────────────────────────────────────
+function mk(tag,cls="",text=""){const e=document.createElement(tag);if(cls)e.className=cls;if(text)e.textContent=text;return e}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function showMsg(el,type,html){el.className="alert "+(type==="ok"?"al-green":"al-red");el.innerHTML=html}
+function addLog(id,msg,type="info"){const b=document.getElementById(id);b.style.display="block";const l=mk("div","log-line log-"+type,msg);b.appendChild(l);b.scrollTop=b.scrollHeight}
 </script>
 </body>
 </html>
