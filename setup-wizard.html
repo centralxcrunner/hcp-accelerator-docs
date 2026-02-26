@@ -287,13 +287,76 @@ label.fl{font-size:13px;font-weight:500;display:block;margin-bottom:5px}
   <div class="panel" style="text-align:center;padding:48px 32px 36px">
     <div style="font-size:52px;margin-bottom:16px">🎉</div>
     <div class="panel-title" style="font-size:26px;margin-bottom:8px">Account configured!</div>
-    <div style="font-size:14px;color:var(--muted);max-width:360px;margin:0 auto;line-height:1.6">Your Online Booking hours, Price Book, and Lead Sources are live. Customers can start booking immediately.</div>
+    <div style="font-size:14px;color:var(--muted);max-width:380px;margin:0 auto;line-height:1.6">Your Online Booking hours, Price Book, and Lead Sources are live. Now get your booking link in front of customers.</div>
   </div>
+
+  <!-- Google Business Profile -->
+  <div class="panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <div style="width:36px;height:36px;border-radius:8px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">G</div>
+      <div class="panel-title" style="margin:0">Add to Google Business Profile</div>
+    </div>
+    <div class="panel-sub" style="margin-bottom:16px">Paste your booking link directly into your Google Business Profile so customers can book from Google Search and Maps.</div>
+
+    <div style="margin-bottom:16px">
+      <label class="fl">Your booking link</label>
+      <div style="display:flex;gap:8px">
+        <input class="fi" id="olb-url" readonly value="https://book.housecallpro.com/book/your-company-id" style="font-size:13px;color:var(--muted);background:#fafafa">
+        <button class="btn btn-outline" style="white-space:nowrap;flex-shrink:0" onclick="copyOlbUrl()">Copy link</button>
+      </div>
+      <div class="fhint" id="olb-copy-msg" style="color:var(--green);display:none">✅ Copied to clipboard</div>
+    </div>
+
+    <div style="background:#f8f9fa;border:1px solid var(--border);border-radius:var(--r8);padding:16px;font-size:13px;line-height:1.8;color:var(--text)">
+      <strong style="display:block;margin-bottom:8px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)">How to add it in GBP</strong>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div><span style="background:#e3f0fb;color:var(--blue);border-radius:200px;padding:1px 8px;font-size:11px;font-weight:700;margin-right:8px">1</span>Go to <strong>business.google.com</strong> and select your business</div>
+        <div><span style="background:#e3f0fb;color:var(--blue);border-radius:200px;padding:1px 8px;font-size:11px;font-weight:700;margin-right:8px">2</span>Click <strong>Edit profile → Contact → Booking</strong></div>
+        <div><span style="background:#e3f0fb;color:var(--blue);border-radius:200px;padding:1px 8px;font-size:11px;font-weight:700;margin-right:8px">3</span>Paste your booking link and save</div>
+        <div><span style="background:#e3f0fb;color:var(--blue);border-radius:200px;padding:1px 8px;font-size:11px;font-weight:700;margin-right:8px">4</span>A <strong>"Book online"</strong> button appears on your Google listing within ~24 hrs</div>
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-top:16px">
+      <a class="btn btn-outline" href="https://business.google.com" target="_blank">Open Google Business Profile ↗</a>
+    </div>
+  </div>
+
+  <!-- Website embed -->
+  <div class="panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <div style="width:36px;height:36px;border-radius:8px;background:#f3e8ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">⟨/⟩</div>
+      <div class="panel-title" style="margin:0">Embed on your website</div>
+    </div>
+    <div class="panel-sub" style="margin-bottom:16px">Copy this snippet and paste it into any page on your website. The booking form appears inline — no redirect, no new tab.</div>
+
+    <div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <label class="fl" style="margin:0">HTML embed code</label>
+        <button class="btn btn-outline" style="height:30px;padding:0 14px;font-size:12px;border-radius:6px" onclick="copyEmbed()">Copy code</button>
+      </div>
+      <pre id="embed-code" style="background:#1e2132;color:#e2e8f0;padding:16px;border-radius:var(--r8);font-size:12px;font-family:'SF Mono','Fira Code',monospace;overflow-x:auto;line-height:1.6;cursor:pointer;user-select:all" onclick="copyEmbed()" title="Click to copy"></pre>
+      <div class="fhint" id="embed-copy-msg" style="color:var(--green);display:none">✅ Copied to clipboard</div>
+    </div>
+
+    <div style="background:#f8f9fa;border:1px solid var(--border);border-radius:var(--r8);padding:16px;font-size:13px;line-height:1.8">
+      <strong style="display:block;margin-bottom:8px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)">Placement tips</strong>
+      <div style="display:flex;flex-direction:column;gap:5px;color:var(--text)">
+        <div>📄 <strong>Services page</strong> — place below your service list so visitors book immediately</div>
+        <div>🏠 <strong>Homepage hero</strong> — use the direct link (not embed) as your primary CTA button</div>
+        <div>📱 <strong>Mobile</strong> — the form is responsive; set <code style="background:#e3f0fb;padding:1px 5px;border-radius:3px;font-size:11px">width="100%"</code> and it fills the column</div>
+        <div>📣 <strong>UTM tracking</strong> — append <code style="background:#e3f0fb;padding:1px 5px;border-radius:3px;font-size:11px">?utm_source=website</code> to the URL inside the iframe src to tag these bookings</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
   <div class="panel">
     <div class="panel-title" style="margin-bottom:20px">What was configured</div>
     <div id="summary"></div>
   </div>
-  <div style="text-align:center;margin-top:24px">
+
+  <div style="text-align:center;margin-top:8px;margin-bottom:16px">
     <a class="btn btn-green" href="https://app.housecallpro.com" target="_blank">Open Housecall Pro ↗</a>
   </div>
 </div>
@@ -704,6 +767,7 @@ async function doLeadSources() {
   }
   btn.innerHTML="Save & Finish →"; btn.disabled=false;
   buildSummary();
+  buildBookingAssets();
   setTimeout(()=>goStep(4),400);
 }
 
@@ -767,6 +831,27 @@ function mk(tag,cls="",text=""){const e=document.createElement(tag);if(cls)e.cla
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 function showMsg(el,type,html){el.className="alert "+(type==="ok"?"al-green":"al-red");el.innerHTML=html}
 function addLog(id,msg,type="info"){const b=document.getElementById(id);b.style.display="block";const l=mk("div","log-line log-"+type,msg);b.appendChild(l);b.scrollTop=b.scrollHeight}
+
+// ── Step 4 — Booking link + embed ────────────────────────────────────────
+const DEMO_COMPANY_ID = "6deaa28d-8150-49cd-9fc6-7c3ac9e55f80"; // real sandbox ID
+function buildBookingAssets() {
+  const url = `https://book.housecallpro.com/book/${DEMO_COMPANY_ID}`;
+  document.getElementById("olb-url").value = url;
+  const embed = `<!-- Housecall Pro Online Booking -->\n<iframe\n  src="${url}"\n  width="100%"\n  height="720"\n  frameborder="0"\n  style="border-radius:8px;border:1px solid #e0e0e0"\n  title="Book an Appointment"\n  loading="lazy">\n</iframe>`;
+  document.getElementById("embed-code").textContent = embed;
+}
+function copyOlbUrl() {
+  navigator.clipboard.writeText(document.getElementById("olb-url").value);
+  const msg=document.getElementById("olb-copy-msg");
+  msg.style.display="block";
+  setTimeout(()=>msg.style.display="none",2500);
+}
+function copyEmbed() {
+  navigator.clipboard.writeText(document.getElementById("embed-code").textContent);
+  const msg=document.getElementById("embed-copy-msg");
+  msg.style.display="block";
+  setTimeout(()=>msg.style.display="none",2500);
+}
 </script>
 </body>
 </html>
